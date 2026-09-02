@@ -7,13 +7,16 @@ using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Controllers.Public.User.Actions;
@@ -36,6 +39,8 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     private readonly IPasswordService _passwordService;
     private readonly IHttpCookiesService _cookiesService;
     private readonly IUserDtoBuilder _userDtoBuilder;
+    private readonly ITimeEntryService _timeEntryService;
+    private readonly ITimeEntryApprovalService _timeEntryApprovalService;
 
     public LoginAsDemoRequestHandler(
         IAuthorizationService authorizationService,
@@ -51,7 +56,9 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         IWorkspaceAccessService workspaceAccessService,
         IPasswordService passwordService,
         IHttpCookiesService cookiesService,
-        IUserDtoBuilder userDtoBuilder
+        IUserDtoBuilder userDtoBuilder,
+        ITimeEntryService timeEntryService,
+        ITimeEntryApprovalService timeEntryApprovalService
     )
     {
         _authorizationService = authorizationService;
@@ -68,6 +75,8 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         _passwordService = passwordService;
         _cookiesService = cookiesService;
         _userDtoBuilder = userDtoBuilder;
+        _timeEntryService = timeEntryService;
+        _timeEntryApprovalService = timeEntryApprovalService;
     }
 
     public async Task<LoginResponseDto> ExecuteAsync(LoginAsDemoRequest request)
@@ -194,7 +203,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
             new DemoMemberPaymentSeed(project4, 450, -5, "Mobile release deposit"),
             new DemoMemberPaymentSeed(project1, 250, -3, "General account credit")
         });
-        await SeedTimeEntriesAsync(ws, user, tasks);
+        await SeedTimeEntriesAsync(ws, user, tasks, approver: user, isTeamWorkspace: false);
     }
 
     private async Task SeedWorkspace2Async(WorkspaceEntity ws, UserEntity user)
@@ -234,18 +243,32 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Stabilize smoke tests", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Add reporting screenshots", priority: TaskPriority.Medium));
 
-        // Add team members for the Team workspace
+        // Add 2 team members for the Team workspace
         var member1 = await _userDao.CreatePendingUser($"sarah_{Guid.NewGuid():N}@team.timevic.com");
         member1.UserName = "sarah_connor";
         member1.VerificationTime = DateTime.UtcNow;
         _passwordService.SetUserPassword(member1, Guid.NewGuid().ToString());
-        await _workspaceAccessService.ShareAccessAsync(ws, member1, MembershipAccessType.User);
+        var member1Projects = new List<ProjectAccessModel>
+        {
+            new() { Project = project1, HourlyRate = 65 },
+            new() { Project = project2, HourlyRate = 70 },
+            new() { Project = project3, HourlyRate = 65 },
+            new() { Project = project4, HourlyRate = 65 }
+        };
+        await _workspaceAccessService.ShareAccessAsync(ws, member1, MembershipAccessType.User, member1Projects);
 
         var member2 = await _userDao.CreatePendingUser($"alex_{Guid.NewGuid():N}@team.timevic.com");
         member2.UserName = "alex_murphy";
         member2.VerificationTime = DateTime.UtcNow;
         _passwordService.SetUserPassword(member2, Guid.NewGuid().ToString());
-        await _workspaceAccessService.ShareAccessAsync(ws, member2, MembershipAccessType.User);
+        var member2Projects = new List<ProjectAccessModel>
+        {
+            new() { Project = project1, HourlyRate = 60 },
+            new() { Project = project2, HourlyRate = 60 },
+            new() { Project = project3, HourlyRate = 75 },
+            new() { Project = project4, HourlyRate = 75 }
+        };
+        await _workspaceAccessService.ShareAccessAsync(ws, member2, MembershipAccessType.User, member2Projects);
 
         await SeedMemberPaymentsAsync(ws, user, new[]
         {
@@ -262,9 +285,9 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
             new DemoMemberPaymentSeed(project2, 340, -5, "Analytics integration fee")
         });
 
-        await SeedTimeEntriesAsync(ws, user, tasks);
-        await SeedTimeEntriesAsync(ws, member1, tasks.Take(4).ToList());
-        await SeedTimeEntriesAsync(ws, member2, tasks.Skip(3).Take(4).ToList());
+        await SeedTimeEntriesAsync(ws, user, tasks, approver: user, isTeamWorkspace: true);
+        await SeedTimeEntriesAsync(ws, member1, tasks.Take(5).ToList(), approver: user, isTeamWorkspace: true);
+        await SeedTimeEntriesAsync(ws, member2, tasks.Skip(3).Take(5).ToList(), approver: user, isTeamWorkspace: true);
     }
 
     private async Task<ProjectEntity> CreateDemoProjectAsync(
@@ -301,7 +324,9 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     private async Task SeedTimeEntriesAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        IReadOnlyCollection<TaskEntity> tasks
+        IReadOnlyCollection<TaskEntity> tasks,
+        UserEntity approver,
+        bool isTeamWorkspace = false
     )
     {
         var index = 0;
@@ -316,22 +341,67 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
                     .AddMinutes(entryIndex * 90);
                 var duration = TimeSpan.FromMinutes(45 + (index % 4) * 30 + entryIndex * 15);
                 var project = task.TaskList.Project;
-                var timeEntry = new TimeEntryEntity
+
+                var timeEntryDto = new TimeEntryCreationDto
                 {
-                    Workspace = workspace,
-                    User = user,
-                    Project = project,
-                    Task = task,
                     Description = task.Title,
                     IsBillable = project.IsBillableByDefault,
                     HourlyRate = project.DefaultHourlyRate,
                     StartTime = startTime,
-                    EndTime = startTime.Add(duration),
-                    TimeZone = workspace.TimeZone,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    EndTime = startTime.Add(duration)
                 };
+
+                var timeEntry = await _timeEntryService.SetAsync(user, workspace, timeEntryDto, project);
+                timeEntry.Task = task;
                 await _sessionProvider.CurrentSession.SaveAsync(timeEntry);
+
+                if (isTeamWorkspace)
+                {
+                    var pattern = (index * 2 + entryIndex) % 5;
+                    switch (pattern)
+                    {
+                        case 0 or 1:
+                            await _timeEntryApprovalService.ApproveAsync(approver, timeEntry);
+                            break;
+                        case 2:
+                            if (user.Id == approver.Id)
+                            {
+                                timeEntry.Status = TimeEntryStatus.Pending;
+                                await _sessionProvider.CurrentSession.SaveAsync(timeEntry);
+                            }
+                            else
+                            {
+                                await _timeEntryApprovalService.SubmitAsync(user, timeEntry);
+                            }
+                            break;
+                        case 3:
+                            timeEntry.Status = TimeEntryStatus.Draft;
+                            await _sessionProvider.CurrentSession.SaveAsync(timeEntry);
+                            break;
+                        default:
+                            await _timeEntryApprovalService.RejectAsync(
+                                approver,
+                                timeEntry,
+                                "Please provide additional details on this task."
+                            );
+                            break;
+                    }
+                }
+                else
+                {
+                    if (timeEntry.Status == TimeEntryStatus.Approved && !timeEntry.Approvals.Any())
+                    {
+                        var approval = new TimeEntryApprovalEntity
+                        {
+                            TimeEntry = timeEntry,
+                            User = approver,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
+                        };
+                        timeEntry.Approvals.Add(approval);
+                        await _sessionProvider.CurrentSession.SaveAsync(approval);
+                    }
+                }
             }
 
             index++;
