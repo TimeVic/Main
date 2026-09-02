@@ -1,3 +1,4 @@
+@using TimeTracker.Client.Core.Core.Extensions.Enums
 @using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Task
@@ -142,12 +143,26 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                             <h3 class="text-sm font-semibold text-slate-800">@DashboardLocalizer["TaskDetail_Details"]</h3>
                         </div>
                         <div class="mt-4 flex flex-col gap-3">
-                        <EnumDropDown
-                            TItem="TaskStatus"
-                            Label="@DashboardLocalizer["Status"]"
-                            Value="_model.Status"
-                            Size="Size.Small"
-                            ValueChanged="OnStatusChanged" />
+                        @if (_task.ExtendedStatus == ExtendedTaskStatus.InProgress)
+                        {
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">@DashboardLocalizer["Status"]</p>
+                                <div class="mt-1">
+                                    <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@_task.ExtendedStatus.GetThemeColor()">
+                                        @DashboardLocalizer["TaskStatus_InProgress"]
+                                    </LumexChip>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <EnumDropDown
+                                TItem="TaskStatus"
+                                Label="@DashboardLocalizer["Status"]"
+                                Value="_model.Status"
+                                Size="Size.Small"
+                                ValueChanged="OnStatusChanged" />
+                        }
                         <EnumDropDown
                             TItem="TaskPriority"
                             Label="@DashboardLocalizer["Priority"]"

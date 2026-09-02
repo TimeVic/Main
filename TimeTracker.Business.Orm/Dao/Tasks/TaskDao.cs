@@ -110,6 +110,7 @@ public class TaskDao: ITaskDao
             OriginalEstimate = originalEstimate,
             ExternalSourceType = externalSourceType,
             Status = status,
+            ExtendedStatus = (ExtendedTaskStatus)status,
             Priority = priority,
             IsArchived = isArchived,
             CreatedAt = DateTime.UtcNow,
@@ -145,6 +146,10 @@ public class TaskDao: ITaskDao
         task.Description = description;
         task.OriginalEstimate = originalEstimate;
         task.Status = status;
+        if (task.ExtendedStatus != ExtendedTaskStatus.InProgress)
+        {
+            task.ExtendedStatus = (ExtendedTaskStatus)status;
+        }
         task.Priority = priority;
         task.IsArchived = isArchived;
         task.UpdatedAt = DateTime.UtcNow;

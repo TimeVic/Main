@@ -16,6 +16,7 @@ using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
@@ -108,6 +109,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 {
                     var timeEntry = await GetTimeEntry(request.TimeEntryId.Value, user);
                     timeEntry.Task = task;
+                    if (timeEntry.IsActive)
+                    {
+                        task.Status = TaskStatus.ToDo;
+                    }
                     if (timeEntry.Project == null)
                     {
                         timeEntry.Project = taskList.Project;

@@ -1,3 +1,6 @@
+using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Common.Constants.Task;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
@@ -347,5 +350,98 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.ReminderTime);
+    }
+
+    [Fact]
+    public async Task ShouldNotUpdateTaskStatusWhenActiveTimerExists()
+    {
+        var timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        await timeEntryDao.StartNewAsync(
+            _user,
+            _workspace,
+            DateTime.UtcNow,
+            internalTask: _task
+        );
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _taskList.Id,
+            Title = _task.Title,
+            Description = _task.Description,
+            Status = TaskStatus.Done,
+            Priority = _task.Priority,
+            IsArchived = _task.IsArchived,
+            UserId = _user.Id
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new ValidationException().GetTypeName(), error.ErrorCode);
+        Assert.Contains("Cannot change status of a task with an active timer", error.Message);
+    }
+
+    [Fact]
+    public async Task ShouldAllowUpdatingOtherFieldsWhenActiveTimerExists()
+    {
+        var timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        await timeEntryDao.StartNewAsync(
+            _user,
+            _workspace,
+            DateTime.UtcNow,
+            internalTask: _task
+        );
+        await FlushDbChanges();
+
+        var expectedTitle = "Updated title while in progress";
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _taskList.Id,
+            Title = expectedTitle,
+            Description = _task.Description,
+            Status = _task.Status,
+            Priority = TaskPriority.High,
+            IsArchived = _task.IsArchived,
+            UserId = _user.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
+        Assert.Equal(expectedTitle, actualData.Title);
+        Assert.Equal(TaskPriority.High, actualData.Priority);
+        Assert.Equal(ExtendedTaskStatus.InProgress, actualData.ExtendedStatus);
+    }
+
+    [Fact]
+    public async Task ShouldAllowUpdatingStatusAfterTimerStopped()
+    {
+        var timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        await timeEntryDao.StartNewAsync(
+            _user,
+            _workspace,
+            DateTime.UtcNow.AddHours(-1),
+            internalTask: _task
+        );
+        await FlushDbChanges();
+        await timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _taskList.Id,
+            Title = _task.Title,
+            Description = _task.Description,
+            Status = TaskStatus.Done,
+            Priority = _task.Priority,
+            IsArchived = _task.IsArchived,
+            UserId = _user.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
+        Assert.Equal(TaskStatus.Done, actualData.Status);
+        Assert.Equal(ExtendedTaskStatus.Done, actualData.ExtendedStatus);
     }
 }

@@ -1,3 +1,4 @@
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using NHibernate;
@@ -297,6 +298,8 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         };
         if (internalTask != null)
         {
+            internalTask.Status = TaskStatus.ToDo;
+            await Session.SaveOrUpdateAsync(internalTask);
             entry.Project = internalTask.TaskList.Project;
         }
         else if (projectId != null)
@@ -465,6 +468,11 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         if (timeEntry.Task != null)
         {
             timeEntry.Project = timeEntry.Task.TaskList.Project;
+            if (timeEntry.IsActive)
+            {
+                timeEntry.Task.Status = TaskStatus.ToDo;
+                await Session.SaveOrUpdateAsync(timeEntry.Task);
+            }
         }
         else
         {

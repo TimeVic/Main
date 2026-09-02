@@ -168,7 +168,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var project4 = await CreateDemoProjectAsync("📱 Mobile App", 105, brightAppsClient);
 
         var list1 = await _taskListDao.CreateTaskListAsync(project1, "Sprint 1");
-        tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Fix login page crash", priority: TaskPriority.High, status: TaskStatus.InProgress));
+        tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Fix login page crash", priority: TaskPriority.High, status: TaskStatus.ToDo));
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Resolve 500 errors on dashboard", priority: TaskPriority.Medium));
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Fix broken image uploads", priority: TaskPriority.Low));
 
@@ -179,14 +179,14 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var list3 = await _taskListDao.CreateTaskListAsync(project2, "🎨 Components");
         tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Create Button component", status: TaskStatus.Done));
         tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Create Input component", status: TaskStatus.Done));
-        tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Create Modal component", status: TaskStatus.InProgress));
+        tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Create Modal component", status: TaskStatus.ToDo));
 
         // empty task list
         await _taskListDao.CreateTaskListAsync(project2, "Backlog");
 
         var list4 = await _taskListDao.CreateTaskListAsync(project3, "Maintenance");
         tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Upgrade background worker logs", priority: TaskPriority.Medium));
-        tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Clean stale demo accounts", status: TaskStatus.InProgress));
+        tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Clean stale demo accounts", status: TaskStatus.ToDo));
 
         var list5 = await _taskListDao.CreateTaskListAsync(project4, "Release 1.4");
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Polish timer widget", priority: TaskPriority.High));
@@ -219,7 +219,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var list1 = await _taskListDao.CreateTaskListAsync(project1, "Planning");
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Define campaign goals", status: TaskStatus.Done, priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Identify target audience", status: TaskStatus.Done));
-        tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Set KPIs", status: TaskStatus.InProgress));
+        tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Set KPIs", status: TaskStatus.ToDo));
 
         var list2 = await _taskListDao.CreateTaskListAsync(project1, "Execution");
         tasks.Add(await _taskDao.AddTaskAsync(list2, user, "Create landing page copy"));

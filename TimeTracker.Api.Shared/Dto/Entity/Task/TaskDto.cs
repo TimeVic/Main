@@ -15,6 +15,8 @@ public class TaskDto : IResponse
     
     public TaskStatus Status { get; set; }
     
+    public ExtendedTaskStatus ExtendedStatus { get; set; }
+    
     public TaskPriority Priority { get; set; }
     
     public string Title { get; set; } = string.Empty;

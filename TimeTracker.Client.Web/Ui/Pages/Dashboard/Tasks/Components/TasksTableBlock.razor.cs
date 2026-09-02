@@ -2,7 +2,9 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Client.Core.Core.Extensions.Enums;
 using TimeTracker.Client.Core.Store.Tasks;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -52,23 +54,9 @@ public partial class TasksTableBlock
         ? "border-t border-slate-200/80"
         : "hidden";
 
-    private string GetStatusCssClass() => Status switch
-    {
-        TaskStatus.InProgress => "in-progress",
-        TaskStatus.ToDo => "todo",
-        TaskStatus.Backlog => "backlog",
-        TaskStatus.Done => "done",
-        _ => throw new ArgumentOutOfRangeException(nameof(Status), Status, null)
-    };
+    private string GetStatusCssClass() => Status.GetStatusCssClass();
 
-    private string GetStatusIconClass() => Status switch
-    {
-        TaskStatus.InProgress => "fa-solid fa-circle-play",
-        TaskStatus.ToDo => "fa-solid fa-list-check",
-        TaskStatus.Backlog => "fa-solid fa-layer-group",
-        TaskStatus.Done => "fa-solid fa-circle-check",
-        _ => throw new ArgumentOutOfRangeException(nameof(Status), Status, null)
-    };
+    private string GetStatusIconClass() => Status.GetStatusIconClass();
 
     // ondragover fires hundreds of times per second — block re-renders unless something actually changed
     protected override bool ShouldRender()

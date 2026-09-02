@@ -3,6 +3,7 @@ using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -63,6 +64,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             // Workspace members may be assigned even when they do not have access to this project.
             if (!await _securityManager.HasAccess(AccessLevel.Read, assignee, task.Workspace))
                 throw new HasNoAccessException("This user has no permissions for task workspace");
+
+            if (task.ExtendedStatus == ExtendedTaskStatus.InProgress && request.Status != task.Status)
+            {
+                throw new ValidationException("Cannot change status of a task with an active timer");
+            }
             
             task = _mapper.Map(request, task);
             var tags = task.Workspace.Tags.Where(

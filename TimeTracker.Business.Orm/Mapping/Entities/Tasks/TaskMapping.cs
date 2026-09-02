@@ -15,6 +15,9 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
         
         Map(x => x.TaskId);
         Map(x => x.Status).Enum<TaskStatus>();
+        Map(x => x.ExtendedStatus)
+            .Formula("(CASE WHEN EXISTS (SELECT 1 FROM time_entries te WHERE te.internal_task_id = id AND te.end_time IS NULL AND te.is_marked_to_delete = false) THEN 3 ELSE status END)")
+            .CustomType<ExtendedTaskStatus>();
         Map(x => x.Priority).Enum<TaskPriority>();
         Map(x => x.Title);
         Map(x => x.Description);
