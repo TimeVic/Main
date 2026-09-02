@@ -29,7 +29,7 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="space-y-5">
+                <div class="flex flex-col gap-5">
                     <div>
                         <InputTextField
                             FullWidth="true"
@@ -39,8 +39,9 @@
                             @bind-Value="model.Name"/>
                     </div>
 
-                    <div class="pt-1">
+                    <div>
                         <ClientsDropDown
+                            Label="@DashboardLocalizer["Client"].Value"
                             Value="@model.ClientId"
                             Clearable="true"
                             SelectedItemChanged="OnClientChanged"/>
@@ -60,10 +61,10 @@
                     
                     @if (model.IsBillableByDefault)
                     {
-                        <div class="pt-1">
+                        <div>
                             <InputNumericNullableField 
                                 TItem="decimal"
-                                Label="@DashboardLocalizer["HourlyRate"]"
+                                Label="@DashboardLocalizer["HourlyRate"].Value"
                                 Size="Size.Small"
                                 Step="00.01"
                                 Variant="InputVariant.Outlined"

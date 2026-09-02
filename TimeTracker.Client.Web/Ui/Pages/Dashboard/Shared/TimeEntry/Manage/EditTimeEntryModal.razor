@@ -23,10 +23,14 @@
                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <i class="fa-regular fa-pen-to-square"></i>
                 </div>
-                <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["EditTimeEntryModal_Title"]</h3>
+                <div>
+                    <h2 class="text-xl font-semibold text-slate-900">
+                        @DashboardLocalizer["EditTimeEntryModal_Title"]
+                    </h2>
+                </div>
             </div>
         </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
+        <LumexModalBody Class="pt-4">
             <EditForm
                 Context="form"
                 EditContext="_editContext"
@@ -123,17 +127,12 @@
                     <LumexTab Title="@DashboardLocalizer["Description"]">
                         <LumexCard>
                             <LumexCardBody>
-                                <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["Description"]</label>
-                                <InputTextArea
+                                <InputTextareaField
+                                    Rows="6"
+                                    MaxLength="500"
                                     Value="@_model.Description"
                                     ValueChanged="@(async (string? description) => await OnDescriptionChanged(description ?? string.Empty))"
-                                    ValueExpression="() => _model.Description"
-                                    AdditionalAttributes="@(new Dictionary<string, object>
-                                                          {
-                                                              ["maxlength"] = 500,
-                                                              ["class"] = "min-h-[150px] w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none",
-                                                          })" 
-                                />
+                                    ValueExpression="() => _model.Description" />
                             </LumexCardBody>
                         </LumexCard>
                     </LumexTab>
@@ -149,9 +148,9 @@
                                         </LumexSwitch>
                                     </label>
                                     <div>
-                                        <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["HourlyRate"]</label>
                                         <InputNumericNullableField 
                                             TItem="decimal"
+                                            Label="@DashboardLocalizer["HourlyRate"].Value"
                                             Size="Size.Small"
                                             Step="00.01"
                                             Variant="InputVariant.Underlined"

@@ -87,6 +87,11 @@ public partial class ClientPaymentsPage
         return value?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false;
     }
 
+    private void OnSearchValueChanged(string? value)
+    {
+        _search = value;
+    }
+
     private void OnSearchChanged(ChangeEventArgs args)
     {
         _search = args.Value?.ToString();

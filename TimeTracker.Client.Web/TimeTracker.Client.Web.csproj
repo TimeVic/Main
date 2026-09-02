@@ -339,8 +339,8 @@
     </ItemGroup>
 
     <PropertyGroup>
-        <TailwindInputCss>$(ProjectDir)styles\app.css</TailwindInputCss>
-        <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
+        <TailwindInputCss>$(ProjectDir)styles/app.css</TailwindInputCss>
+        <TailwindOutputCss>$(ProjectDir)wwwroot/css/app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
     <ItemGroup>
