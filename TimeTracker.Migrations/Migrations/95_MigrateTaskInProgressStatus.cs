@@ -10,7 +10,7 @@ public class _95_MigrateTaskInProgressStatus : MyMigration
     {
         Execute.Sql("UPDATE tasks SET status = 2 WHERE status = 3;");
         Execute.Sql("UPDATE task_history_items SET status = 2 WHERE status = 3;");
-        Execute.Sql("DELETE FROM task_statuses WHERE id = 3;");
+        Execute.Sql("DELETE FROM enum.task_statuses WHERE id = 3;");
         Execute.Sql("""
             CREATE INDEX IF NOT EXISTS "IX_time_entries_active_task"
             ON time_entries (internal_task_id)
@@ -26,7 +26,7 @@ public class _95_MigrateTaskInProgressStatus : MyMigration
             DROP INDEX IF EXISTS "IX_time_entries_active_task";
         """);
         Execute.Sql("""
-            INSERT INTO task_statuses (id, name) VALUES (3, 'InProgress') ON CONFLICT DO NOTHING;
+            INSERT INTO enum.task_statuses (id, name) VALUES (3, 'InProgress') ON CONFLICT DO NOTHING;
         """);
 
         base.Down();
