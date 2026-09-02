@@ -32,6 +32,9 @@ public partial class TasksTableBlock
 
     private readonly HashSet<Guid> _selectedTaskIds = [];
     private TaskDto? _taskToUpdate = null;
+    private bool _isTaskEditorOpened = false;
+
+
     private Guid? _selectedTaskId;
 
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
@@ -172,6 +175,7 @@ public partial class TasksTableBlock
     {
         _selectedTaskId = task.Id;
         _taskToUpdate = task;
+        _isTaskEditorOpened = true;
     }
 
     private string GetTaskUrl(TaskDto task) => UrlService.GetDashboardUrl($"task/{task.Id}", task.TaskList.WorkspaceId);

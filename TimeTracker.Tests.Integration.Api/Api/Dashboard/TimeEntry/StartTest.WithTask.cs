@@ -1,4 +1,5 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Extensions;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.TimeEntry;
@@ -26,6 +27,7 @@ public partial class StartTest
         Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.NotNull(actualDto.Task);
         Assert.True(actualDto.Task.TaskId > 0);
+        Assert.Equal(ExtendedTaskStatus.InProgress, actualDto.Task.ExtendedStatus);
     }
     
 }

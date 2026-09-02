@@ -10,10 +10,10 @@ public partial class UpdateTaskModal
     private UpdateTaskForm? _taskForm;
 
     [Parameter]
-    public required TaskDto Task { get; set; }
+    public TaskDto? Task { get; set; }
     
     [Parameter]
-    public required bool IsOpened { get; set; } = false;
+    public bool IsOpened { get; set; } = false;
     
     [Parameter]
     public virtual EventCallback<bool> IsOpenedChanged { get; set; }
@@ -23,7 +23,7 @@ public partial class UpdateTaskModal
 
     private Task OnStatusChanged(TaskStatus status)
     {
-        Task.Status = status;
+        if (Task != null) Task.Status = status;
         return System.Threading.Tasks.Task.CompletedTask;
     }
 
@@ -35,15 +35,8 @@ public partial class UpdateTaskModal
     
     private async Task OnCloseModal()
     {
-        await IsOpenedChanged.InvokeAsync(false);
         IsOpened = false;
-    }
-
-    private void OnOpenChanged(bool isOpened)
-    {
-        if (!isOpened)
-        {
-            OnClose.InvokeAsync();
-        }
+        await IsOpenedChanged.InvokeAsync(false);
+        await OnClose.InvokeAsync();
     }
 }

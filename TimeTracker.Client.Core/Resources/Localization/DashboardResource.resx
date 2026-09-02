@@ -432,6 +432,7 @@
   <data name="TasksBlock_ClientEmptyDescription" xml:space="preserve"><value>Create a project before adding task lists.</value></data>
   <data name="TasksBlock_SelectTaskList" xml:space="preserve"><value>Select a task list to view its tasks.</value></data>
   <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="TasksTableBlock_SelectedOfTasks" xml:space="preserve"><value>{0} of {1} selected</value></data>
   <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>No tasks found.</value></data>
   <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Archive this task</value></data>
   <data name="AddTasksListModalForm_Title" xml:space="preserve"><value>Add task list</value></data>

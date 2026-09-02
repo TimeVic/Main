@@ -65,6 +65,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
             await _sessionProvider.CurrentSession.FlushAsync();
 
+            if (timeEntry.Task != null)
+            {
+                await _sessionProvider.CurrentSession.RefreshAsync(timeEntry.Task);
+            }
+
             var result = _mapper.Map<TimeEntryDto>(timeEntry);
             if (result.Task != null)
             {

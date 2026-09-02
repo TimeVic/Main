@@ -432,6 +432,7 @@
   <data name="TasksBlock_ClientEmptyDescription" xml:space="preserve"><value>Створіть проєкт перед додаванням списків задач.</value></data>
   <data name="TasksBlock_SelectTaskList" xml:space="preserve"><value>Виберіть список задач, щоб переглянути його задачі.</value></data>
   <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>Вибрано: {0}</value></data>
+  <data name="TasksTableBlock_SelectedOfTasks" xml:space="preserve"><value>{0} із {1} вибрано</value></data>
   <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>Задач не знайдено.</value></data>
   <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Архівувати цю задачу</value></data>
   <data name="AddTasksListModalForm_Title" xml:space="preserve"><value>Додати список задач</value></data>

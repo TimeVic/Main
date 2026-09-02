@@ -1,11 +1,13 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
@@ -52,6 +54,21 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 HourlyRate = action.HourlyRate,
                 InternalTaskId = action.InternalTask?.Id
             });
+
+            var tasksToUpdate = new List<TaskDto>();
+            if (response?.StoppedTimeEntry?.Task != null)
+            {
+                tasksToUpdate.Add(response.StoppedTimeEntry.Task);
+            }
+            if (response?.ActiveTimeEntry?.Task != null)
+            {
+                tasksToUpdate.Add(response.ActiveTimeEntry.Task);
+            }
+            if (tasksToUpdate.Any())
+            {
+                dispatcher.Dispatch(new UpdateListItemsAction(tasksToUpdate));
+            }
+
             AddStoppedTimeEntryToListIfTimeEntriesPageIsOpen(response?.StoppedTimeEntry, dispatcher);
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response?.ActiveTimeEntry));
         }

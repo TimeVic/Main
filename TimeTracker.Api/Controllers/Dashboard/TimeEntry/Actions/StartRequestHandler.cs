@@ -101,10 +101,41 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 hourlyRate: request.HourlyRate,
                 internalTask: task
             );
+
+            await _sessionProvider.CurrentSession.FlushAsync();
+
+            if (task != null)
+            {
+                await _sessionProvider.CurrentSession.RefreshAsync(task);
+            }
+            if (stoppedTimeEntry?.Task != null && stoppedTimeEntry.Task.Id != task?.Id)
+            {
+                await _sessionProvider.CurrentSession.RefreshAsync(stoppedTimeEntry.Task);
+            }
+
+            var activeDto = _mapper.Map<TimeEntryDto>(timeEntry);
+            var stoppedDto = _mapper.Map<TimeEntryDto>(stoppedTimeEntry);
+
+            var taskIds = new List<Guid>();
+            if (activeDto.Task != null) taskIds.Add(activeDto.Task.Id);
+            if (stoppedDto?.Task != null) taskIds.Add(stoppedDto.Task.Id);
+            if (taskIds.Any())
+            {
+                var trackedDurationMap = await _taskDao.GetTrackedDurationByTaskIds(taskIds);
+                if (activeDto.Task != null && trackedDurationMap.TryGetValue(activeDto.Task.Id, out var activeDuration))
+                {
+                    activeDto.Task.TrackedDuration = activeDuration;
+                }
+                if (stoppedDto?.Task != null && trackedDurationMap.TryGetValue(stoppedDto.Task.Id, out var stoppedDuration))
+                {
+                    stoppedDto.Task.TrackedDuration = stoppedDuration;
+                }
+            }
+
             return new StartResponse
             {
-                ActiveTimeEntry = _mapper.Map<TimeEntryDto>(timeEntry),
-                StoppedTimeEntry = _mapper.Map<TimeEntryDto>(stoppedTimeEntry)
+                ActiveTimeEntry = activeDto,
+                StoppedTimeEntry = stoppedDto
             };
         }
     }
