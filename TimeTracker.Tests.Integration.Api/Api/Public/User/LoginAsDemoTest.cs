@@ -1,9 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
+using NHibernate.Linq;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -17,12 +20,14 @@ public class LoginAsDemoTest : BaseTest
     private readonly IJwtAuthService _jwtService;
     private readonly IUserAccessTokenDao _accessTokenDao;
     private readonly IUserDao _userDao;
+    private readonly IDbSessionProvider _sessionProvider;
 
     public LoginAsDemoTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _jwtService = ServiceProvider.GetRequiredService<IJwtAuthService>();
         _accessTokenDao = ServiceProvider.GetRequiredService<IUserAccessTokenDao>();
         _userDao = ServiceProvider.GetRequiredService<IUserDao>();
+        _sessionProvider = ServiceProvider.GetRequiredService<IDbSessionProvider>();
     }
 
     [Fact]
@@ -141,5 +146,44 @@ public class LoginAsDemoTest : BaseTest
         var workspaces = await _userDao.GetUsersWorkspaces(demoUser);
         Assert.Contains(workspaces, w => w.Mode == WorkspaceMode.Solo);
         Assert.Contains(workspaces, w => w.Mode == WorkspaceMode.Team);
+    }
+
+    [Fact]
+    public async Task ShouldCreateTeamMembersWithApprovedAndUnapprovedTimeEntries()
+    {
+        var response = await GetRequestAsAnonymousAsync($"{Url}?mode=Team");
+        response.EnsureSuccessStatusCode();
+
+        var demoUser = await _userDao.GetLastDemoUserAsync();
+        Assert.NotNull(demoUser);
+
+        var workspaces = await _userDao.GetUsersWorkspaces(demoUser);
+        var teamWorkspace = workspaces.First(w => w.Mode == WorkspaceMode.Team);
+
+        // Verify team workspace has members
+        var members = teamWorkspace.Members.Where(m => m.User.Id != demoUser.Id).ToList();
+        Assert.Equal(2, members.Count);
+
+        // Verify time entries for each member include approved and unapproved entries
+        foreach (var member in members)
+        {
+            var entries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+                .Where(e => e.Workspace.Id == teamWorkspace.Id && e.User.Id == member.User.Id)
+                .Fetch(e => e.Approvals)
+                .ToListAsync();
+
+            Assert.NotEmpty(entries);
+            Assert.Contains(entries, e => e.Status == TimeEntryStatus.Approved && e.Approvals.Count > 0);
+            Assert.Contains(entries, e => e.Status != TimeEntryStatus.Approved);
+        }
+
+        // Verify demo user also has time entries with both approved and unapproved statuses in team workspace
+        var ownerEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(e => e.Workspace.Id == teamWorkspace.Id && e.User.Id == demoUser.Id)
+            .Fetch(e => e.Approvals)
+            .ToListAsync();
+        Assert.NotEmpty(ownerEntries);
+        Assert.Contains(ownerEntries, e => e.Status == TimeEntryStatus.Approved && e.Approvals.Count > 0);
+        Assert.Contains(ownerEntries, e => e.Status != TimeEntryStatus.Approved);
     }
 }
