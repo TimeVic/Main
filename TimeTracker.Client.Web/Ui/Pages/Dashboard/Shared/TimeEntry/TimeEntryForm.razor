@@ -23,12 +23,11 @@
             OnAdded="@OnTaskAdded"/>
     }
 
-    @if (_isUpdateTaskModalOpened && _activeEntry?.Task != null)
+    @if (_activeEntry?.Task != null)
     {
         <UpdateTaskModal
             Task="_activeEntry.Task"
-            IsOpened="_isUpdateTaskModalOpened"
-            IsOpenedChanged="@((isOpened) => _isUpdateTaskModalOpened = isOpened)"
+            @bind-IsOpened="_isUpdateTaskModalOpened"
             OnClose="@(() => _isUpdateTaskModalOpened = false)"/>
     }
 

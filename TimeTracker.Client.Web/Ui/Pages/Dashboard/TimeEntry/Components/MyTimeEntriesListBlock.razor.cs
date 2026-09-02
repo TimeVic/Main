@@ -33,6 +33,9 @@ public partial class MyTimeEntriesListBlock
     private TimeEntryDto? _timeEntryToEdit { get; set; }
     private TimeEntryDto? _timeEntryToDelete { get; set; }
     private TaskDto? _taskToEdit { get; set; }
+    private bool _isTaskEditorOpened = false;
+
+
 
     private IReadOnlyList<ClientDurationItem> GetClientDurationItems(IEnumerable<TimeEntryDto> entries)
     {

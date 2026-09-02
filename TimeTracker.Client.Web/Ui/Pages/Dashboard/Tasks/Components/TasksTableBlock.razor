@@ -4,6 +4,8 @@
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Client.Core.Constants.Ui
 @using LumexUI.Common
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 
 @inherits BaseReactiveComponent
 
@@ -25,13 +27,7 @@
         </div>
     </div>
 
-    @if (_taskToUpdate != null)
-    {
-        <UpdateTaskModal
-            TaskId="@_taskToUpdate.Id"
-            IsOpen="true"
-            OnClose="@(() => _taskToUpdate = null)" />
-    }
+    <UpdateTaskModal @bind-IsOpened="_isTaskEditorOpened" Task="_taskToUpdate" OnClose="@(() => _taskToUpdate = null)" />
 
     <div class="@TableContentClass">
         @if (Tasks.Any())
@@ -106,7 +102,7 @@
                 <Virtualize
                     @ref="_virtualize"
                     Items="Tasks"
-                    ItemSize="56"
+                    ItemSize="72"
                     OverscanCount="10"
                     SpacerElement="tr">
                     @{ var task = context; }

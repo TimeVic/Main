@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -103,6 +104,7 @@ public class StopTest: BaseTest
         Assert.Equal(expectedEntry.Id, actualDto.Id);
         Assert.NotNull(actualDto.Task);
         Assert.Equal(task.Id, actualDto.Task.Id);
+        Assert.Equal(ExtendedTaskStatus.ToDo, actualDto.Task.ExtendedStatus);
         Assert.InRange(
             actualDto.Task.TrackedDuration,
             TimeSpan.FromHours(2),
