@@ -20,8 +20,8 @@
             <div>
                 <LumexTextbox
                     @bind-Value="_login"
-                    Label="Login"
-                    Placeholder="username"
+                    Label="@DashboardLocalizer["UserSettings_Login"].Value"
+                    Placeholder="@DashboardLocalizer["UserSettings_Login"].Value"
                     FullWidth="true" />
                 <p class="mt-1.5 text-xs text-slate-400">@DashboardLocalizer["UserSettings_LoginHelper"]</p>
             </div>
