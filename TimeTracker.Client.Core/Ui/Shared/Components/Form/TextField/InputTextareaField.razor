@@ -1,0 +1,155 @@
+@inherits InputBase<string>
+@using LumexUI.Common
+@using TimeTracker.Client.Core.Constants.Ui
+
+<div class="@ComputedWrapperClass">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="@ComputedLabelClass">
+            @Label
+            @if (Required)
+            {
+                <span class="text-danger ms-0.5">*</span>
+            }
+        </label>
+    }
+    <div class="relative w-full">
+        @if (BindOnInput)
+        {
+            <textarea
+                id="@Id"
+                value="@CurrentValue"
+                @oninput="OnInputChanged"
+                rows="@Rows"
+                placeholder="@Placeholder"
+                disabled="@Disabled"
+                readonly="@ReadOnly"
+                maxlength="@(MaxLength.HasValue ? MaxLength.Value.ToString() : null)"
+                class="@ComputedTextareaClass"
+                @attributes="AdditionalAttributes"></textarea>
+        }
+        else
+        {
+            <textarea
+                id="@Id"
+                value="@CurrentValue"
+                @onchange="OnInputChanged"
+                rows="@Rows"
+                placeholder="@Placeholder"
+                disabled="@Disabled"
+                readonly="@ReadOnly"
+                maxlength="@(MaxLength.HasValue ? MaxLength.Value.ToString() : null)"
+                class="@ComputedTextareaClass"
+                @attributes="AdditionalAttributes"></textarea>
+        }
+    </div>
+    @if (HasError && !string.IsNullOrEmpty(FirstError))
+    {
+        <div class="mt-1 text-xs text-danger">
+            @FirstError
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    [Parameter]
+    public bool BindOnInput { get; set; } = false;
+
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
+    [Parameter]
+    public ThemeColor Color { get; set; } = ThemeColor.Default;
+
+    [Parameter]
+    public bool FullWidth { get; set; } = true;
+
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
+    public bool Clearable { get; set; } = false;
+
+    [Parameter]
+    public int Rows { get; set; } = 4;
+
+    [Parameter]
+    public int? MaxLength { get; set; }
+
+    [Parameter]
+    public int MaxRows { get; set; } = 8;
+
+    [Parameter]
+    public int MinRows { get; set; } = 3;
+
+    [Parameter]
+    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
+
+    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
+
+    private string FirstError =>
+        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+
+    private string ComputedWrapperClass =>
+        $"{(FullWidth ? "w-full" : "w-auto")} {Class}".Trim();
+
+    private string ComputedLabelClass =>
+        Size == Size.Small
+            ? "mb-1 block text-xs font-medium text-slate-600"
+            : "mb-1.5 block text-sm font-medium text-slate-700";
+
+    private string ComputedTextareaClass
+    {
+        get
+        {
+            var baseClass = "w-full rounded-xl border px-3 py-2 text-sm transition-colors focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
+            
+            if (HasError)
+            {
+                return $"{baseClass} border-danger text-danger placeholder:text-danger/60 focus:border-danger focus:ring-1 focus:ring-danger bg-danger/5";
+            }
+
+            if (Variant == InputVariant.Flat)
+            {
+                return $"{baseClass} border-transparent bg-slate-100 text-slate-700 placeholder:text-slate-400 hover:bg-slate-200/70 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+            }
+
+            return $"{baseClass} border-slate-200 bg-white text-slate-700 placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+        }
+    }
+
+    private Task OnInputChanged(ChangeEventArgs e)
+    {
+        CurrentValueAsString = e.Value?.ToString();
+        return Task.CompletedTask;
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value, out string result, out string validationErrorMessage)
+    {
+        result = value ?? string.Empty;
+        validationErrorMessage = string.Empty;
+        return true;
+    }
+}

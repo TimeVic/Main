@@ -60,7 +60,7 @@ public partial class SmartUserSearchInput : IDisposable
         var atIndex = trimmed.IndexOf('@');
         if (atIndex > 0 && atIndex < trimmed.Length - 1)
         {
-            // Email mode detected (e.g. name@domain.com)
+            // Email mode detected (e.g., name@domain.com)
             _isEmailMode = true;
             _isOpen = false;
             _searchResults.Clear();
@@ -99,7 +99,7 @@ public partial class SmartUserSearchInput : IDisposable
             var response = await ApiService.UserSearchAsync(query);
             if (!token.IsCancellationRequested)
             {
-                _searchResults = response?.Items?.ToList() ?? new List<UserDto>();
+                _searchResults = response?.Items.ToList() ?? [];
                 _isOpen = _searchResults.Count > 0;
             }
         }

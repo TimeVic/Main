@@ -2,8 +2,10 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadClientPayment)]
 @attribute [RequireWorkspaceRole(MembershipAccessType.Owner, MembershipAccessType.Manager)]
 
+@using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.ClientPayments.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.ClientPayments.Parts.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
@@ -11,7 +13,7 @@
 @using TimeTracker.Client.Web.Ui.Shared.Components.List
 
 @inherits BaseReactiveComponent
-@layout Layout
+@layout TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 @implements IDisposable
 
 <AddClientPaymentModal
@@ -74,29 +76,30 @@
         </LumexCardHeader>
         <LumexCardBody>
             <div class="grid gap-4 md:grid-cols-3">
-                <label class="block">
-                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Client"]</span>
+                <div>
                     <ClientsDropDown
+                        Label="@DashboardLocalizer["Client"].Value"
                         Clearable="true"
                         Value="@SelectedClientId"
                         SelectedItemChanged="OnClientFilterChanged"/>
-                </label>
-                <label class="block">
-                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</span>
+                </div>
+                <div>
                     <ProjectsDropDown
+                        Label="@DashboardLocalizer["Project"].Value"
                         Clearable="true"
                         ClientId="@SelectedClientId"
                         Value="@SelectedProjectId"
                         SelectedItemChanged="OnProjectFilterChanged"/>
-                </label>
-                <label class="block">
-                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Search"]</span>
-                    <input
-                        class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
-                        placeholder="@DashboardLocalizer["ClientProjectNoteReference"]"
-                        value="@_search"
-                        @oninput="OnSearchChanged"/>
-                </label>
+                </div>
+                <div>
+                    <LumexTextbox
+                        Label="@DashboardLocalizer["Search"].Value"
+                        LabelPlacement="LabelPlacement.Outside"
+                        Placeholder="@DashboardLocalizer["ClientProjectNoteReference"].Value"
+                        Value="@_search"
+                        ValueChanged="OnSearchValueChanged"
+                        Clearable="true"/>
+                </div>
             </div>
         </LumexCardBody>
     </LumexCard>

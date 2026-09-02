@@ -29,12 +29,12 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="space-y-6">
+                <div class="flex flex-col gap-4">
                     <div>
                         <SmartUserSearchInput
                             Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
                             @bind-Value="_model.EmailOrLogin" />
-                        <ValidationMessage For="@(() => _model.EmailOrLogin)" Class="text-xs text-rose-500 mt-1" />
+                        <CustomValidationMessage For="@(() => _model.EmailOrLogin)" />
                     </div>
 
                     <div>

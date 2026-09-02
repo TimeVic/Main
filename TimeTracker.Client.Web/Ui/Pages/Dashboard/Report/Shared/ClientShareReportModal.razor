@@ -36,20 +36,27 @@
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["ClientShareReport_Link"]</label>
-                    <div class="flex gap-2">
-                        <input
-                            class="min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
-                            readonly
-                            value="@_shareUrl"/>
-                        <button
-                            type="button"
-                            class="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-                            disabled="@(!_isActive)"
-                            @onclick="CopyAsync">
-                            <i class="fa-regular fa-copy"></i>
-                            @DashboardLocalizer["ClientShareReport_Copy"]
-                        </button>
+                    <div class="flex items-end gap-2">
+                        <div class="flex-1">
+                            <LumexTextbox
+                                Value="@_shareUrl"
+                                Label="@DashboardLocalizer["ClientShareReport_Link"].Value"
+                                LabelPlacement="LabelPlacement.Outside"
+                                Disabled="@(!_isActive)"
+                                FullWidth="true" />
+                        </div>
+                        <CustomButton
+                            Color="ThemeColor.Default"
+                            Variant="Variant.Flat"
+                            Disabled="@(!_isActive)"
+                            OnClick="CopyAsync">
+                            <StartContent>
+                                <i class="fa-regular fa-copy"></i>
+                            </StartContent>
+                            <ChildContent>
+                                @DashboardLocalizer["ClientShareReport_Copy"]
+                            </ChildContent>
+                        </CustomButton>
                     </div>
                     @if (!_isActive)
                     {

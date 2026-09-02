@@ -19,6 +19,7 @@
         Color="Color"
         Size="Size"
         Clearable="Clearable"
+        LabelPlacement="LabelPlacement"
         ErrorMessage="@FirstError"/>
 </div>
 
@@ -49,6 +50,9 @@
     
     [Parameter]
     public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
+    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
     
     [Parameter]
     public InputDateType Type { get; set; } = InputDateType.Date;
@@ -61,25 +65,28 @@
     private string FirstError =>
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
 
-    public bool _isShowEmojiModal { get; set; } = false;
     
-    // Bridge between InputBase<DateTime> (non-nullable) and LumexDatebox<DateTime?> (nullable).
-    // Without this, @bind-Value would generate EventCallback<DateTime> which cannot be
-    // assigned to LumexDatebox's ValueChanged: EventCallback<DateTime?>.
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+    
+    protected override bool TryParseValueFromString(
+        string? value, out DateTime result, out string validationErrorMessage)
+    {
+        if (DateTime.TryParse(value, out result))
+        {
+            validationErrorMessage = string.Empty;
+            return true;
+        }
+
+        validationErrorMessage = "Invalid date format.";
+        return false;
+    }
+    
     private DateTime? CurrentValueNullable
     {
-        get => CurrentValue == default ? null : CurrentValue;
+        get => CurrentValue;
         set => CurrentValue = value ?? default;
-    }
-
-    protected override bool TryParseValueFromString(
-        string? value,
-        out DateTime result,
-        out string? validationErrorMessage
-    )
-    {
-        DateTime.TryParse(value, out result);
-        validationErrorMessage = null;
-        return true;
     }
 }
