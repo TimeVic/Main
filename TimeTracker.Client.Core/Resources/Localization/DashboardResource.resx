@@ -565,6 +565,15 @@
   <data name="UserSettings_AvatarHelper" xml:space="preserve"><value>JPG or PNG. Max 2 MB.</value></data>
   <data name="UserSettings_AvatarUploadError" xml:space="preserve"><value>Avatar upload error</value></data>
   <data name="UserSettings_AvatarDeleteError" xml:space="preserve"><value>Avatar delete error</value></data>
+  <data name="UserSettings_LoginSection" xml:space="preserve"><value>Login</value></data>
+  <data name="UserSettings_LoginSectionDescription" xml:space="preserve"><value>Manage your unique account handle.</value></data>
+  <data name="UserSettings_Login" xml:space="preserve"><value>Login</value></data>
+  <data name="UserSettings_LoginHelper" xml:space="preserve"><value>Login is used to sign in and identify your profile.</value></data>
+  <data name="UserSettings_SaveLogin" xml:space="preserve"><value>Save login</value></data>
+  <data name="UserSettings_LoginRequired" xml:space="preserve"><value>Login is required.</value></data>
+  <data name="UserSettings_LoginInvalidFormat" xml:space="preserve"><value>Login must be 3-60 characters and contain only lowercase letters, digits, and underscores.</value></data>
+  <data name="UserSettings_LoginSaved" xml:space="preserve"><value>Login updated successfully.</value></data>
+  <data name="UserSettings_LoginChangeError" xml:space="preserve"><value>Could not update login. It may already be taken.</value></data>
   <data name="WorkspaceDeletionBlock_DangerZone" xml:space="preserve"><value>Danger zone</value></data>
   <data name="WorkspaceDeletionBlock_Title" xml:space="preserve"><value>Delete workspace</value></data>
   <data name="WorkspaceDeletionBlock_Description" xml:space="preserve"><value>Workspace data will become unavailable immediately and will be permanently deleted after 30 days.</value></data>
