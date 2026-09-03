@@ -20,7 +20,7 @@ namespace TimeTracker.Client.Core.Services.Http
         
         public async Task TasksUpdatePositionsAsync(UpdatePositionsRequest request)
         {
-            await PostAsync<TaskFullDto>(ApiUrl.TasksUpdatePositions, request);
+            await PostAsync(ApiUrl.TasksUpdatePositions, request);
         }
         
         public async Task<GetListResponse?> TasksGetListAsync(GetListRequest model)
