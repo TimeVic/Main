@@ -1,6 +1,8 @@
 .update-task-modal ::deep dialog {
   width: min(70rem, calc(100vw - 2rem));
   max-width: min(70rem, calc(100vw - 2rem));
+  height: calc(100dvh - 1rem);
+  min-height: min(35rem, calc(100dvh - 1rem));
   max-height: calc(100dvh - 1rem);
   margin: .5rem .5rem .5rem auto;
   display: flex;
@@ -10,6 +12,7 @@
 .update-task-modal.is-full-screen ::deep dialog {
   width: calc(100vw - 1rem);
   max-width: calc(100vw - 1rem);
+  height: calc(100dvh - 1rem);
   max-height: calc(100dvh - 1rem);
   margin: .5rem;
 }
