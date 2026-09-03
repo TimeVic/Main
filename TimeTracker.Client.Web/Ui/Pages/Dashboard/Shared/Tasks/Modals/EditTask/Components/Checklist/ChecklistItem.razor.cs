@@ -99,6 +99,10 @@ public partial class ChecklistItem
         }
 
         var trimmed = _editingTitle.Trim();
+        if (trimmed.Length > 512)
+        {
+            trimmed = trimmed[..512];
+        }
         _isEditing = false;
 
         if (!string.IsNullOrWhiteSpace(trimmed) && trimmed != SubTask.Title)

@@ -33,6 +33,11 @@ public partial class ChecklistInput
             return;
         }
 
+        if (trimmed.Length > 512)
+        {
+            trimmed = trimmed[..512];
+        }
+
         _title = string.Empty;
         await OnAdd.InvokeAsync(trimmed);
     }
