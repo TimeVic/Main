@@ -59,11 +59,19 @@ public partial class ChecklistBlock
         }
     }
 
+    private const int MaxTitleLength = 512;
+
     private void HandleAdd(string title)
     {
         if (TaskId == Guid.Empty || string.IsNullOrWhiteSpace(title))
         {
             return;
+        }
+
+        var trimmed = title.Trim();
+        if (trimmed.Length > MaxTitleLength)
+        {
+            trimmed = trimmed[..MaxTitleLength];
         }
 
         NormalizePositions();
@@ -73,7 +81,7 @@ public partial class ChecklistBlock
         {
             Id = Guid.NewGuid(),
             TaskId = TaskId,
-            Title = title,
+            Title = trimmed,
             IsCompleted = false,
             PositionIndex = nextPosition,
             CreatedAt = DateTime.UtcNow,
@@ -84,7 +92,7 @@ public partial class ChecklistBlock
 
         Dispatcher.Dispatch(new AddSubTaskAction(
             TaskId,
-            title,
+            trimmed,
             OnSuccess: created =>
             {
                 var list = SubTasks.ToList();
@@ -124,13 +132,18 @@ public partial class ChecklistBlock
     private void HandleTitleChanged((TaskSubTaskDto SubTask, string NewTitle) args)
     {
         var (subTask, newTitle) = args;
-        subTask.Title = newTitle;
+        var trimmed = newTitle.Trim();
+        if (trimmed.Length > MaxTitleLength)
+        {
+            trimmed = trimmed[..MaxTitleLength];
+        }
+        subTask.Title = trimmed;
         StateHasChanged();
 
         Dispatcher.Dispatch(new UpdateSubTaskAction(
             TaskId,
             subTask.Id,
-            newTitle,
+            trimmed,
             subTask.IsCompleted,
             OnSuccess: updated =>
             {
