@@ -16,7 +16,7 @@
 
 @if (_isLoading)
 {
-    <div class="flex justify-center py-12"><LumexSpinner Size="@Size.Large" /></div>
+    <div class="task-detail-workspace flex flex-1 flex-col min-h-0 @(IsFullPage ? "min-h-[30rem]" : "")"></div>
 }
 else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
 {

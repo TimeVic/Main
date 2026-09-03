@@ -31,13 +31,14 @@ public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
     {
         try
         {
-            var taskListId = action.Tasks.Select(x => x.TaskList.Id).FirstOrDefault();
+            var taskListId = action.Tasks.Select(x => x.TaskList?.Id ?? Guid.Empty).FirstOrDefault(id => id != Guid.Empty);
             if (taskListId == Guid.Empty)
             {
                 _logger.LogError("Task List Id can not be null");
+                return;
             }
 
-            var items = action.Tasks.ToDictionary(x => x.Id, x => x.PositionIndex);
+            var items = action.Tasks.DistinctBy(x => x.Id).ToDictionary(x => x.Id, x => x.PositionIndex);
             await _apiService.TasksUpdatePositionsAsync(new UpdatePositionsRequest()
             {
                 TaskListId = taskListId,
@@ -46,7 +47,7 @@ public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
         }
         catch (Exception e)
         {
-            _toastService.ShowError("Task adding error");
+            _toastService.ShowError("Task position updating error");
             _logger.LogError(e.Message, e);
         }
     }

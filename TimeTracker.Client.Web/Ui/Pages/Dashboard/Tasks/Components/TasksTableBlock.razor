@@ -9,16 +9,16 @@
 
 @inherits BaseReactiveComponent
 
-<section class="task-board-block @GetStatusCssClass() rounded-xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+<section class="tasks-table-block tasks-table-block--@GetStatusCssClass() @(!IsExpanded ? "tasks-table-block--collapsed" : "") rounded-xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
     <div
-        class="flex cursor-pointer items-center justify-between px-3 py-2 select-none"
+        class="tasks-table-block__header flex cursor-pointer items-center justify-between px-3.5 py-2.5 select-none"
         @onclick="ToggleExpanded">
         <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center text-xs">
+            <span class="tasks-table-block__icon inline-flex h-6 w-6 items-center justify-center rounded-md text-xs">
                 <i class="@GetStatusIconClass()"></i>
             </span>
-            <span class="text-sm font-semibold tracking-wide">@Title</span>
-            <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-100 px-1.5 text-xs font-semibold text-slate-600">
+            <span class="text-sm font-semibold tracking-wide text-slate-800">@Title</span>
+            <span class="tasks-table-block__count inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold">
                 @Tasks.Count
             </span>
         </div>

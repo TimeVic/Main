@@ -1,21 +1,21 @@
 .tasks-table-block {
   --task-status-accent: #2563eb;
-  --task-status-border: #93c5fd;
-  --task-status-background: #eff6ff;
-  --task-status-hover: #dbeafe;
+  --task-status-border: #3b82f6;
+  --task-status-background: #f8faff;
+  --task-status-hover: #eff6ff;
 
-  border-left-color: var(--task-status-border);
-  border-left-width: 3px;
+  border-left-color: var(--task-status-accent) !important;
+  border-left-width: 4px !important;
 }
 
 .tasks-table-block__header {
   background-color: var(--task-status-background);
-  border-radius: .5rem .5rem 0 0;
+  border-radius: 0.75rem 0.75rem 0 0;
   transition: background-color 150ms ease;
 }
 
 .tasks-table-block--collapsed .tasks-table-block__header {
-  border-radius: .5rem;
+  border-radius: 0.75rem;
 }
 
 .tasks-table-block__header:hover {
@@ -31,32 +31,33 @@
 .tasks-table-block__count {
   background-color: var(--task-status-hover);
   color: var(--task-status-accent);
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .tasks-table-block--in-progress {
   --task-status-accent: #d97706;
-  --task-status-border: #fcd34d;
-  --task-status-background: #fffbeb;
+  --task-status-border: #f59e0b;
+  --task-status-background: #fffdf5;
   --task-status-hover: #fef3c7;
 }
 
 .tasks-table-block--todo {
   --task-status-accent: #2563eb;
-  --task-status-border: #93c5fd;
-  --task-status-background: #eff6ff;
-  --task-status-hover: #dbeafe;
+  --task-status-border: #3b82f6;
+  --task-status-background: #f8faff;
+  --task-status-hover: #eff6ff;
 }
 
 .tasks-table-block--backlog {
   --task-status-accent: #64748b;
-  --task-status-border: #cbd5e1;
+  --task-status-border: #94a3b8;
   --task-status-background: #f8fafc;
   --task-status-hover: #f1f5f9;
 }
 
 .tasks-table-block--done {
   --task-status-accent: #059669;
-  --task-status-border: #6ee7b7;
-  --task-status-background: #ecfdf5;
-  --task-status-hover: #d1fae5;
+  --task-status-border: #10b981;
+  --task-status-background: #f6fdf9;
+  --task-status-hover: #ecfdf5;
 }

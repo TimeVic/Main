@@ -29,6 +29,11 @@ namespace TimeTracker.Client.Core.Services.Http
         {
             return await _httpClient.RequestAsync<TResponse>(requestUri, data, HttpMethod.Post);
         }
+
+        private async Task PostAsync(string requestUri, object? data = null)
+        {
+            await _httpClient.RequestAsync(requestUri, data, HttpMethod.Post);
+        }
         
         private async Task<TResponse?> GetAsync<TResponse>(string requestUri)
         {
