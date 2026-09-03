@@ -1,49 +1,45 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 @inherits BaseReactiveComponent
 
-<div class="w-full space-y-3 mt-5 @Class">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
+<div class="w-full @Class">
+    <div class="flex items-center justify-between mb-2.5 mt-4 pb-2 border-b border-slate-200">
+        <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
             <i class="fa-solid fa-list-check text-slate-500 text-sm"></i>
-            <span class="text-sm font-semibold text-slate-800">@DashboardLocalizer["Checklist_Title"]</span>
-            @if (TotalCount > 0)
-            {
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-semibold @(CompletedCount == TotalCount ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600")">
-                    @CompletedCount/@TotalCount
-                </span>
-            }
+            <span>@DashboardLocalizer["Checklist_Title"]</span>
         </div>
+
+        @if (TotalCount > 0)
+        {
+            <div class="flex items-center gap-3">
+                <div class="w-32 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-blue-600 rounded-full transition-all duration-300 ease-out"
+                         style="width: @(Percentage)%;"></div>
+                </div>
+                <span class="text-xs font-medium text-slate-500">
+                    @string.Format(DashboardLocalizer["Checklist_Progress"].Value, CompletedCount, TotalCount, Percentage)
+                </span>
+            </div>
+        }
     </div>
 
     @if (TotalCount > 0)
     {
-        <ChecklistProgressBar
-            TotalCount="@TotalCount"
-            CompletedCount="@CompletedCount" />
-    }
-
-    <div class="space-y-1">
-        @foreach (var subTask in Items)
-        {
-            <ChecklistItem
-                @key="subTask.Id"
-                SubTask="@subTask"
-                IsDragging="@(_draggingItem?.Id == subTask.Id)"
-                IsDropTarget="@(_dragOverItem?.Id == subTask.Id && _draggingItem?.Id != subTask.Id)"
-                OnToggle="HandleToggle"
-                OnDelete="HandleDelete"
-                OnTitleChanged="HandleTitleChanged"
-                OnDragStartCallback="@(() => OnDragStart(subTask))"
-                OnDragOverCallback="@(() => OnDragOver(subTask))"
-                OnDropCallback="@(() => OnDrop(subTask))"
-                OnDragEndCallback="@OnDragEnd" />
-        }
-    </div>
-
-    @if (TotalCount == 0)
-    {
-        <div class="text-xs text-slate-400 italic py-1">
-            @DashboardLocalizer["Checklist_Empty"]
+        <div class="space-y-1">
+            @foreach (var subTask in Items)
+            {
+                <ChecklistItem
+                    @key="subTask.Id"
+                    SubTask="@subTask"
+                    IsDragging="@(_draggingItem?.Id == subTask.Id)"
+                    IsDropTarget="@(_dragOverItem?.Id == subTask.Id && _draggingItem?.Id != subTask.Id)"
+                    OnToggle="HandleToggle"
+                    OnDelete="HandleDelete"
+                    OnTitleChanged="HandleTitleChanged"
+                    OnDragStartCallback="@(() => OnDragStart(subTask))"
+                    OnDragOverCallback="@(() => OnDragOver(subTask))"
+                    OnDropCallback="@(() => OnDrop(subTask))"
+                    OnDragEndCallback="@OnDragEnd" />
+            }
         </div>
     }
 

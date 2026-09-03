@@ -17,11 +17,6 @@ public partial class ChecklistInput
     [Parameter]
     public EventCallback<string> OnAdd { get; set; }
 
-    private void HandleInput(ChangeEventArgs e)
-    {
-        _title = e.Value?.ToString() ?? string.Empty;
-    }
-
     private async System.Threading.Tasks.Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
@@ -32,7 +27,7 @@ public partial class ChecklistInput
 
     private async System.Threading.Tasks.Task Submit()
     {
-        var trimmed = _title.Trim();
+        var trimmed = _title?.Trim();
         if (string.IsNullOrWhiteSpace(trimmed))
         {
             return;
