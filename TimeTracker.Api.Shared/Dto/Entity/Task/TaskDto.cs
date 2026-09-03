@@ -43,6 +43,10 @@ public class TaskDto : IResponse
     
     public DateTime CreatedAt { get; set; }
 
+    public int SubTasksCount { get; set; }
+    
+    public int SubTasksCompletedCount { get; set; }
+
     public TaskListDto TaskList { get; set; } = null!;
     
     public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();

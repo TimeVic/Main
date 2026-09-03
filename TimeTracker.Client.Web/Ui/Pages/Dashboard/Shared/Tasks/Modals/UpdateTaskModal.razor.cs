@@ -1,14 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
-using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 
 public partial class UpdateTaskModal
 {
-    private UpdateTaskForm? _taskForm;
-
     [Parameter]
     public TaskDto? Task { get; set; }
     
@@ -20,23 +16,4 @@ public partial class UpdateTaskModal
     
     [Parameter]
     public virtual EventCallback OnClose { get; set; }
-
-    private Task OnStatusChanged(TaskStatus status)
-    {
-        if (Task != null) Task.Status = status;
-        return System.Threading.Tasks.Task.CompletedTask;
-    }
-
-    private Task OnTitleChanged(string title)
-    {
-        _taskForm?.SetTitle(title);
-        return System.Threading.Tasks.Task.CompletedTask;
-    }
-    
-    private async Task OnCloseModal()
-    {
-        IsOpened = false;
-        await IsOpenedChanged.InvokeAsync(false);
-        await OnClose.InvokeAsync();
-    }
 }

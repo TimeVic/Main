@@ -90,7 +90,7 @@ public class ApiUrl
     #endregion
     
     #region Report
-    
+
     public const string ReportSummaryPersonal = "dashboard/report/summary/personal";
 
     public const string ReportSummaryTeam = "dashboard/report/summary/team";
@@ -164,6 +164,14 @@ public class ApiUrl
     public const string TaskCommentDelete = "dashboard/tasks/comment/delete";
     public const string TaskCommentsList = "dashboard/tasks/comment/get-list";
     
+    #endregion
+
+    #region Task SubTasks
+
+    public const string TaskSubTaskAdd = "dashboard/tasks/sub-task/add";
+    public const string TaskSubTaskUpdate = "dashboard/tasks/sub-task/update";
+    public const string TaskSubTaskDelete = "dashboard/tasks/sub-task/delete";
+
     #endregion
 
     #region Notes

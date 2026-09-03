@@ -79,7 +79,19 @@
                 TrackedDuration="Task.TrackedDuration"
                 ExternalSourceType="Task.ExternalSourceType" />
 
-            <TagsBadgesList Tags="@Task.Tags"/>
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <TagsBadgesList Tags="@Task.Tags"/>
+
+                @if (Task.SubTasksCount > 0)
+                {
+                    var isAllCompleted = Task.SubTasksCompletedCount == Task.SubTasksCount;
+                    <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors duration-200 @(isAllCompleted ? "bg-emerald-50 text-emerald-600 border border-emerald-200" : "bg-slate-100 text-slate-500 border border-slate-200")"
+                         title="@(isAllCompleted ? DashboardLocalizer["Checklist_TooltipCompleted"].Value : string.Format(DashboardLocalizer["Checklist_TooltipInProgress"].Value, Task.SubTasksCompletedCount, Task.SubTasksCount))">
+                        <i class="@(isAllCompleted ? "fa-solid fa-square-check" : "fa-regular fa-square-check") text-[10px]"></i>
+                        <span>@Task.SubTasksCompletedCount/@Task.SubTasksCount</span>
+                    </div>
+                }
+            </div>
             
             @if (IsShowTaskList)
             {

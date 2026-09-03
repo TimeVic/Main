@@ -158,6 +158,25 @@ public class TasksReducers
         };
     }
 
+    [ReducerMethod]
+    public static TasksState UpdateTaskSubTasksCountsActionReducer(TasksState state, UpdateTaskSubTasksCountsAction action)
+    {
+        var list = GetMutableList(state.List);
+        var taskIndex = list.FindIndex(item => item.Id == action.TaskId);
+        if (taskIndex >= 0)
+        {
+            var task = list[taskIndex];
+            task.SubTasksCount = Math.Max(0, task.SubTasksCount + action.SubTasksCountDelta);
+            task.SubTasksCompletedCount = Math.Max(0, task.SubTasksCompletedCount + action.CompletedDelta);
+            list[taskIndex] = task;
+        }
+
+        return state with
+        {
+            List = list
+        };
+    }
+
     private static List<TaskDto> GetMutableList(ICollection<TaskDto> tasks) =>
         tasks as List<TaskDto> ?? tasks.ToList();
 }

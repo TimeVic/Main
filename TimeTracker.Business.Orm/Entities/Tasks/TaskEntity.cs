@@ -26,6 +26,11 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual string? ExternalTaskId { get; set; }
         public virtual int PositionIndex { get; set; }
         
+        #region SubTasks
+        public virtual int SubTasksCount { get; set; }
+        public virtual int SubTasksCompletedCount { get; set; }
+        #endregion
+
         #region Reminder
         public virtual DateTime? ReminderTime { get; set; }
         public virtual DateTime? RemindedTime { get; set; }
@@ -39,6 +44,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
         public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
         public virtual ICollection<TaskHistoryItemEntity> HistoryItems { get; set; } = new List<TaskHistoryItemEntity>();
+        public virtual ICollection<TaskSubTaskEntity> SubTasks { get; set; } = new List<TaskSubTaskEntity>();
 
         #endregion
         

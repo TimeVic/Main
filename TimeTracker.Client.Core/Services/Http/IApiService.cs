@@ -47,6 +47,8 @@ using TasksGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dash
 using TasksGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.GetListResponse;
 using TasksUpdatePositionsRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.UpdatePositionsRequest;
 using TasksUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.UpdateRequest;
+using TaskSubTaskAddRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.SubTasks.AddRequest;
+using TaskSubTaskUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.SubTasks.UpdateRequest;
 using TimeEntryGetFilteredListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListResponse;
 using TimeEntryGetFilteredListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListRequest;
 using TimeEntryGetActiveResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetActiveResponse;
@@ -218,6 +220,10 @@ public interface IApiService
         Guid workspaceId,
         string? searchString = null
     );
+
+    Task<TaskSubTaskDto?> TaskSubTaskAddAsync(TaskSubTaskAddRequest model);
+    Task<TaskSubTaskDto?> TaskSubTaskUpdateAsync(TaskSubTaskUpdateRequest model);
+    Task TaskSubTaskDeleteAsync(Guid subTaskId);
 
     Task TaskListArchiveAsync(Guid taskListId);
 

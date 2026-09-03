@@ -137,11 +137,22 @@
                                             @GetTaskListTitle(task.Title)
                                         </a>
                                     </div>
-                                    <TaskEstimateSummaryBlock
-                                        Class="max-w-[42rem]"
-                                        IsCompact="true"
-                                        PlannedDuration="task.OriginalEstimate"
-                                        TrackedDuration="task.TrackedDuration" />
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <TaskEstimateSummaryBlock
+                                            Class="max-w-[42rem]"
+                                            IsCompact="true"
+                                            PlannedDuration="task.OriginalEstimate"
+                                            TrackedDuration="task.TrackedDuration" />
+                                        @if (task.SubTasksCount > 0)
+                                        {
+                                            var isAllCompleted = task.SubTasksCompletedCount == task.SubTasksCount;
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors duration-200 @(isAllCompleted ? "bg-emerald-50 text-emerald-600 border border-emerald-200" : "bg-slate-100 text-slate-500 border border-slate-200")"
+                                                  title="@(isAllCompleted ? DashboardLocalizer["Checklist_TooltipCompleted"].Value : string.Format(DashboardLocalizer["Checklist_TooltipInProgress"].Value, task.SubTasksCompletedCount, task.SubTasksCount))">
+                                                <i class="@(isAllCompleted ? "fa-solid fa-square-check" : "fa-regular fa-square-check") text-[10px]"></i>
+                                                <span>@task.SubTasksCompletedCount/@task.SubTasksCount</span>
+                                            </span>
+                                        }
+                                    </div>
                                     <div class="flex flex-wrap items-center gap-1.5 lg:hidden" @onclick:stopPropagation="true">
                                         @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                                         {
