@@ -22,6 +22,10 @@ public partial class ChecklistBlock
 
     private int CompletedCount => SubTasks.Count(x => x.IsCompleted);
 
+    private int Percentage => TotalCount > 0
+        ? (int)Math.Round((double)CompletedCount / TotalCount * 100)
+        : 0;
+
     private TaskSubTaskDto? _draggingItem;
     private TaskSubTaskDto? _dragOverItem;
 
