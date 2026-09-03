@@ -23,5 +23,10 @@ namespace TimeTracker.Client.Core.Services.Http
                 SubTaskId = subTaskId
             });
         }
+
+        public async Task TaskSubTaskUpdatePositionsAsync(UpdatePositionsRequest model)
+        {
+            await PostAsync(ApiUrl.TaskSubTasksUpdatePositions, model);
+        }
     }
 }

@@ -1034,4 +1034,5 @@
   <data name="Checklist_TooltipInProgress" xml:space="preserve"><value>Completed {0} of {1} subtasks</value></data>
   <data name="Checklist_TooltipCompleted" xml:space="preserve"><value>🎉 All subtasks completed!</value></data>
   <data name="Checklist_DeleteTooltip" xml:space="preserve"><value>Delete subtask</value></data>
+  <data name="Checklist_DragTooltip" xml:space="preserve"><value>Drag to reorder</value></data>
 </root>

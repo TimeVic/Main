@@ -28,9 +28,15 @@
             <ChecklistItem
                 @key="subTask.Id"
                 SubTask="@subTask"
+                IsDragging="@(_draggingItem?.Id == subTask.Id)"
+                IsDropTarget="@(_dragOverItem?.Id == subTask.Id && _draggingItem?.Id != subTask.Id)"
                 OnToggle="HandleToggle"
                 OnDelete="HandleDelete"
-                OnTitleChanged="HandleTitleChanged" />
+                OnTitleChanged="HandleTitleChanged"
+                OnDragStartCallback="@(() => OnDragStart(subTask))"
+                OnDragOverCallback="@(() => OnDragOver(subTask))"
+                OnDropCallback="@(() => OnDrop(subTask))"
+                OnDragEndCallback="@OnDragEnd" />
         }
     </div>
 
