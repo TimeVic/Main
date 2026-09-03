@@ -1029,4 +1029,11 @@
   <data name="Validation_InvalidUrl" xml:space="preserve"><value>Вкажіть коректну URL-адресу (наприклад, https://example.com)</value></data>
   <data name="SmartUserSearchInput_Placeholder" xml:space="preserve"><value>Введіть логін або email...</value></data>
   <data name="SmartUserSearchInput_NewUserHint" xml:space="preserve"><value>✨ Новий користувач. Буде надіслано інвайт для завершення реєстрації.</value></data>
+  <data name="Checklist_Title" xml:space="preserve"><value>Чек-лист</value></data>
+  <data name="Checklist_InputPlaceholder" xml:space="preserve"><value>Додати пункт плану... (натисніть Enter)</value></data>
+  <data name="Checklist_Empty" xml:space="preserve"><value>Ваш чек-лист порожній. Розбийте задачу на дрібні кроки.</value></data>
+  <data name="Checklist_Progress" xml:space="preserve"><value>{0} з {1} виконано</value></data>
+  <data name="Checklist_TooltipInProgress" xml:space="preserve"><value>Виконано {0} з {1} підзадач</value></data>
+  <data name="Checklist_TooltipCompleted" xml:space="preserve"><value>🎉 Усі підзадачі виконано!</value></data>
+  <data name="Checklist_DeleteTooltip" xml:space="preserve"><value>Видалити підзадачу</value></data>
 </root>

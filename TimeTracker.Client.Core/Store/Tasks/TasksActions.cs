@@ -1,4 +1,4 @@
-﻿using TimeTracker.Api.Shared.Dto.Entity;
+﻿﻿using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
@@ -43,4 +43,31 @@ public record struct UpdatePositionsAction(
 
 public record struct UpdateListItemsAction(
     IEnumerable<TaskDto> Tasks
+);
+
+public record struct AddSubTaskAction(
+    Guid TaskId,
+    string Title,
+    Action<TaskSubTaskDto>? OnSuccess = null
+);
+
+public record struct UpdateSubTaskAction(
+    Guid TaskId,
+    Guid SubTaskId,
+    string Title,
+    bool IsCompleted,
+    Action<TaskSubTaskDto>? OnSuccess = null
+);
+
+public record struct DeleteSubTaskAction(
+    Guid TaskId,
+    Guid SubTaskId,
+    bool WasCompleted,
+    Action? OnSuccess = null
+);
+
+public record struct UpdateTaskSubTasksCountsAction(
+    Guid TaskId,
+    int SubTasksCountDelta,
+    int CompletedDelta
 );

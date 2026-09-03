@@ -38,6 +38,8 @@ public class TaskProfile : Profile
                     IsArchived = src.IsArchived,
                     UpdatedAt = src.UpdatedAt,
                     CreatedAt = src.CreatedAt,
+                    SubTasksCount = src.SubTasksCount,
+                    SubTasksCompletedCount = src.SubTasksCompletedCount,
                     TaskList = taskList,
                     Tags = tags,
                     User = user
@@ -59,11 +61,15 @@ public class TaskProfile : Profile
                         var user = mapper.Mapper.Map<UserDto>(src.User);
                         var tags = mapper.Mapper.Map<List<TagDto>>(src.Tags.ToList());
                         var attachments = mapper.Mapper.Map<List<StoredFileDto>>(src.Attachments.ToList());
+                        var subTasks = mapper.Mapper.Map<List<TaskSubTaskDto>>(
+                            src.SubTasks.OrderBy(s => s.PositionIndex).ThenBy(s => s.CreatedAt).ToList()
+                        );
                         return new TaskFullDto
                         {
                             User = user,
                             Attachments = attachments,
-                            Tags = tags
+                            Tags = tags,
+                            SubTasks = subTasks
                         };
                     }
                 );

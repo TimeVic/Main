@@ -33,6 +33,11 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
+        Map(x => x.SubTasksCount)
+            .Formula("(SELECT count(st.id) FROM task_sub_tasks st WHERE st.task_id = id)");
+        Map(x => x.SubTasksCompletedCount)
+            .Formula("(SELECT count(st.id) FROM task_sub_tasks st WHERE st.task_id = id AND st.is_completed = true)");
+        
         References(x => x.User)
             .Column("user_id")
             .Fetch.Select()
@@ -66,6 +71,13 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate()
+            .Inverse();
+
+        HasMany(x => x.SubTasks)
+            .KeyColumn("task_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.AllDeleteOrphan()
             .Inverse();
     }
 }

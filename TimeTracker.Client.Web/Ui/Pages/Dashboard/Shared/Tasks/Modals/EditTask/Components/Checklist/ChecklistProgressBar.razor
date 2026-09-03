@@ -1,0 +1,15 @@
+@inherits BaseComponent
+
+@if (TotalCount > 0)
+{
+    <div class="w-full space-y-1">
+        <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span>@string.Format(DashboardLocalizer["Checklist_Progress"].Value, CompletedCount, TotalCount)</span>
+            <span>@Percentage%</span>
+        </div>
+        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-300 @(Percentage == 100 ? "bg-emerald-500" : "bg-blue-500")"
+                 style="width: @(Percentage)%;"></div>
+        </div>
+    </div>
+}

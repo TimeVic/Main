@@ -9,6 +9,7 @@
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals.EditTask.Components.Checklist
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -81,6 +82,10 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                                 EmptyText="@DashboardLocalizer["TaskDescription_Empty"].Value"
                                 Placeholder="@DashboardLocalizer["TaskDescription"].Value"
                                 RowsMin="4" />
+
+                            <ChecklistBlock
+                                TaskId="@TaskId"
+                                SubTasks="@_task.SubTasks" />
                             <AttachmentsBlock
                                 Class="mt-4"
                                 ListClass="flex flex-wrap gap-3"

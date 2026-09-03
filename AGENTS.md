@@ -28,10 +28,17 @@ Solution folders in `TimeTracker.sln`: **Infrastructure** (reusable cross-cuttin
 
 ---
 
-## 2. Task Workflow & Implementation Standards
+## 2. Execution & Implementation Plan Rules
 
-- **Strict Adherence to Plan**: When an implementation plan or task specification is formed or provided, all listed items, components, DTOs, subtasks, and UX details must be strictly tracked and completed.
-- **Mandatory Pre-Completion Verification**: Before reporting a task as complete, perform a line-by-line verification against the original implementation plan and user requests to ensure no planned component, helper, validation, or flow was skipped.
+1. **Strict Plan Adherence:**
+   - Whenever an implementation plan or numbered list of requirements is provided, you MUST implement EVERY single item in order.
+   - Do NOT skip, summarize, or leave placeholders (TODOs) for intermediate steps unless explicitly requested.
+
+2. **Pre-Execution / Post-Execution Checklist (Mandatory):**
+   - Before outputting or editing final code, perform a self-check confirming all N requirements/steps from the plan are covered.
+   - If any requirement cannot be met or conflicts with existing code, explicitly state it instead of silently omitting it.
+
+### General Implementation Standards
 - **English Only**: Write all comments, code documentation, and commit/task notes in English.
 - **No Git Commits**: Do not create git commits directly unless explicitly requested.
 - **Issue Fix Documentation**: When adding a fix for a specific issue or bug, add a concise comment describing the resolved problem. Avoid meaningless comments like `@* Added: Invalid *@`.
@@ -71,6 +78,7 @@ Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-regi
 - Entity→DTO mapping profiles live in `TimeTracker.Api/Profiles/Api/` (one `Profile` per entity, e.g. `TimeEntryProfile`).
 - DTOs live in `TimeTracker.Api.Shared/Dto/Entity/`.
 - Request / Response types live in `TimeTracker.Api.Shared/Dto/RequestsAndResponses/`.
+- **Avoid Lazy Loading in AutoMapper via `IgnoreAllAndConstructUsing`**: Never use `.ForMember(...)` directly on entity-to-DTO mappings without ignoring all members. Default AutoMapper member traversal touches all properties, triggering unintentional loading of lazy-loaded fields/relationships across the entire Entity tree. Always map entities using `.IgnoreAllAndConstructUsing((src, mapper) => new MyDto { ... })` (from `TimeTracker.Business.Extensions.AutoMapperExtensions`).
 
 ### Exception & Error Handling
 - Domain exceptions implement `IDomainException` → intercepted by `ExceptionHandlerActionFilter` → returns HTTP 400:

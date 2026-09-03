@@ -1,0 +1,53 @@
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@inherits BaseComponent
+
+<div class="flex items-center justify-between py-1.5 px-2 hover:bg-slate-50/80 rounded-lg group transition-colors">
+    <div class="flex items-center flex-1 min-w-0 mr-2">
+        <input
+            type="checkbox"
+            checked="@SubTask.IsCompleted"
+            @onchange="ToggleCompleted"
+            class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500/10 cursor-pointer accent-blue-600 shrink-0" />
+
+        @if (_isEditing)
+        {
+            <input
+                @ref="_editInputRef"
+                type="text"
+                class="ml-2.5 w-full bg-white border border-blue-400 focus:ring-2 focus:ring-blue-500/20 rounded-md px-2 py-0.5 text-sm text-slate-800 outline-none"
+                value="@_editingTitle"
+                @oninput="HandleEditInput"
+                @onkeydown="HandleEditKeyDown"
+                @onblur="SaveEdit" />
+        }
+        else
+        {
+            <span
+                class="ml-2.5 select-none cursor-pointer flex-1 truncate text-sm transition-all duration-150 @(SubTask.IsCompleted ? "text-slate-400 line-through font-normal" : "text-slate-700 font-medium")"
+                @ondblclick="StartEdit"
+                @onclick="ToggleCompleted">
+                @SubTask.Title
+            </span>
+        }
+    </div>
+
+    <div class="flex items-center gap-1 shrink-0">
+        @if (!_isEditing)
+        {
+            <button
+                type="button"
+                class="text-slate-400 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-150 cursor-pointer p-1 rounded hover:bg-slate-100"
+                @onclick="StartEdit"
+                title="Edit">
+                <i class="fa-regular fa-pen-to-square text-xs"></i>
+            </button>
+            <button
+                type="button"
+                class="text-slate-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-150 cursor-pointer p-1 rounded hover:bg-rose-50"
+                @onclick="Delete"
+                title="@DashboardLocalizer["Checklist_DeleteTooltip"].Value">
+                <i class="fa-regular fa-trash-can text-xs"></i>
+            </button>
+        }
+    </div>
+</div>

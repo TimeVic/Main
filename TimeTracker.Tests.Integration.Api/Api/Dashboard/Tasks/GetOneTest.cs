@@ -7,6 +7,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -36,6 +37,7 @@ public class GetOneTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskSeeder _taskSeeder;
+    private readonly ITaskSubTaskDao _taskSubTaskDao;
     private readonly IFileStorage _fileStorage;
     private readonly ITagSeeder _tagSeeder;
     private readonly TaskEntity _task;
@@ -45,6 +47,7 @@ public class GetOneTest: BaseTest
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
+        _taskSubTaskDao = ServiceProvider.GetRequiredService<ITaskSubTaskDao>();
         _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
@@ -124,6 +127,31 @@ public class GetOneTest: BaseTest
         
         Assert.NotEmpty(actualDto.Attachments);
         Assert.NotEmpty(actualDto.Attachments.First().Url);
+    }
+
+    [Fact]
+    public async Task ShouldReceiveSubTasks()
+    {
+        var subTask1 = await _taskSubTaskDao.AddAsync(_task, "Subtask 1");
+        var subTask2 = await _taskSubTaskDao.AddAsync(_task, "Subtask 2");
+        await _taskSubTaskDao.UpdateAsync(subTask2, "Subtask 2 done", true);
+        await FlushDbChanges(true);
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest
+        {
+            TaskId = _task.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TaskFullDto>();
+        Assert.NotNull(actualDto.SubTasks);
+        Assert.Equal(2, actualDto.SubTasks.Count);
+        
+        var subTasksList = actualDto.SubTasks.ToList();
+        Assert.Equal("Subtask 1", subTasksList[0].Title);
+        Assert.False(subTasksList[0].IsCompleted);
+        Assert.Equal("Subtask 2 done", subTasksList[1].Title);
+        Assert.True(subTasksList[1].IsCompleted);
     }
     
     [Fact]

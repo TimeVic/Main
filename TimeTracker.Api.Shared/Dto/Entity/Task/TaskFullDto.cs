@@ -7,6 +7,8 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 public class TaskFullDto : TaskDto
 {
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
+    
+    public ICollection<TaskSubTaskDto> SubTasks { get; set; } = new List<TaskSubTaskDto>();
 
     #region Calculated
 

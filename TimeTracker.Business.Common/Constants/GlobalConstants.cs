@@ -49,6 +49,11 @@ namespace TimeTracker.Business.Common.Constants
         /// The maximum number of active non-default workspaces a user can create
         /// </summary>
         public const int MaxActiveCreatedWorkspaces = 10;
+
+        /// <summary>
+        /// The maximum number of subtasks per task
+        /// </summary>
+        public const int MaxSubTasksPerTask = 100;
         
         public static readonly TimeSpan EndOfDay = TimeSpan.FromHours(23)
             .Add(TimeSpan.FromMinutes(59))

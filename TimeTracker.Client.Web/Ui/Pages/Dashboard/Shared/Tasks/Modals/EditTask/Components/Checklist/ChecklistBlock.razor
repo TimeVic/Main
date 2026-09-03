@@ -1,0 +1,46 @@
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@inherits BaseReactiveComponent
+
+<div class="w-full space-y-3 mt-5 @Class">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-list-check text-slate-500 text-sm"></i>
+            <span class="text-sm font-semibold text-slate-800">@DashboardLocalizer["Checklist_Title"]</span>
+            @if (TotalCount > 0)
+            {
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-semibold @(CompletedCount == TotalCount ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600")">
+                    @CompletedCount/@TotalCount
+                </span>
+            }
+        </div>
+    </div>
+
+    @if (TotalCount > 0)
+    {
+        <ChecklistProgressBar
+            TotalCount="@TotalCount"
+            CompletedCount="@CompletedCount" />
+    }
+
+    <div class="space-y-1">
+        @foreach (var subTask in Items)
+        {
+            <ChecklistItem
+                @key="subTask.Id"
+                SubTask="@subTask"
+                OnToggle="HandleToggle"
+                OnDelete="HandleDelete"
+                OnTitleChanged="HandleTitleChanged" />
+        }
+    </div>
+
+    @if (TotalCount == 0)
+    {
+        <div class="text-xs text-slate-400 italic py-1">
+            @DashboardLocalizer["Checklist_Empty"]
+        </div>
+    }
+
+    <ChecklistInput
+        OnAdd="HandleAdd" />
+</div>

@@ -84,6 +84,10 @@ public class SecurityManager: ISecurityManager
         {
             return await HasAccessToTaskComment(accessLevel, user, taskCommentEntity);
         }
+        if (entity is TaskSubTaskEntity taskSubTaskEntity)
+        {
+            return await HasAccessToTaskSubTask(accessLevel, user, taskSubTaskEntity);
+        }
         if (entity is NoteNodeEntity noteNodeEntity)
         {
             return await HasAccessToNoteNode(accessLevel, user, noteNodeEntity);
@@ -261,6 +265,11 @@ public class SecurityManager: ISecurityManager
             return true;
         }
         return false;
+    }
+
+    private async Task<bool> HasAccessToTaskSubTask(AccessLevel accessLevel, UserEntity user, TaskSubTaskEntity subTask)
+    {
+        return await HasAccessToTask(user, subTask.Task);
     }
     
     private async Task<bool> HasAccessToTaskList(UserEntity user, TaskListEntity taskList)
