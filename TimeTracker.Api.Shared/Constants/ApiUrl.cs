@@ -171,6 +171,7 @@ public class ApiUrl
     public const string TaskSubTaskAdd = "dashboard/tasks/sub-task/add";
     public const string TaskSubTaskUpdate = "dashboard/tasks/sub-task/update";
     public const string TaskSubTaskDelete = "dashboard/tasks/sub-task/delete";
+    public const string TaskSubTasksUpdatePositions = "dashboard/tasks/sub-task/update-positions";
 
     #endregion
 

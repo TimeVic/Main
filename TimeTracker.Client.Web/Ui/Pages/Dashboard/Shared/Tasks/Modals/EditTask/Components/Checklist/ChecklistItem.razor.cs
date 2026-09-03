@@ -8,10 +8,17 @@ public partial class ChecklistItem
 {
     private ElementReference _editInputRef;
     private bool _isEditing;
+    private bool _shouldFocusInput;
     private string _editingTitle = string.Empty;
 
     [Parameter]
     public required TaskSubTaskDto SubTask { get; set; }
+
+    [Parameter]
+    public bool IsDragging { get; set; }
+
+    [Parameter]
+    public bool IsDropTarget { get; set; }
 
     [Parameter]
     public EventCallback<TaskSubTaskDto> OnToggle { get; set; }
@@ -21,6 +28,35 @@ public partial class ChecklistItem
 
     [Parameter]
     public EventCallback<(TaskSubTaskDto SubTask, string NewTitle)> OnTitleChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnDragStartCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnDragOverCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnDropCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnDragEndCallback { get; set; }
+
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (_shouldFocusInput)
+        {
+            _shouldFocusInput = false;
+            try
+            {
+                await _editInputRef.FocusAsync();
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+    }
 
     private async System.Threading.Tasks.Task ToggleCompleted()
     {
@@ -35,6 +71,7 @@ public partial class ChecklistItem
     {
         _editingTitle = SubTask.Title;
         _isEditing = true;
+        _shouldFocusInput = true;
     }
 
     private void HandleEditInput(ChangeEventArgs e)
@@ -73,5 +110,28 @@ public partial class ChecklistItem
     private async System.Threading.Tasks.Task Delete()
     {
         await OnDelete.InvokeAsync(SubTask);
+    }
+
+    private async System.Threading.Tasks.Task HandleDragStart()
+    {
+        if (_isEditing) return;
+        await OnDragStartCallback.InvokeAsync();
+    }
+
+    private async System.Threading.Tasks.Task HandleDragOver()
+    {
+        if (_isEditing) return;
+        await OnDragOverCallback.InvokeAsync();
+    }
+
+    private async System.Threading.Tasks.Task HandleDrop()
+    {
+        if (_isEditing) return;
+        await OnDropCallback.InvokeAsync();
+    }
+
+    private async System.Threading.Tasks.Task HandleDragEnd()
+    {
+        await OnDragEndCallback.InvokeAsync();
     }
 }

@@ -123,3 +123,34 @@ public class DeleteSubTaskEffect : Effect<DeleteSubTaskAction>
         }
     }
 }
+
+public class UpdateSubTaskPositionsEffect : Effect<UpdateSubTaskPositionsAction>
+{
+    private readonly IApiService _apiService;
+    private readonly ILogger<UpdateSubTaskPositionsEffect> _logger;
+
+    public UpdateSubTaskPositionsEffect(
+        IApiService apiService,
+        ILogger<UpdateSubTaskPositionsEffect> logger
+    )
+    {
+        _apiService = apiService;
+        _logger = logger;
+    }
+
+    public override async Task HandleAsync(UpdateSubTaskPositionsAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            await _apiService.TaskSubTaskUpdatePositionsAsync(new UpdatePositionsRequest
+            {
+                TaskId = action.TaskId,
+                Positions = action.Positions
+            });
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to update subtask positions");
+        }
+    }
+}

@@ -32,6 +32,15 @@ public class TaskSubTaskDao : ITaskSubTaskDao
             .Select(x => (int?)x.PositionIndex)
             .MaxAsync() ?? -1;
 
+        if (task.SubTasks.Any())
+        {
+            var inMemoryMax = task.SubTasks.Max(x => x.PositionIndex);
+            if (inMemoryMax > maxPosition)
+            {
+                maxPosition = inMemoryMax;
+            }
+        }
+
         var subTask = new TaskSubTaskEntity
         {
             Task = task,

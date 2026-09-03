@@ -1036,4 +1036,5 @@
   <data name="Checklist_TooltipInProgress" xml:space="preserve"><value>Виконано {0} з {1} підзадач</value></data>
   <data name="Checklist_TooltipCompleted" xml:space="preserve"><value>🎉 Усі підзадачі виконано!</value></data>
   <data name="Checklist_DeleteTooltip" xml:space="preserve"><value>Видалити підзадачу</value></data>
+  <data name="Checklist_DragTooltip" xml:space="preserve"><value>Перетягніть для зміни порядку</value></data>
 </root>

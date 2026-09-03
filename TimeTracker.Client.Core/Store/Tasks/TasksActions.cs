@@ -1,4 +1,4 @@
-﻿﻿using TimeTracker.Api.Shared.Dto.Entity;
+﻿using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
@@ -64,6 +64,11 @@ public record struct DeleteSubTaskAction(
     Guid SubTaskId,
     bool WasCompleted,
     Action? OnSuccess = null
+);
+
+public record struct UpdateSubTaskPositionsAction(
+    Guid TaskId,
+    IDictionary<Guid, int> Positions
 );
 
 public record struct UpdateTaskSubTasksCountsAction(
