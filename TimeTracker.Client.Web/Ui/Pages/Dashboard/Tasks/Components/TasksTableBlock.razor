@@ -108,21 +108,21 @@
                     @{ var task = context; }
                     <tr
                         @key="task.Id"
-                        class="transition @GetTaskBoardRowClass(task.Id) @GetDragRowClass(task) @(IsDropTarget(task) ? "border-t-2 border-blue-400" : "")"
+                        class="transition @GetTaskBoardRowClass(task.Id) @GetDragRowClass(task) @(IsDropTarget(task) ? "tasks-table-row--drop-target" : "")"
                         draggable="true"
                         @ondragstart="@(() => OnDragStart(task))"
                         @ondragover:preventDefault="true"
                         @ondragover="@(() => OnDragOver(task))"
                         @ondrop="@(() => OnDrop(task))"
                         @ondragend="@OnDragEnd">
-                        <td class="border-t border-slate-200 px-3 py-2 align-top">
+                        <td class="@GetCellBorderClass(task) px-3 py-2 align-top">
                             <div class="flex flex-col items-center">
                                 <LumexCheckbox
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
                         </td>
-                        <td class="cursor-pointer border-t border-slate-200 px-2 py-2 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
+                        <td class="cursor-pointer @GetCellBorderClass(task) px-2 py-2 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
                             <div class="flex">
                                 <div class="min-w-0 flex-1 space-y-1.5">
                                     <div class="flex min-w-0 items-start gap-2">
@@ -189,7 +189,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
+                        <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
                             @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                             {
                                 <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@task.ExtendedStatus.GetThemeColor()">
@@ -209,7 +209,7 @@
                                     ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                             }
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
+                        <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
                             <EnumDropDown
                                 TItem="TaskPriority"
                                 Class="whitespace-nowrap"
@@ -220,7 +220,7 @@
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
+                        <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
                             <div class="flex items-center gap-2" title="@task.User?.FormattedLogin">
                                 <UserAvatarBlock
                                     User="@task.User"
@@ -231,7 +231,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-2 align-top text-right">
+                        <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right">
                             <div class="flex items-center justify-end gap-1">
                                 <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>
