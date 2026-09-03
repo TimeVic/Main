@@ -110,9 +110,14 @@ public partial class TasksTableBlock
 
     private void OnDragOver(TaskDto task)
     {
-        if (_draggingTask == null || _draggingTask.Id == task.Id || _dragOverTaskId == task.Id)
+        if (_draggingTask == null)
             return;
-        _dragOverTaskId = task.Id;
+
+        var targetId = _draggingTask.Id == task.Id ? Guid.Empty : task.Id;
+        if (_dragOverTaskId == targetId)
+            return;
+
+        _dragOverTaskId = targetId;
         _dragRenderPending = true;
     }
 
@@ -170,6 +175,11 @@ public partial class TasksTableBlock
 
     private bool IsDropTarget(TaskDto task) =>
         _isDragging && _dragOverTaskId == task.Id && _draggingTask?.Id != task.Id;
+
+    private string GetCellBorderClass(TaskDto task) =>
+        IsDropTarget(task)
+            ? "!border-t-2 !border-blue-500"
+            : "border-t border-slate-200";
 
     private void OpenTaskEditor(TaskDto task)
     {
