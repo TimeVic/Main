@@ -1,4 +1,4 @@
-﻿@using System.Net.Http
+@using System.Net.Http
 @using System.Net.Http.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -28,8 +28,12 @@
 @using TimeTracker.Client.Web.Constants
 @using TimeTracker.Client.Core.Constants
 @using TimeTracker.Client.Web.Ui.Shared.Components.Seo
+@using TimeTracker.Client.Web.Ui.Components.Core.Modal
+@using TimeTracker.Client.Web.Ui.Components.Core.Modal.Components
+@using TimeTracker.Client.Web.Services.UI
 
 @using LumexUI
 @using LumexUI.Shared.Icons
 
 @inject IStringLocalizer<DashboardResource> DashboardLocalizer
+@inject IStringLocalizer<CommonComponentsResource> CommonLocalizer

@@ -1,4 +1,4 @@
-﻿@using LumexUI.Common
+@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
@@ -21,14 +21,6 @@
             IsOpened="_isAddTaskModalOpened"
             IsOpenedChanged="@((isOpened) => _isAddTaskModalOpened = isOpened)"
             OnAdded="@OnTaskAdded"/>
-    }
-
-    @if (_activeEntry?.Task != null)
-    {
-        <UpdateTaskModal
-            Task="_activeEntry.Task"
-            @bind-IsOpened="_isUpdateTaskModalOpened"
-            OnClose="@(() => _isUpdateTaskModalOpened = false)"/>
     }
 
     @{
@@ -78,7 +70,7 @@
                 {
                     <button
                         type="button"
-                        @onclick="@(() => _isUpdateTaskModalOpened = true)"
+                        @onclick="@OpenTaskDetailsModal"
                         class="w-time-form__task-chip inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
                         <i class="fa-regular fa-square-check text-blue-600"></i>
                         <span>@_activeEntry.Task.FormattedId</span>

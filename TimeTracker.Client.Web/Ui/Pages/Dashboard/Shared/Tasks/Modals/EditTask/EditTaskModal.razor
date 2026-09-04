@@ -1,33 +1,27 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 
 @inherits BaseReactiveComponent
 
-@if (IsOpened && Task != null)
+@if (Task != null)
 {
-    <div class="update-task-modal">
-        <LumexModal 
-            Open="true" 
-            OnClose="@OnCloseModal"
-            Placement="ModalPlacement.Auto"
-            Size="ModalSize.Large"
-            ScrollBehavior="ScrollBehavior.Normal">
-            <LumexModalContent>
-                <LumexModalHeader Class="pr-14">
-                    <TaskDetailsHeaderBlock
-                        Task="@Task"
-                        IsFullPage="false"
-                        TitleChanged="OnTitleChanged" />
-                </LumexModalHeader>
-                <LumexModalBody Class="pt-3">
-                    <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms.UpdateTaskForm
-                        @ref="_taskForm"
-                        TaskId="Task.Id"
-                        StatusChanged="@OnStatusChanged" />
-                </LumexModalBody>
-            </LumexModalContent>
-        </LumexModal>
+    <div
+        class="update-task-modal">
+        <AppModalHeader
+            Class="shrink-0"
+            OnClose="@OnCloseModal">
+            <TaskDetailsHeaderBlock
+                Task="@Task"
+                IsFullPage="false"
+                TitleChanged="@OnTitleChanged" />
+        </AppModalHeader>
+
+        <AppModalBody
+            NoPadding="true">
+            <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms.UpdateTaskForm
+                @ref="_taskForm"
+                TaskId="Task.Id"
+                StatusChanged="@OnStatusChanged" />
+        </AppModalBody>
     </div>
 }

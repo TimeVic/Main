@@ -16,12 +16,6 @@
         IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
 }
 
-@if (IsTeamInvitationAvailable)
-{
-    <AddMemberModal
-        IsOpened="_isInviteTeamModalOpened"
-        IsOpenedChanged="@((isOpened) => _isInviteTeamModalOpened = isOpened)" />
-}
 
 <SupportModal
     IsOpened="_isSupportModalOpened"

@@ -27,8 +27,6 @@
         </div>
     </div>
 
-    <UpdateTaskModal @bind-IsOpened="_isTaskEditorOpened" Task="_taskToUpdate" OnClose="@(() => _taskToUpdate = null)" />
-
     <div class="@TableContentClass">
         @if (Tasks.Any())
         {

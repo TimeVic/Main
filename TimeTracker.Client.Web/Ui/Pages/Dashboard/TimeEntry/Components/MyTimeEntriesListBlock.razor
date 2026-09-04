@@ -19,7 +19,6 @@
         OnCancel="@(() => _timeEntryToDelete = null)"
     />
 }
-<UpdateTaskModal @bind-IsOpened="_isTaskEditorOpened" Task="_taskToEdit" OnClose="@(() => _taskToEdit = null)" />
 
 @{
     var listItems = GetListItems();
@@ -80,7 +79,7 @@
                         Entry="@timeEntry.Entry"
                         OnEdit="OnEditTimeEntry"
                         OnClone="OnCloneTimeEntry"
-                        OnOpenTask="@(entry => { _taskToEdit = entry.Task; _isTaskEditorOpened = true; })"
+                        OnOpenTask="@OnOpenTask"
                         OnDelete="(entry) => _timeEntryToDelete = entry"
                         OnSubmitForApproval="OnSubmitForApprovalTimeEntry"
                     />

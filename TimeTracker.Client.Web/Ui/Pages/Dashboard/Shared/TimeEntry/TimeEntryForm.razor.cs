@@ -1,8 +1,9 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry;
 
@@ -22,10 +23,12 @@ public partial class TimeEntryForm : IDisposable
 
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
     
     private bool _isEditModalOpened = false;
     private bool _isAddTaskModalOpened = false;
-    private bool _isUpdateTaskModalOpened = false;
     
     private TimeEntryDto? _activeEntry
     {
@@ -136,6 +139,14 @@ public partial class TimeEntryForm : IDisposable
     {
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry, isSetProjectDefaults));
         await Task.CompletedTask;
+    }
+
+    private async Task OpenTaskDetailsModal()
+    {
+        if (_activeEntry?.Task != null)
+        {
+            await _modalDialogService.ShowEditTaskModal(_activeEntry.Task);
+        }
     }
 
     private void OnTimeEntryStateChanged(object? sender, EventArgs e)
