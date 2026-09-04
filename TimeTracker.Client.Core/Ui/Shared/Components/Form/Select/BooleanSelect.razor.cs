@@ -25,10 +25,10 @@ public partial class BooleanSelect
     public bool Clearable { get; set; } = true;
 
     [Parameter]
-    public bool FullWidth { get; set; }
+    public bool FullWidth { get; set; } = true;
 
     [Parameter]
-    public DropDownType SelectType { get; set; } = DropDownType.DropDown;
+    public DropDownType SelectType { get; set; } = DropDownType.Select;
 
     private readonly List<bool?> _items = new() { true, false };
 

@@ -89,29 +89,11 @@
             <LumexCardBody Class="space-y-6 p-6">
                 <div class="grid gap-6 md:grid-cols-2">
                     <div>
-                        <LumexSelect
-                            TValue="TimeEntryImportSourceType"
+                        <EnumSelect
+                            TItem="TimeEntryImportSourceType"
                             Label="@DashboardLocalizer["WorkspaceSettings_Import_Source"].Value"
-                            LabelPlacement="@LabelPlacement.Outside"
-                            Variant="InputVariant.Outlined"
-                            @bind-Value="_selectedSource">
-                            <LumexSelectItem
-                                Value="@TimeEntryImportSourceType.Clockify"
-                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"].Value">
-                                <span class="inline-flex items-center gap-2">
-                                    <i class="fa-solid fa-clock text-blue-500" aria-hidden="true"></i>
-                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"]</span>
-                                </span>
-                            </LumexSelectItem>
-                            <LumexSelectItem
-                                Value="@TimeEntryImportSourceType.Toggl"
-                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"].Value">
-                                <span class="inline-flex items-center gap-2">
-                                    <i class="fa-solid fa-hourglass-half text-rose-500" aria-hidden="true"></i>
-                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"]</span>
-                                </span>
-                            </LumexSelectItem>
-                        </LumexSelect>
+                            ItemIcon="@GetSourceIcon"
+                            @bind-Value="_selectedSource" />
                     </div>
 
                     <div>

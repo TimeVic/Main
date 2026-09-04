@@ -13,7 +13,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     protected EditContext? CurrentEditContext { get; set; }
     
     [Parameter]
-    public DropDownType Type { get; set; } = DropDownType.DropDown;
+    public DropDownType Type { get; set; } = DropDownType.Select;
 
     [Parameter]
     public SelectSize Size { get; set; } = SelectSize.Medium;
@@ -70,7 +70,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     public string Class { get; set; }
     
     [Parameter]
-    public bool FullWidth { get; set; } = false;
+    public bool FullWidth { get; set; } = true;
     
     [Parameter]
     public EventCallback<T?> SelectedItemChanged { get; set; }

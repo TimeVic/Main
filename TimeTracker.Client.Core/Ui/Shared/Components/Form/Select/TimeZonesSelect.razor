@@ -1,0 +1,41 @@
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+@inherits AppBaseSelect
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="TimeZoneInfo"
+        Value="@_selectedItem"
+        ValueChanged="@OnTimeZoneSelected"
+        Items="@_timeZones"
+        ItemText="@(item => item.DisplayName)"
+        Label="@Label"
+        Placeholder="@LocalizedPlaceholder"
+        IsDisabled="@Disabled"
+        IsClearable="@Clearable"
+        IsFullWidth="@FullWidth"
+        Variant="@ResolvedVariant"
+        Color="@DropDownColor"
+        Size="@Size"
+        HasSearch="true"
+        SearchPlaceholder="@DashboardLocalizer["Search"].Value">
+        <TriggerContent>
+            @if (_selectedItem != null)
+            {
+                <span
+                    class="truncate">
+                    @_selectedItem.DisplayName
+                </span>
+            }
+            else
+            {
+                <span
+                    class="text-slate-400">
+                    @LocalizedPlaceholder
+                </span>
+            }
+        </TriggerContent>
+    </AppSelect>
+</div>

@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
 @inherits BaseReactiveComponent
 
@@ -18,23 +16,15 @@
         <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
             <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">Workspace</label>
             
-            <LumexDropdown Class="w-100">
-                <LumexDropdownTrigger>
-                    <LumexButton
-                        FullWidth="true"
-                        Variant="@Variant.Outlined"
-                        Color="ThemeColor.Primary">
-                        
-                        @AuthState.Value.Workspace!.Name
-                    </LumexButton>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu>
-                    @foreach (var workspace in WorkspaceState.Value.List)
-                    {
-                        <LumexDropdownItem @OnClick="(() => OnWorkspaceChanged(workspace.Id))">@workspace.Name</LumexDropdownItem>
-                    }
-                </LumexDropdownMenu>
-            </LumexDropdown>
+            <AppSelect
+                TValue="WorkspaceDto"
+                Value="@AuthState.Value.Workspace"
+                ValueChanged="@OnWorkspaceChanged"
+                Items="@WorkspaceState.Value.List"
+                ItemText="@(w => w.Name)"
+                IsFullWidth="true"
+                Variant="SelectVariant.Button"
+                Color="SelectColor.Primary" />
         </div>
     </div>    
 }

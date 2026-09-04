@@ -19,12 +19,19 @@ public partial class ImportBlock
     [Inject]
     private ILogger<ImportBlock> Logger { get; set; } = null!;
 
-    private TimeEntryImportSourceType _selectedSource = TimeEntryImportSourceType.Clockify;
+    private TimeEntryImportSourceType? _selectedSource = TimeEntryImportSourceType.Clockify;
     private bool _isBillable;
     private string _hourlyRateString = string.Empty;
     private IBrowserFile? _selectedFile;
     private bool _isImporting;
     private ImportResponse? _importResult;
+
+    private string GetSourceIcon(TimeEntryImportSourceType source) => source switch
+    {
+        TimeEntryImportSourceType.Clockify => "fa-solid fa-clock text-blue-500",
+        TimeEntryImportSourceType.Toggl => "fa-solid fa-hourglass-half text-rose-500",
+        _ => string.Empty
+    };
 
     private async Task OnImportClick()
     {
@@ -44,7 +51,7 @@ public partial class ImportBlock
             }
 
             var response = await ApiService.WorkspaceTimeEntryImportAsync(
-                _selectedSource,
+                _selectedSource ?? TimeEntryImportSourceType.Clockify,
                 _isBillable,
                 hourlyRate,
                 _selectedFile

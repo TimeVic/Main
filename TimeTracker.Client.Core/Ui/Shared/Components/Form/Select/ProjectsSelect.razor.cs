@@ -8,19 +8,12 @@ using TimeTracker.Client.Core.Store.Client;
 using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Project;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Models;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
 {
-    private sealed class ProjectClientGroup
-    {
-        public required Guid ClientId { get; init; }
-
-        public required string Name { get; init; }
-
-        public required IReadOnlyCollection<ProjectDto> Projects { get; init; }
-    }
 
     [Parameter]
     public bool IsShowProjectsWithoutClients { get; set; } = true;

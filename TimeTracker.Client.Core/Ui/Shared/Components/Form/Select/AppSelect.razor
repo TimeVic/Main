@@ -30,7 +30,7 @@
     {
         <button
             type="button"
-            class="inline-flex items-center justify-between gap-2 @ButtonSizeClasses font-medium border transition-all duration-150 cursor-pointer select-none @ButtonColorClasses @(IsOpen ? "ring-2 ring-blue-500/20" : "") @(IsDisabled ? "opacity-60 cursor-not-allowed" : "")"
+            class="inline-flex items-center justify-between gap-2 @ButtonSizeClasses font-medium border transition-all duration-150 cursor-pointer select-none @ButtonColorClasses @(IsOpen ? "ring-2 ring-blue-500/20" : "") @(IsDisabled ? "opacity-60 cursor-not-allowed" : "") @(IsFullWidth ? "w-full" : "")"
             disabled="@IsDisabled"
             @onclick="ToggleOpen"
             @onclick:stopPropagation="true">
@@ -63,17 +63,23 @@
                 {
                     @PrefixContent
                 }
-                <span
-                    class="truncate @(!HasValue ? "text-slate-400 dark:text-slate-500" : "")">
-                    @if (TriggerContent != null)
+                @if (TriggerContent != null)
+                {
+                    @TriggerContent
+                }
+                else
+                {
+                    @if (!IsMultiple && Value != null && ItemIcon != null && !string.IsNullOrWhiteSpace(ItemIcon(Value)))
                     {
-                        @TriggerContent
+                        <i
+                            class="@ItemIcon(Value) shrink-0">
+                        </i>
                     }
-                    else
-                    {
+                    <span
+                        class="truncate @(!HasValue ? "text-slate-400 dark:text-slate-500" : "")">
                         @SelectedDisplaySummary
-                    }
-                </span>
+                    </span>
+                }
                 @if (IsMultiple && Values != null && Values.Count > 1)
                 {
                     <span

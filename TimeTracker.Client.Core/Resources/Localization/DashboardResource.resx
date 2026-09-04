@@ -939,6 +939,10 @@
   <data name="WorkspaceSettings_Import_Source" xml:space="preserve"><value>Import Source</value></data>
   <data name="WorkspaceSettings_Import_SourceClockify" xml:space="preserve"><value>Clockify (CSV)</value></data>
   <data name="WorkspaceSettings_Import_SourceToggl" xml:space="preserve"><value>Toggl (CSV)</value></data>
+  <data name="TimeEntryImportSourceType_Clockify" xml:space="preserve"><value>Clockify (CSV)</value></data>
+  <data name="TimeEntryImportSourceType_Toggl" xml:space="preserve"><value>Toggl (CSV)</value></data>
+  <data name="SelectTimeZone" xml:space="preserve"><value>Select time zone</value></data>
+  <data name="SelectLanguage" xml:space="preserve"><value>Select language</value></data>
   <data name="WorkspaceSettings_Import_IsBillable" xml:space="preserve"><value>Mark entries as billable</value></data>
   <data name="WorkspaceSettings_Import_IsBillable_Helper" xml:space="preserve"><value>Clockify CSV export does not contain billable status. This setting will be applied to imported entries.</value></data>
   <data name="WorkspaceSettings_Import_IsBillable_Helper_Toggl" xml:space="preserve"><value>Toggl CSV export includes billable status. This setting is used as a fallback if not specified.</value></data>

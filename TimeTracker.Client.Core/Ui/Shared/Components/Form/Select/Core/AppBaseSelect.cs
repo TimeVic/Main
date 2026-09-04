@@ -41,7 +41,7 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
     }
 
     [Parameter]
-    public bool IsFullWidth { get; set; }
+    public bool IsFullWidth { get; set; } = true;
 
     [Parameter]
     public bool FullWidth
@@ -52,6 +52,16 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
 
     [Parameter]
     public bool IsMultiple { get; set; }
+
+    [Parameter]
+    public bool IsRequired { get; set; }
+
+    [Parameter]
+    public bool Required
+    {
+        get => IsRequired;
+        set => IsRequired = value;
+    }
 
     [Parameter]
     public SelectVariant Variant { get; set; } = SelectVariant.Input;

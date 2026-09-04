@@ -19,7 +19,6 @@ public partial class UpdateWorkspaceForm
     public IState<WorkspaceState> _workspaceState { get; set; }
     
     private WorkspaceDto? _workspace;
-    private IReadOnlyCollection<TimeZoneInfo> _timeZones;
     
     private UpdateRequest model = new();
     private EditForm _form;
@@ -27,7 +26,6 @@ public partial class UpdateWorkspaceForm
 
     protected override async Task OnInitializedAsync()
     {
-        _timeZones = TimeZoneInfo.GetSystemTimeZones();
         _workspace = _workspaceState.Value.List.First(
             x => x.Id == _authState.Value.Workspace!.Id
         );

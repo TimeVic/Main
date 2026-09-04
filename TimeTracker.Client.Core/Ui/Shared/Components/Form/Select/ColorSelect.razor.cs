@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Models;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class ColorSelect
 {
-    private sealed record TagColorOption(string Code);
 
     [Parameter]
     public string? Label { get; set; }
 
     [Parameter]
-    public DropDownType Type { get; set; } = DropDownType.DropDown;
+    public DropDownType Type { get; set; } = DropDownType.Select;
 
     [Parameter]
     public string Placeholder { get; set; } = string.Empty;

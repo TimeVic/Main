@@ -1,5 +1,6 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Workspace;
@@ -17,9 +18,11 @@ public partial class WorkspaceMenuBlock
     [Inject]
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
     
-    private void OnWorkspaceChanged(Guid workspaceId)
+    private void OnWorkspaceChanged(WorkspaceDto? workspace)
     {
-        var workspace = WorkspaceState.Value.List.First(x => x.Id == workspaceId);
-        _workspaceInitialization.ChangeWorkspace(workspace);
+        if (workspace != null)
+        {
+            _workspaceInitialization.ChangeWorkspace(workspace);
+        }
     }
 }

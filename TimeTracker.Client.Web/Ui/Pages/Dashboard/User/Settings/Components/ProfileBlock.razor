@@ -103,29 +103,9 @@
             <p class="mb-3 text-sm font-semibold text-slate-700">@DashboardLocalizer["UserSettings_InterfaceLanguageSection"]</p>
             <p class="mb-4 text-sm text-slate-500">@DashboardLocalizer["UserSettings_InterfaceLanguageSectionDescription"]</p>
             <div class="max-w-xs">
-                <LumexSelect
-                    TValue="string"
+                <LanguagesSelect
                     Label="@DashboardLocalizer["Language"].Value"
-                    LabelPlacement="@LabelPlacement.Outside"
-                    Variant="InputVariant.Outlined"
-                    @bind-Value="_selectedLanguage">
-                    <LumexSelectItem
-                        Value="@ILocalizationUrlService.EnglishCultureName"
-                        TextValue="@DashboardLocalizer["English"].Value">
-                        <span class="inline-flex items-center gap-2">
-                            <span aria-hidden="true">🇺🇸</span>
-                            <span>@DashboardLocalizer["English"]</span>
-                        </span>
-                    </LumexSelectItem>
-                    <LumexSelectItem
-                        Value="@ILocalizationUrlService.UkrainianCultureName"
-                        TextValue="@DashboardLocalizer["Ukrainian"].Value">
-                        <span class="inline-flex items-center gap-2">
-                            <span aria-hidden="true">🇺🇦</span>
-                            <span>@DashboardLocalizer["Ukrainian"]</span>
-                        </span>
-                    </LumexSelectItem>
-                </LumexSelect>
+                    @bind-Value="_selectedLanguage" />
             </div>
         </div>
 

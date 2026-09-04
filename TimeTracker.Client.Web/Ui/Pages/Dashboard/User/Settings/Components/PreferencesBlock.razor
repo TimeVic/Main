@@ -1,6 +1,4 @@
 @using LumexUI.Common
-@using TimeTracker.Client.Web.Services
-
 @inherits BaseReactiveComponent
 
 <LumexCard>
@@ -13,25 +11,9 @@
     </LumexCardHeader>
     <LumexCardBody>
         <div class="max-w-xs">
-            <LumexSelect
-                TValue="string"
+            <LanguagesSelect
                 Label="@DashboardLocalizer["Language"].Value"
-                LabelPlacement="@LabelPlacement.Outside"
-                Variant="InputVariant.Outlined"
-                @bind-Value="_selectedLanguage">
-                <LumexSelectItem Value="@ILocalizationUrlService.EnglishCultureName">
-                    <span class="inline-flex items-center gap-2">
-                        <span aria-hidden="true">🇺🇸</span>
-                        <span>@DashboardLocalizer["English"]</span>
-                    </span>
-                </LumexSelectItem>
-                <LumexSelectItem Value="@ILocalizationUrlService.UkrainianCultureName">
-                    <span class="inline-flex items-center gap-2">
-                        <span aria-hidden="true">🇺🇦</span>
-                        <span>@DashboardLocalizer["Ukrainian"]</span>
-                    </span>
-                </LumexSelectItem>
-            </LumexSelect>
+                @bind-Value="_selectedLanguage" />
         </div>
 
         <div class="mt-6 flex justify-end">

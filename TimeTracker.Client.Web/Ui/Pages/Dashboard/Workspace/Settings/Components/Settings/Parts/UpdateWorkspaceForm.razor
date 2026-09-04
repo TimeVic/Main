@@ -20,20 +20,10 @@
             </div>
 
             <div>
-                <LumexSelect 
-                    TValue="string"
+                <TimeZonesSelect 
                     Label="@DashboardLocalizer["UpdateWorkspaceForm_TimeZone"]"
-                    LabelPlacement="@LabelPlacement.Outside"
-                    Variant="InputVariant.Outlined"
-                    Required="true"
-                    @bind-Value="model.TimeZone">
-                    @foreach (var timeZone in _timeZones)
-                    {
-                        <LumexSelectItem @key="@timeZone.Id" Value="@timeZone.Id">
-                            @timeZone.DisplayName
-                        </LumexSelectItem>
-                    }
-                </LumexSelect>
+                    IsRequired="true"
+                    @bind-Value="model.TimeZone" />
             </div>
             
             <div>

@@ -45,6 +45,19 @@ public partial class EnumSelect<TItem> : AppBaseSelect where TItem : struct, ICo
     [Parameter]
     public ICollection<TItem> AllowedValues { get; set; } = new List<TItem>();
 
+    [Parameter]
+    public Func<TItem, string>? ItemIcon { get; set; }
+
+    protected string? GetItemIcon(TItem? item)
+    {
+        if (item.HasValue && ItemIcon != null)
+        {
+            return ItemIcon(item.Value);
+        }
+
+        return null;
+    }
+
     private List<TItem?> _list = new();
     private TItem? _value;
 
