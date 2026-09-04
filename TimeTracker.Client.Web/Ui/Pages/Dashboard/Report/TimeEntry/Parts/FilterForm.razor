@@ -9,7 +9,7 @@
     <LumexCardBody>
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div>
-                <ProjectsDropDown
+                <ProjectsSelect
                     Type="DropDownType.Select"
                     Label="@DashboardLocalizer["Projects"].Value"
                     Clearable="true"
@@ -21,7 +21,7 @@
             @if (_securityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
             {
                 <div>
-                    <MembersDropDown
+                    <MembersSelect
                         Type="DropDownType.Select"
                         Label="@DashboardLocalizer["Member"].Value"
                         FullWidth="true"
@@ -31,7 +31,7 @@
                 </div>
             }
             <div>
-                <BooleanDropDown
+                <BooleanSelect
                     SelectType="DropDownType.Select"
                     Label="@DashboardLocalizer["Billable"].Value"
                     FullWidth="true"

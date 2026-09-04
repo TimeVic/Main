@@ -1,9 +1,8 @@
 @using System.Linq.Expressions
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Client.Core.Constants.Ui
 
-<TaskListsDropDown
+<TaskListsSelect
     Type="@Type"
     Label="@Label"
     Disabled="@Disabled"
@@ -18,11 +17,13 @@
     ProjectId="@ProjectId"
     ClientId="@ClientId"
     IsExtendedInfo="@IsExtendedInfo"
-    LabelPlacement="@LabelPlacement"
-    Size="Size"
-    Variant="@Variant" />
+    Size="@Size">
+</TaskListsSelect>
 
 @code {
+    [Parameter]
+    public SelectSize Size { get; set; } = SelectSize.Medium;
+
     [Parameter]
     public DropDownType Type { get; set; } = DropDownType.DropDown;
 
@@ -64,13 +65,4 @@
 
     [Parameter]
     public bool IsExtendedInfo { get; set; } = true;
-
-    [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
 }

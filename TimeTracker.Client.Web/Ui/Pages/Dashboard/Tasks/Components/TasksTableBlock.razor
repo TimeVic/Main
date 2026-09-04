@@ -160,23 +160,21 @@
                                         }
                                         else
                                         {
-                                            <EnumDropDown
+                                            <EnumSelect
                                                 TItem="TaskStatus"
                                                 Class="shrink-0"
-                                                DropDownColor="@task.Status.GetThemeColor()"
-                                                DropDownVariant="Variant.Light"
+                                                DropDownColor="@task.Status.GetSelectColor()"
                                                 SelectType="DropDownType.DropDown"
-                                                Size="Size.Small"
+                                                Size="SelectSize.Small"
                                                 Value="@task.Status"
                                                 ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                                         }
-                                        <EnumDropDown
+                                        <EnumSelect
                                             TItem="TaskPriority"
                                             Class="shrink-0"
-                                            DropDownColor="@task.Priority.GetThemeColor()"
-                                            DropDownVariant="Variant.Light"
+                                            DropDownColor="@task.Priority.GetSelectColor()"
                                             SelectType="DropDownType.DropDown"
-                                            Size="Size.Small"
+                                            Size="SelectSize.Small"
                                             Value="@task.Priority"
                                             ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                                         <UserAvatarBlock
@@ -196,25 +194,23 @@
                             }
                             else
                             {
-                                <EnumDropDown
+                                <EnumSelect
                                     TItem="TaskStatus"
                                     Class="whitespace-nowrap"
-                                    DropDownColor="@task.Status.GetThemeColor()"
-                                    DropDownVariant="Variant.Light"
+                                    DropDownColor="@task.Status.GetSelectColor()"
                                     SelectType="DropDownType.DropDown"
-                                    Size="Size.Small"
+                                    Size="SelectSize.Small"
                                     Value="@task.Status"
                                     ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                             }
                         </td>
                         <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
-                            <EnumDropDown
+                            <EnumSelect
                                 TItem="TaskPriority"
                                 Class="whitespace-nowrap"
-                                DropDownColor="@task.Priority.GetThemeColor()"
-                                DropDownVariant="Variant.Light"
+                                DropDownColor="@task.Priority.GetSelectColor()"
                                 SelectType="DropDownType.DropDown"
-                                Size="Size.Small"
+                                Size="SelectSize.Small"
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>

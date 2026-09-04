@@ -81,7 +81,7 @@
                     <div class="w-time-form__project-control flex items-center gap-2">
                         <div class="@projectSelectClass @(!_hasActiveEntry ? "cursor-pointer" : "")" @onclick="@OnProjectAreaClick">
                             <div class="@(!_hasActiveEntry ? "pointer-events-none" : "")">
-                                <ProjectsDropDown
+                                <ProjectsSelect
                                     Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
                                     Disabled="@(!_hasActiveEntry)"
                                     Clearable="true"

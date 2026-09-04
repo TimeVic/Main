@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Core.Components;
@@ -13,7 +13,20 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     protected EditContext? CurrentEditContext { get; set; }
     
     [Parameter]
-    public DropDownType Type { get; set; } = DropDownType.DropDown; 
+    public DropDownType Type { get; set; } = DropDownType.DropDown;
+
+    [Parameter]
+    public SelectSize Size { get; set; } = SelectSize.Medium;
+
+    [Parameter]
+    public SelectVariant Variant { get; set; } = SelectVariant.Input;
+
+    protected SelectVariant ResolvedVariant => Type switch
+    {
+        DropDownType.DropDown => SelectVariant.Button,
+        DropDownType.Select => SelectVariant.Input,
+        _ => Variant
+    };
     
     [Parameter]
     public string? Label { get; set; }

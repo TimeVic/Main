@@ -1,16 +1,16 @@
-@inherits TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TimeTracker.Api.Shared.Dto.Entity.List.CurrencyDto>
-@using TimeTracker.Api.Shared.Dto.Entity.List
+@inherits TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TimeTracker.Api.Shared.Dto.Entity.ClientDto>
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
 
 <div
     class="@Class @(FullWidth ? "w-full" : "")">
     <AppSelect
-        TValue="CurrencyDto"
+        TValue="ClientDto"
         Value="@_selectedItem"
-        ValueChanged="@OnCurrencySelected"
+        ValueChanged="@OnClientSelected"
         Items="@_list"
-        ItemText="@(c => $"{c.Code} ({c.Symbol})")"
+        ItemText="@(c => c.Name)"
         Label="@Label"
         Placeholder="@_placeholder"
         IsDisabled="@Disabled"

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Constants.Ui;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class BooleanDropDown
+public partial class BooleanSelect
 {
     [Parameter]
     public bool? Value { get; set; }
@@ -29,21 +30,21 @@ public partial class BooleanDropDown
     [Parameter]
     public DropDownType SelectType { get; set; } = DropDownType.DropDown;
 
-    private bool _isOpen;
+    private readonly List<bool?> _items = new() { true, false };
 
-    private Task OnOpenChanged(bool isOpen)
+    protected SelectVariant ResolvedVariant => SelectType switch
     {
-        _isOpen = isOpen;
-        return Task.CompletedTask;
-    }
+        DropDownType.DropDown => SelectVariant.Button,
+        _ => SelectVariant.Input
+    };
 
-    private async Task OnItemSelected(bool? value)
+    private string GetDisplayText(bool? item)
     {
-        _isOpen = false;
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
-        await ValueChanged.InvokeAsync(value);
-    }
+        if (!item.HasValue)
+        {
+            return string.Empty;
+        }
 
-    private Task OnSelectValueChanged(bool? value) => ValueChanged.InvokeAsync(value);
+        return item.Value ? DashboardLocalizer["Yes"] : DashboardLocalizer["No"];
+    }
 }

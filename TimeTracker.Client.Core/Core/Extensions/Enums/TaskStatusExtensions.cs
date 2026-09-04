@@ -1,11 +1,29 @@
-﻿using LumexUI.Common;
+using LumexUI.Common;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Core.Core.Extensions.Enums;
 
 public static class TaskStatusExtensions
 {
+    public static SelectColor GetSelectColor(this TaskStatus status) => status switch
+    {
+        TaskStatus.Backlog => SelectColor.Secondary,
+        TaskStatus.Done => SelectColor.Success,
+        TaskStatus.ToDo => SelectColor.Primary,
+        _ => SelectColor.Default
+    };
+
+    public static SelectColor GetSelectColor(this ExtendedTaskStatus status) => status switch
+    {
+        ExtendedTaskStatus.Backlog => SelectColor.Secondary,
+        ExtendedTaskStatus.Done => SelectColor.Success,
+        ExtendedTaskStatus.InProgress => SelectColor.Warning,
+        ExtendedTaskStatus.ToDo => SelectColor.Primary,
+        _ => SelectColor.Default
+    };
+
     public static ThemeColor GetThemeColor(this TaskStatus status)
     {
         switch (status)

@@ -77,14 +77,14 @@
         <LumexCardBody>
             <div class="grid gap-4 md:grid-cols-3">
                 <div>
-                    <ClientsDropDown
+                    <ClientsSelect
                         Label="@DashboardLocalizer["Client"].Value"
                         Clearable="true"
                         Value="@SelectedClientId"
                         SelectedItemChanged="OnClientFilterChanged"/>
                 </div>
                 <div>
-                    <ProjectsDropDown
+                    <ProjectsSelect
                         Label="@DashboardLocalizer["Project"].Value"
                         Clearable="true"
                         ClientId="@SelectedClientId"

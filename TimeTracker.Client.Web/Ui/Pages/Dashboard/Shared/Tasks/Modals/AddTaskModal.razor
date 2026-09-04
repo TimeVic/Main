@@ -42,10 +42,8 @@
                     else
                     {
                         <div>
-                            <TaskListsDropDown
+                            <TaskListsSelect
                                 Label="@DashboardLocalizer["TasksListBlock_Title"].Value"
-                                Variant="InputVariant.Outlined"
-                                LabelPlacement="LabelPlacement.Outside"
                                 ProjectId="@ProjectId"
                                 Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
                                 Disabled="@_isLoading"

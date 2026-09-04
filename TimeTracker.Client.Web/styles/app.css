@@ -2,6 +2,8 @@
 
 @import "../bin/lumexui/theme"; /* theme */
 @source "../bin/lumexui/*.cs"; /* styles */
+@source "../../TimeTracker.Client.Core/**/*.razor";
+@source "../../TimeTracker.Client.Core/**/*.cs";
 
 @layer components {
     /* Lumex popovers are portaled into the dialog; the dialog must not clip dropdowns that extend outside modal content. */

@@ -1,16 +1,13 @@
 using Fluxor;
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class MembersDropDown
+public partial class MembersSelect
 {
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-
     [Parameter]
     public Guid? UserId
     {
@@ -21,28 +18,15 @@ public partial class MembersDropDown
             UpdateSelectedItem();
         }
     }
-    
+
     [Parameter]
     public ICollection<Guid> AllowedIds { get; set; } = new List<Guid>();
 
-    [Parameter] 
-    public Variant DropDownVariant { get; set; } = Variant.Outlined;
-
-    [Parameter] 
-    public MenuVariant DropDownMenuVariant { get; set; } = MenuVariant.Outlined;
-
-    [Parameter] 
-    public ThemeColor DropDownColor { get; set; } = ThemeColor.Default;
-
-    [Parameter]
-    public InputVariant SelectVariant { get; set; } = InputVariant.Outlined;
-
     [Inject]
     public IState<WorkspaceMembersState> _state { get; set; }
-    
+
     private Guid? _userId;
-    private bool _isOpen;
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -54,24 +38,24 @@ public partial class MembersDropDown
         };
         UpdateList();
     }
-    
+
     private void UpdateList()
     {
         if (AllowedIds.Any())
         {
             _list = _state.Value.List
-                .Where(
-                    item => AllowedIds.Any(allowedId => allowedId == item.Id)
-                ) 
+                .Where(item => AllowedIds.Any(allowedId => allowedId == item.Id))
                 .ToList();
         }
         else
         {
-            _list = _state.Value.List;    
+            _list = _state.Value.List;
         }
+
         UpdateSelectedItem();
+        InvokeAsync(StateHasChanged);
     }
-    
+
     protected override void UpdateSelectedItem()
     {
         if (!string.IsNullOrEmpty(_selectedId) && _selectedId != Guid.Empty.ToString())
@@ -96,21 +80,7 @@ public partial class MembersDropDown
         }
     }
 
-    private Task OnOpenChanged(bool isOpen)
-    {
-        _isOpen = isOpen;
-        return Task.CompletedTask;
-    }
-
-    private async Task OnMemberSelected(WorkspaceMemberDto? member)
-    {
-        _isOpen = false;
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
-        OnMemberValueChanged(member);
-    }
-
-    private void OnMemberValueChanged(WorkspaceMemberDto? member)
+    private void OnMemberSelected(WorkspaceMemberDto? member)
     {
         _userId = member?.Id == Guid.Empty ? null : member?.User.Id;
         OnValueChanged(member);

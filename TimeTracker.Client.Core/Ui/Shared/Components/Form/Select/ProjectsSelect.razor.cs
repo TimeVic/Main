@@ -1,5 +1,4 @@
-﻿using Fluxor;
-using LumexUI.Common;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -8,10 +7,11 @@ using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Client;
 using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class ProjectsDropDown: IDisposable
+public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
 {
     private sealed class ProjectClientGroup
     {
@@ -23,17 +23,11 @@ public partial class ProjectsDropDown: IDisposable
     }
 
     [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-    
-    [Parameter]
     public bool IsShowProjectsWithoutClients { get; set; } = true;
 
     [Parameter]
     public bool IsGroupByClient { get; set; }
-    
+
     [Parameter]
     public Guid? ClientId
     {
@@ -59,23 +53,18 @@ public partial class ProjectsDropDown: IDisposable
 
     [Inject]
     public ISecurityManager _securityManager { get; set; }
-    
+
     private Guid? _clientId;
-    private bool _isOpen;
     private bool _isAddClientModalOpened;
     private bool _isAddProjectModalOpened;
     private Guid? _projectClientIdToAdd;
-    private readonly ProjectDto _addFirstClientActionItem = new()
-    {
-        Id = Guid.NewGuid()
-    };
-    private readonly Dictionary<Guid, ProjectDto> _addProjectActionItems = new();
-    private readonly Dictionary<string, ProjectDto> _groupHeaderItems = new();
+
     private bool IsCanCreateClient => _securityManager.HasPermission(WorkspacePermission.CreateClient);
     private bool IsCanCreateProject => _securityManager.HasPermission(WorkspacePermission.CreateProject);
     private bool _shouldGroupByClient => IsGroupByClient && (!_clientId.HasValue || _clientId.Value == Guid.Empty);
     private bool _shouldShowAddFirstClientAction =>
         IsCanCreateClient && _shouldGroupByClient && _clientState.Value.IsLoaded && !_clientState.Value.List.Any();
+
     private IReadOnlyCollection<ProjectClientGroup> _projectGroups => _shouldGroupByClient
         ? GetClientProjectGroups()
         : new List<ProjectClientGroup>
@@ -87,12 +76,11 @@ public partial class ProjectsDropDown: IDisposable
                 Projects = _list.OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase).ToList()
             }
         };
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Placeholder = DashboardLocalizer["SelectProject"].Value;
-        _addFirstClientActionItem.Name = DashboardLocalizer["ProjectsDropDown_AddFirstClient"].Value;
 
         _state.StateChanged += UpdateList;
         _clientState.StateChanged += UpdateList;
@@ -104,7 +92,7 @@ public partial class ProjectsDropDown: IDisposable
     {
         UpdateList();
     }
-    
+
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
@@ -123,6 +111,7 @@ public partial class ProjectsDropDown: IDisposable
         }
 
         UpdateSelectedItem();
+        InvokeAsync(StateHasChanged);
     }
 
     private IReadOnlyCollection<ProjectClientGroup> GetClientProjectGroups()
@@ -162,40 +151,6 @@ public partial class ProjectsDropDown: IDisposable
         return _shouldGroupByClient ? null : project.Client?.Name;
     }
 
-    private ProjectDto GetGroupHeaderItem(string key)
-    {
-        if (_groupHeaderItems.TryGetValue(key, out var item))
-        {
-            return item;
-        }
-
-        item = new ProjectDto
-        {
-            Id = Guid.NewGuid(),
-            Name = key
-        };
-
-        _groupHeaderItems[key] = item;
-        return item;
-    }
-
-    private ProjectDto GetAddProjectActionItem(Guid clientId)
-    {
-        if (_addProjectActionItems.TryGetValue(clientId, out var item))
-        {
-            return item;
-        }
-
-        item = new ProjectDto
-        {
-            Id = Guid.NewGuid(),
-            Name = DashboardLocalizer["AddProject"].Value
-        };
-
-        _addProjectActionItems[clientId] = item;
-        return item;
-    }
-
     protected override void UpdateSelectedItem()
     {
         _selectedItem = _list.FirstOrDefault(
@@ -203,37 +158,8 @@ public partial class ProjectsDropDown: IDisposable
         );
     }
 
-    private Task OnOpenChanged(bool isOpen)
+    private void OnProjectSelected(ProjectDto? project)
     {
-        _isOpen = isOpen;
-        return Task.CompletedTask;
-    }
-
-    private async Task OnProjectSelected(ProjectDto? project)
-    {
-        _isOpen = false;
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
-        OnValueChanged(project);
-    }
-
-    private async Task OnSelectValueChanged(ProjectDto? project)
-    {
-        if (project?.Id == _addFirstClientActionItem.Id)
-        {
-            await OnAddFirstClient();
-            await InvokeAsync(StateHasChanged);
-            return;
-        }
-
-        var addProjectAction = _addProjectActionItems.FirstOrDefault(item => item.Value.Id == project?.Id);
-        if (addProjectAction.Value != null)
-        {
-            await OnAddProject(addProjectAction.Key);
-            await InvokeAsync(StateHasChanged);
-            return;
-        }
-
         OnValueChanged(project);
     }
 
@@ -244,7 +170,6 @@ public partial class ProjectsDropDown: IDisposable
             return Task.CompletedTask;
         }
 
-        _isOpen = false;
         _isAddClientModalOpened = true;
         return Task.CompletedTask;
     }
@@ -256,7 +181,6 @@ public partial class ProjectsDropDown: IDisposable
             return Task.CompletedTask;
         }
 
-        _isOpen = false;
         _projectClientIdToAdd = clientId;
         _isAddProjectModalOpened = true;
         return Task.CompletedTask;

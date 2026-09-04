@@ -1,18 +1,16 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Client.Core.Store.List.Currency;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class CurrenciesSelect: IDisposable
-{   
-    [Parameter]
-    public bool ShowProjectsWithoutClients { get; set; } = true;
-    
+public partial class CurrenciesSelect : IDisposable
+{
     [Inject]
     public IState<CurrencyState> _state { get; set; }
-    
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -26,13 +24,14 @@ public partial class CurrenciesSelect: IDisposable
     {
         UpdateList();
     }
-    
+
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
         UpdateSelectedItem();
+        InvokeAsync(StateHasChanged);
     }
-    
+
     protected override void UpdateSelectedItem()
     {
         _selectedItem = _list.FirstOrDefault(
@@ -41,8 +40,14 @@ public partial class CurrenciesSelect: IDisposable
         StateHasChanged();
     }
 
-    public void Dispose()
+    private void OnCurrencySelected(CurrencyDto? item)
+    {
+        OnValueChanged(item);
+    }
+
+    public new void Dispose()
     {
         _state.StateChanged -= UpdateList;
+        base.Dispose();
     }
 }

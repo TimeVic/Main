@@ -161,44 +161,42 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                         }
                         else
                         {
-                            <EnumDropDown
+                            <EnumSelect
                                 TItem="TaskStatus"
                                 Label="@DashboardLocalizer["Status"]"
                                 Value="_model.Status"
-                                Size="Size.Small"
+                                Size="SelectSize.Small"
                                 ValueChanged="OnStatusChanged" />
                         }
-                        <EnumDropDown
+                        <EnumSelect
                             TItem="TaskPriority"
                             Label="@DashboardLocalizer["Priority"]"
                             Value="_model.Priority"
-                            Size="Size.Small"
+                            Size="SelectSize.Small"
                             ValueChanged="OnPriorityChanged" />
                         @if (_securityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
                         {
-                            <MembersDropDown
+                            <MembersSelect
                                 Type="DropDownType.Select"
                                 Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]"
                                 UserId="_model.UserId"
-                                Size="Size.Small"
+                                Size="SelectSize.Small"
                                 SelectedItemChanged="OnAssignedChanged"
                                 AllowedIds="_allowedUserIds" />
                         }
                         <div class="border-l border-slate-200 pl-2.5"><p class="text-xs font-medium text-slate-500">@DashboardLocalizer["Project"]</p><p class="mt-1 text-sm font-medium text-slate-800">@_task.TaskList.Project.Name</p></div>
-                        <TaskListDropDown
+                        <TaskListSelect
                             Label="@DashboardLocalizer["TaskList"]"
-                            Variant="InputVariant.Outlined"
-                            LabelPlacement="LabelPlacement.Outside"
                             ProjectId="@_task.TaskList.Project.Id"
                             Value="@_model.TaskListId"
                             Disabled="@_tasksState.Value.IsTaskSaving"
                             FullWidth="true"
-                            Size="Size.Small"
+                            Size="SelectSize.Small"
                             SelectedItemChanged="@OnTaskListChanged" />
-                        <TagsDropDown
+                        <TagsSelect
                             Label="@DashboardLocalizer["Tags"]"
                             Value="_model.TagIds"
-                            Size="Size.Small"
+                            Size="SelectSize.Small"
                             ValueChanged="OnTagsChanged" />
                         <div class="border-l border-slate-200 pl-2.5"><p class="text-xs font-medium text-slate-500">@DashboardLocalizer["TaskId"]</p><p class="mt-1 font-mono text-xs font-medium text-slate-700">@_task.FormattedId</p></div>
                         </div>

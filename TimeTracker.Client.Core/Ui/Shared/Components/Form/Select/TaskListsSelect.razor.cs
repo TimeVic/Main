@@ -1,16 +1,13 @@
-﻿using Fluxor;
-using LumexUI.Common;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.TasksList;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class TaskListsDropDown: IDisposable
-{ 
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-
+public partial class TaskListsSelect : BaseSingleSelect<TaskListDto>, IDisposable
+{
     [Parameter]
     public Guid? ProjectId
     {
@@ -27,27 +24,19 @@ public partial class TaskListsDropDown: IDisposable
             LoadList();
         }
     }
-    
+
     [Parameter]
     public Guid? ClientId { get; set; }
 
     [Parameter]
     public bool IsExtendedInfo { get; set; } = true;
 
-    [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-    
     [Inject]
     public IState<TasksListState> _state { get; set; }
-    
-    private IEnumerable<IGrouping<Guid, TaskListDto>> _groupedList => _list.GroupBy(item => item.Project.Id).AsQueryable();
-    private Guid? _projectId = null;
-    private string? _searchString = null;
-    private bool _isInitialized = false;
-    
+
+    private Guid? _projectId;
+    private bool _isInitialized;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -81,7 +70,7 @@ public partial class TaskListsDropDown: IDisposable
 
         Dispatcher.Dispatch(new LoadDropDownListAction(ProjectId));
     }
-    
+
     private void UpdateList()
     {
         _list = _state.Value.DropDownList.ToList();
@@ -95,19 +84,24 @@ public partial class TaskListsDropDown: IDisposable
         }
 
         UpdateSelectedItem();
+        InvokeAsync(StateHasChanged);
     }
 
     private void OnStateChanged(object? sender, EventArgs e)
     {
         UpdateList();
-        InvokeAsync(StateHasChanged);
     }
-    
+
     protected override void UpdateSelectedItem()
     {
         _selectedItem = _list.FirstOrDefault(
             item => item.Id.ToString() == _selectedId
         );
+    }
+
+    private void OnTaskListSelected(TaskListDto? item)
+    {
+        OnValueChanged(item);
     }
 
     public new void Dispose()

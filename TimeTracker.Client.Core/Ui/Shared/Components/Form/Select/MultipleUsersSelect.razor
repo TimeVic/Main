@@ -1,0 +1,34 @@
+@inherits BaseReactiveComponent
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="UserDto"
+        IsMultiple="true"
+        Values="@_selectedUserList"
+        ValuesChanged="@OnUsersChanged"
+        Items="@_list"
+        ItemText="@(u => u.Name)"
+        Label="@Label"
+        Placeholder="@LocalizedPlaceholder"
+        IsDisabled="@(Disabled || !_list.Any())"
+        IsClearable="@Clearable"
+        IsFullWidth="@FullWidth"
+        Size="@Size">
+        <ItemTemplate Context="user">
+            <div
+                class="flex items-center gap-2">
+                <UserAvatarBlock
+                    User="@user"
+                    SizeClass="h-6 w-6"
+                    Class="text-[10px]" />
+                <span
+                    class="truncate">
+                    @user.Name
+                </span>
+            </div>
+        </ItemTemplate>
+    </AppSelect>
+</div>

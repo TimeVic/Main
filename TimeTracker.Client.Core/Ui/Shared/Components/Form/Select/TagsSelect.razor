@@ -1,0 +1,63 @@
+@inherits BaseReactiveComponent
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="TagDto"
+        IsMultiple="true"
+        Values="@_selectedTagList"
+        ValuesChanged="@OnTagsChanged"
+        Items="@_list"
+        ItemText="@(t => t.Name)"
+        Label="@Label"
+        Placeholder="@LocalizedPlaceholder"
+        IsDisabled="@Disabled"
+        IsFullWidth="@FullWidth"
+        Size="@Size"
+        Variant="@Variant">
+        <TriggerContent>
+            @if (_selectedTagList.Any())
+            {
+                <div
+                    class="flex flex-wrap items-center gap-1.5 min-w-0">
+                    @foreach (var tag in _selectedTagList)
+                    {
+                        <span
+                            class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600">
+                            <span
+                                class="inline-block h-2.5 w-2.5 rounded-full border border-slate-300 dark:border-slate-500 shrink-0"
+                                style="@GetColorStyle(tag)">
+                            </span>
+                            <span
+                                class="truncate max-w-[8rem]">
+                                @tag.Name
+                            </span>
+                        </span>
+                    }
+                </div>
+            }
+            else
+            {
+                <span
+                    class="text-slate-400">
+                    @LocalizedPlaceholder
+                </span>
+            }
+        </TriggerContent>
+        <ItemTemplate Context="tag">
+            <div
+                class="flex items-center gap-2 min-w-0">
+                <span
+                    class="inline-block h-3 w-3 rounded-full border border-slate-300 dark:border-slate-500 shrink-0"
+                    style="@GetColorStyle(tag)">
+                </span>
+                <span
+                    class="truncate">
+                    @tag.Name
+                </span>
+            </div>
+        </ItemTemplate>
+    </AppSelect>
+</div>

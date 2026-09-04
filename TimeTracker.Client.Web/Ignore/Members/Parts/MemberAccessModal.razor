@@ -1,4 +1,4 @@
-﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember
 @using TimeTracker.Business.Common.Constants
 @using Microsoft.AspNetCore.Components
 
@@ -10,7 +10,7 @@
             @ref="_form"
             @bind-IsValid="_isValid">
 
-            <EnumDropDown
+            <EnumSelect
                 TItem="MembershipAccessType"
                 AllowClear="false"
                 AllowedValues="_allowedAccessLevels"

@@ -1,24 +1,15 @@
-﻿using Fluxor;
-using LumexUI.Common;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Store.Client;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class ClientsDropDown
+public partial class ClientsSelect
 {
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-    
     [Inject]
     public IState<ClientState> _state { get; set; }
-
-    private bool _isOpen;
 
     protected override void OnInitialized()
     {
@@ -31,13 +22,14 @@ public partial class ClientsDropDown
         };
         UpdateList();
     }
-    
+
     private void UpdateList()
     {
         _list = _state.Value.List;
         UpdateSelectedItem();
+        InvokeAsync(StateHasChanged);
     }
-    
+
     protected override void UpdateSelectedItem()
     {
         _selectedItem = _list.FirstOrDefault(
@@ -45,17 +37,8 @@ public partial class ClientsDropDown
         );
     }
 
-    private Task OnOpenChanged(bool isOpen)
+    private void OnClientSelected(ClientDto? client)
     {
-        _isOpen = isOpen;
-        return Task.CompletedTask;
-    }
-
-    private async Task OnClientSelected(ClientDto? client)
-    {
-        _isOpen = false;
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
         OnValueChanged(client);
     }
 }

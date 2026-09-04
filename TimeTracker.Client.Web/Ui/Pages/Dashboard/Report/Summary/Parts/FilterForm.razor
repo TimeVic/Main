@@ -9,10 +9,9 @@
             @if (!IsTeamSummary)
             {
                 <div>
-                <EnumDropDown
+                <EnumSelect
                     Label="@DashboardLocalizer["GroupBy"].Value"
                     TItem="SummaryReportType"
-                    DropDownColor="ThemeColor.Default"
                     AllowedValues="@(Enum.GetValues<SummaryReportType>())"
                     Value="@_filterState.ReportType"
                     ValueChanged="OnChangeReportType"/>
@@ -20,10 +19,9 @@
             }
 
             <div>
-                <EnumDropDown
+                <EnumSelect
                     Label="@DashboardLocalizer["Period"].Value"
                     TItem="SummaryReportPeriodType"
-                    DropDownColor="ThemeColor.Default"
                     Value="@_filterState.PeriodType"
                     ValueChanged="OnChangePeriodType"/>
             </div>
