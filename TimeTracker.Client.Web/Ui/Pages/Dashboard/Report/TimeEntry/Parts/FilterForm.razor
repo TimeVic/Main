@@ -39,7 +39,7 @@
                     ValueChanged="OnChangeBillable"/>
             </div>
             <div>
-                <InputDateTimeField
+                <InputDateField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateFrom"].Value"
                     Value="@_state.Value.Filter.DateFrom"
@@ -48,7 +48,7 @@
                     FullWidth="true"/>
             </div>
             <div>
-                <InputDateTimeField
+                <InputDateField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateTo"].Value"
                     Value="@_state.Value.Filter.DateTo"

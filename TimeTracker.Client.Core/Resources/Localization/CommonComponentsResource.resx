@@ -51,4 +51,37 @@
   <data name="Success" xml:space="preserve">
     <value>Success</value>
   </data>
+  <data name="Day_Monday_Short" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="Day_Tuesday_Short" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Day_Wednesday_Short" xml:space="preserve">
+    <value>We</value>
+  </data>
+  <data name="Day_Thursday_Short" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="Day_Friday_Short" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="Day_Saturday_Short" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="Day_Sunday_Short" xml:space="preserve">
+    <value>Su</value>
+  </data>
+  <data name="Calendar_PreviousMonth" xml:space="preserve">
+    <value>Previous month</value>
+  </data>
+  <data name="Calendar_NextMonth" xml:space="preserve">
+    <value>Next month</value>
+  </data>
+  <data name="Calendar" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
 </root>

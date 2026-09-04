@@ -28,7 +28,7 @@
             @if (_filterState.PeriodType == SummaryReportPeriodType.Custom)
             {
                 <div>
-                    <InputDateTimeField 
+                    <InputDateField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.StartDate"
@@ -37,7 +37,7 @@
                 </div>
 
                 <div>
-                    <InputDateTimeField 
+                    <InputDateField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.EndDate"

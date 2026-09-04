@@ -80,7 +80,7 @@
                         <LumexCardBody>
                             <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
                                 <div>
-                                    <InputDateTimeField 
+                                    <InputDateField 
                                         TValue="DateTime?"
                                         Size="InputSize.Small"
                                         Required="true"
@@ -90,7 +90,7 @@
                                         Label="@DashboardLocalizer["Date"]"/>
                                 </div>
                                 <div>
-                                    <TimeEditField
+                                    <InputTimeField
                                         Label="@DashboardLocalizer["Start"]"
                                         Value="@_model.StartTime"
                                         ValueChanged="@OnChangeStartTime"
@@ -101,7 +101,7 @@
                                 @if (!IsActiveTimeEntry)
                                 {
                                     <div>
-                                        <TimeEditField
+                                        <InputTimeField
                                             Label="@DashboardLocalizer["End"]"
                                             Value="@_model.EndTime"
                                             ValueChanged="@OnChangeEndTime"

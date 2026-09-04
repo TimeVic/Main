@@ -350,3 +350,14 @@ window.attachmentInput = (() => {
     };
 })();
 
+window.getTimeCaret = function(el) {
+    if (!el) return 0;
+    return el.selectionStart || 0;
+};
+
+window.setTimeCaret = function(el, pos) {
+    if (!el) return;
+    try {
+        el.setSelectionRange(pos, pos);
+    } catch (e) {}
+};

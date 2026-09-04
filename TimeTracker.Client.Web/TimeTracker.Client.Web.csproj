@@ -255,8 +255,6 @@
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\ProjectsDropDown.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TagsDropDown.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TaskListsDropDown.razor" />
-      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\DateTimeEditField.razor" />
-      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\TimeEditField.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Storage\FileViewModal.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\TagsBadgesList.razor" />
       <_ContentIncludedByDefault Remove="Shared\InitializationContainer.razor" />

@@ -30,6 +30,9 @@ public abstract class BaseInputField<TValue> : BaseReactiveComponent, IDisposabl
     public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
+    public string Description { get; set; } = string.Empty;
+
+    [Parameter]
     public bool Disabled { get; set; }
 
     [Parameter]
