@@ -35,7 +35,6 @@
                             FullWidth="true"
                             Label="@DashboardLocalizer["Project"]"
                             Placeholder="@DashboardLocalizer["ProjectName"]"
-                            Variant="InputVariant.Outlined"
                             @bind-Value="model.Name"/>
                     </div>
 
@@ -65,9 +64,8 @@
                             <InputNumericNullableField 
                                 TItem="decimal"
                                 Label="@DashboardLocalizer["HourlyRate"].Value"
-                                Size="Size.Small"
+                                Size="InputSize.Small"
                                 Step="00.01"
-                                Variant="InputVariant.Outlined"
                                 Value="@model.DefaultHourlyRate"
                                 ValueExpression="() => model.DefaultHourlyRate"
                                 ValueChanged="OnChangeDefaultHourlyRate"/>

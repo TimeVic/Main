@@ -1,4 +1,3 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Constants.Ui
@@ -40,38 +39,32 @@
                     ValueChanged="OnChangeBillable"/>
             </div>
             <div>
-                <LumexDatebox
+                <InputDateTimeField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateFrom"].Value"
                     Value="@_state.Value.Filter.DateFrom"
                     ValueChanged="OnChangeDateFrom"
                     Clearable="true"
-                    Variant="InputVariant.Outlined"
-                    LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
             </div>
             <div>
-                <LumexDatebox
+                <InputDateTimeField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateTo"].Value"
                     Value="@_state.Value.Filter.DateTo"
                     ValueChanged="OnChangeDateTo"
                     Clearable="true"
-                    Variant="InputVariant.Outlined"
-                    LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
             </div>
         </div>
         <div class="mt-4">
-            <LumexTextbox
-                TValue="string"
+            <InputTextField
                 Label="@DashboardLocalizer["Search"].Value"
                 Placeholder="@DashboardLocalizer["SearchByDescription"].Value"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"
-                FullWidth="true"
-                LabelPlacement="LabelPlacement.Outside"
-                Variant="InputVariant.Outlined"/>
+                Clearable="true"
+                FullWidth="true"/>
         </div>
     </LumexCardBody>
 </LumexCard>

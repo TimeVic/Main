@@ -1,117 +1,134 @@
-@inherits InputBase<TItem?>
+@inherits BaseInputField<TItem?>
 @using System.ComponentModel
-@using LumexUI.Common
-
-
+@using System.Globalization
 @typeparam TItem where TItem : struct
 
-<LumexNumbox
-    TValue="TItem?"
-    Value="_numericValue"
-    ValueChanged="OnChangedValue"
-    Class="@Class"
-    Placeholder="@Placeholder"
-    Label="@Label"
-    Invalid="@HasError"
-    LabelPlacement="LabelPlacement"
-    Disabled="Disabled"
-    FullWidth="FullWidth"
-    Required="@Required"
-    Variant="Variant"
-    Color="Color"
-    Size="Size"
-    Clearable="Clearable"
-    ErrorMessage="@FirstError"
-    step="@Step">
-    <StartContent>@StartContent</StartContent>
-    <EndContent>@EndContent</EndContent>
-</LumexNumbox>
+<div
+    class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label
+            class="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            @Label
+            @if (IsRequired)
+            {
+                <span
+                    class="text-rose-500 ms-0.5">*</span>
+            }
+        </label>
+    }
+
+    <div
+        class="@ContainerClasses @InputSizeClasses @Class">
+        @if (StartContent != null)
+        {
+            <div
+                class="flex items-center pl-3 pr-1 text-slate-400 shrink-0">
+                @StartContent
+            </div>
+        }
+
+        <input
+            type="number"
+            step="@Step"
+            min="@Min"
+            max="@Max"
+            value="@_stringValue"
+            @oninput="HandleInput"
+            @onchange="HandleChange"
+            placeholder="@Placeholder"
+            disabled="@IsDisabled"
+            readonly="@IsReadOnly"
+            class="w-full h-full bg-transparent border-0 px-3.5 py-1.5 text-inherit placeholder:text-slate-400 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed @(StartContent != null ? "!pl-1.5" : "") @(HasEndElements ? "!pr-1.5" : "")"
+            @attributes="AdditionalAttributes" />
+
+        @if (HasEndElements)
+        {
+            <div
+                class="flex items-center gap-1 pr-3 pl-1 shrink-0">
+                @if (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(_stringValue))
+                {
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        @onclick="ClearAsync">
+                        <i
+                            class="fa-solid fa-circle-xmark text-xs">
+                        </i>
+                    </button>
+                }
+
+                @if (EndContent != null)
+                {
+                    @EndContent
+                }
+            </div>
+        }
+    </div>
+
+    @if (HasError && !string.IsNullOrWhiteSpace(FirstError))
+    {
+        <p
+            class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i
+                class="fa-solid fa-circle-exclamation text-[11px]">
+            </i>
+            <span>@FirstError</span>
+        </p>
+    }
+</div>
 
 @code {
     [Parameter]
-    public bool Required { get; set; }
-    
-    [Parameter]
-    public bool Disabled { get; set; }
-    
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-
-    [Parameter]
-    public ThemeColor Color { get; set; } = ThemeColor.Default;
-    
-    [Parameter]
-    public bool FullWidth { get; set; }
-    
-    [Parameter]
-    public InputType Type { get; set; } = InputType.Text;
-    
-    [Parameter]
-    public string Placeholder { get; set; } = string.Empty;
-    
-    [Parameter]
-    public string Label { get; set; } = string.Empty;
-    
-    [Parameter]
-    public string Class { get; set; } = string.Empty;
-    
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-
-    [Parameter]
-    public bool Clearable { get; set; } = false;
-    
-    [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-    
-    [Parameter]
-    public RenderFragment? StartContent { get; set; }
-    
-    [Parameter]
-    public RenderFragment? EndContent { get; set; }
-    
-    [Parameter]
     public string? Step { get; set; }
-    
-    public TItem? _numericValue { get; set; }
-    
-    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
 
-    private string FirstError =>
-        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+    [Parameter]
+    public string? Min { get; set; }
 
-    
+    [Parameter]
+    public string? Max { get; set; }
+
+    private string _stringValue = string.Empty;
+
+    private bool HasEndElements =>
+        EndContent != null
+        || (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(_stringValue));
+
     protected override void OnParametersSet()
     {
-        _numericValue = CurrentValue != null ? CurrentValue : default;
-    }
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
-    
-    private Task OnChangedValue(TItem? newVal)
-    {
-        CurrentValue = newVal;
-        return Task.CompletedTask;
+        base.OnParametersSet();
+        _stringValue = Value.HasValue ? Value.Value.ToString() ?? string.Empty : string.Empty;
     }
 
-    protected override bool TryParseValueFromString(
-        string? value,
-        out TItem? result,
-        out string? validationErrorMessage)
+    private async Task HandleInput(ChangeEventArgs e)
     {
-        if (TryParse(value, out result))
+        _stringValue = e.Value?.ToString() ?? string.Empty;
+        if (TryParse(_stringValue, out var parsed))
         {
-            validationErrorMessage = null;
-            return true;
+            await SetValueAsync(parsed);
         }
-
-        validationErrorMessage = "Invalid number format";
-        return false;
     }
-    
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        _stringValue = e.Value?.ToString() ?? string.Empty;
+        if (TryParse(_stringValue, out var parsed))
+        {
+            await SetValueAsync(parsed);
+        }
+        else if (string.IsNullOrWhiteSpace(_stringValue))
+        {
+            await SetValueAsync(null);
+        }
+    }
+
+    public override async Task ClearAsync()
+    {
+        _stringValue = string.Empty;
+        await base.ClearAsync();
+    }
+
     private static bool TryParse(string? input, out TItem? value)
     {
         try
@@ -119,22 +136,41 @@
             if (string.IsNullOrWhiteSpace(input))
             {
                 value = null;
-                return true; 
+                return true;
             }
 
             var targetType = Nullable.GetUnderlyingType(typeof(TItem)) ?? typeof(TItem);
             var converter = TypeDescriptor.GetConverter(targetType);
+            var converted = converter.ConvertFromString(null, CultureInfo.InvariantCulture, input);
+            if (converted != null)
+            {
+                value = (TItem)converted;
+                return true;
+            }
 
-            var converted = converter.ConvertFromString(input);
-
-            value = (TItem?)converted;
-            return true;
+            value = null;
+            return false;
         }
         catch
         {
-            value = default;
+            try
+            {
+                var targetType = Nullable.GetUnderlyingType(typeof(TItem)) ?? typeof(TItem);
+                var converter = TypeDescriptor.GetConverter(targetType);
+                var converted = converter.ConvertFromString(null, CultureInfo.CurrentCulture, input);
+                if (converted != null)
+                {
+                    value = (TItem)converted;
+                    return true;
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+
+            value = null;
             return false;
         }
     }
-
 }

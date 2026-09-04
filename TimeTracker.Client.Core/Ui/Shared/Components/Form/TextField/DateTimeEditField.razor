@@ -1,40 +1,39 @@
-﻿@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Services.Format
 @using TimeTracker.Business.Extensions
 
-<div Class="@Class">
-    @* <FluentLabel>@Label</FluentLabel> *@
-    @* <FluentStack Orientation="Orientation.Horizontal"> *@
-    @*     <LumexDatebox  *@
-    @*         TValue="DateTime?" *@
-    @*         Size="Size.Small" *@
-    @*         Placeholder="@Placeholder" *@
-    @*         Value="@_value" *@
-    @*         ValueChanged="OnDateChanged" *@
-    @*         Label="@Label"/> *@
-    @*     <TimeEditField *@
-    @*         Value="@_timeValue" *@
-    @*         ValueChanged="@(OnTimeChanged)"/> *@
-    @* </FluentStack> *@
+<div class="@Class">
+    <div class="flex items-center gap-2">
+        <InputDateTimeField
+            TValue="DateTime?"
+            Size="InputSize.Small"
+            Placeholder="@Placeholder"
+            Value="@_value"
+            ValueChanged="OnDateChanged"
+            Disabled="@Disabled"
+            Label="@Label" />
+        <TimeEditField
+            Value="@_value"
+            ValueChanged="@(OnDateChanged)"
+            Disabled="@Disabled" />
+    </div>
 </div>
 
 @code
 {
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
 
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     [Parameter]
-    public string Placeholder { get; set; }
+    public string Placeholder { get; set; } = string.Empty;
 
     [Parameter] 
-    public Boolean Disabled { get; set; } = false;
+    public bool Disabled { get; set; } = false;
 
     [Inject]
-    public ITimeParsingService _timeParsingService { get; set; }
+    public ITimeParsingService _timeParsingService { get; set; } = null!;
 
     [Parameter]
     public virtual Func<DateTime, bool>? DisabledDateFunc { get; set; }
@@ -57,10 +56,6 @@
 
     private DateTime? _value;
     private TimeSpan? _timeValue;
-
-    protected override void OnInitialized()
-    {
-    }
 
     private void OnDateChanged(DateTime? date)
     {
@@ -87,7 +82,6 @@
         ValueChanged.InvokeAsync(_value);
         Changed.InvokeAsync(_value);
     }
-
 
     private void UpdateTimeValue()
     {

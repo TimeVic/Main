@@ -79,7 +79,7 @@
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <LumexTextbox
+                    <InputTextField
                         @bind-Value="_name"
                         Label="@DashboardLocalizer["UserSettings_Name"].Value"
                         Placeholder="@DashboardLocalizer["UserSettings_Name"].Value"
@@ -87,7 +87,7 @@
                     <p class="mt-1.5 text-xs text-slate-400">@DashboardLocalizer["UserSettings_NameHelper"]</p>
                 </div>
                 <div>
-                    <LumexTextbox
+                    <InputTextField
                         @bind-Value="_email"
                         Label="@DashboardLocalizer["UserSettings_Email"].Value"
                         FullWidth="true"

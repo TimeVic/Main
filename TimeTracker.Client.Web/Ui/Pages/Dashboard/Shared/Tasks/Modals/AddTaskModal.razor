@@ -58,7 +58,6 @@
                             FullWidth="true"
                             Label="@DashboardLocalizer["TaskName"].Value"
                             Placeholder="@DashboardLocalizer["AddTaskModal_TaskTitlePlaceholder"].Value"
-                            Variant="InputVariant.Outlined"
                             @bind-Value="model.Title"/>
                     </div>
 
@@ -80,7 +79,6 @@
                                     FullWidth="true"
                                     Label="@DashboardLocalizer["ExternalTaskId"].Value"
                                     Placeholder="@DashboardLocalizer["AddTaskModal_ExternalTaskIdPlaceholder"].Value"
-                                    Variant="InputVariant.Outlined"
                                     @bind-Value="model.ExternalTaskId"/>
                                 <p class="mt-1.5 text-xs text-slate-500">@DashboardLocalizer["AddTaskModal_ExternalTaskHelp"]</p>
                             </div>
@@ -90,7 +88,6 @@
                                     FullWidth="true"
                                     Label="@DashboardLocalizer["Description"].Value"
                                     Placeholder="@DashboardLocalizer["TaskDescription"].Value"
-                                    Variant="InputVariant.Outlined"
                                     @bind-Value="model.Description"/>
                             </div>
 
@@ -99,7 +96,6 @@
                                     Label="@DashboardLocalizer["OriginalEstimate"].Value"
                                     Placeholder="1h 30m"
                                     FullWidth="true"
-                                    Size="Size.Medium"
                                     @bind-Value="model.OriginalEstimate"/>
                             </div>
                         </div>

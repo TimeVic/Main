@@ -80,9 +80,9 @@
                         <LumexCardBody>
                             <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
                                 <div>
-                                    <LumexDatebox 
+                                    <InputDateTimeField 
                                         TValue="DateTime?"
-                                        Size="Size.Small"
+                                        Size="InputSize.Small"
                                         Required="true"
                                         Value="@_model.StartTime.Date"
                                         ValueChanged="OnDateChanged"
@@ -151,9 +151,8 @@
                                         <InputNumericNullableField 
                                             TItem="decimal"
                                             Label="@DashboardLocalizer["HourlyRate"].Value"
-                                            Size="Size.Small"
+                                            Size="InputSize.Small"
                                             Step="00.01"
-                                            Variant="InputVariant.Underlined"
                                             Value="@_model.HourlyRate"
                                             ValueExpression="() => _model.HourlyRate"
                                             ValueChanged="OnChangeBillableAmount"/>

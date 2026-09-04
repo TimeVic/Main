@@ -65,9 +65,8 @@
                                                         <InputNumericNullableField
                                                             TItem="decimal"
                                                             Label="@DashboardLocalizer["HourlyRate"]"
-                                                            Size="Size.Small"
+                                                            Size="InputSize.Small"
                                                             Step="00.01"
-                                                            Variant="InputVariant.Outlined"
                                                             Value="@item.HourlyRate"
                                                             ValueExpression="() => item.HourlyRate"
                                                             ValueChanged="@(v => item.HourlyRate = v)"/>

@@ -1,131 +1,156 @@
-@inherits InputBase<string>
-@using LumexUI.Common
+@inherits BaseInputField<string>
 @using TimeTracker.Client.Core.Constants.Ui
 
-<LumexTextbox
-    @bind-Value="CurrentValue"
-    AdditionalAttributes="@AdditionalAttributes"
-    Class="@Class"
-    Placeholder="@Placeholder"
-    Type="@Type"
-    Label="@Label"
-    Invalid="@HasError"
-    Disabled="Disabled"
-    FullWidth="FullWidth"
-    Required="@Required"
-    Variant="Variant"
-    Color="@ComputedColor"
-    LabelPlacement="LabelPlacement"
-    Size="Size"
-    Clearable="Clearable"
-    ErrorMessage="@FirstError">
+<div
+    class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label
+            class="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            @Label
+            @if (IsRequired)
+            {
+                <span
+                    class="text-rose-500 ms-0.5">*</span>
+            }
+        </label>
+    }
 
-    <StartContent>@StartContent</StartContent>
-    <EndContent>
-        @if (EndContent != null || IsShowEmojiButton || (ShowValidationState && IsSuccess))
+    <div
+        class="@ContainerClasses @InputSizeClasses @Class">
+        @if (StartContent != null)
         {
-            <span class="inline-flex items-center gap-1.5">
-                @EndContent
-                @if (ShowValidationState && IsSuccess)
+            <div
+                class="flex items-center pl-3 pr-1 text-slate-400 shrink-0">
+                @StartContent
+            </div>
+        }
+
+        <input
+            type="@ResolvedHtmlInputType"
+            value="@Value"
+            @oninput="HandleInput"
+            placeholder="@Placeholder"
+            disabled="@IsDisabled"
+            readonly="@IsReadOnly"
+            class="w-full h-full bg-transparent border-0 px-3.5 py-1.5 text-inherit placeholder:text-slate-400 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed @(StartContent != null ? "!pl-1.5" : "") @(HasEndElements ? "!pr-1.5" : "")"
+            @attributes="AdditionalAttributes" />
+
+        @if (HasEndElements)
+        {
+            <div
+                class="flex items-center gap-1 pr-3 pl-1 shrink-0">
+                @if (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(Value))
                 {
-                    <i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i>
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        @onclick="ClearAsync">
+                        <i
+                            class="fa-solid fa-circle-xmark text-xs">
+                        </i>
+                    </button>
                 }
+
+                @if (Type == InputType.Password)
+                {
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        @onclick="TogglePasswordVisibility">
+                        <i
+                            class="fa-regular @(_isPasswordVisible ? "fa-eye-slash" : "fa-eye") text-xs">
+                        </i>
+                    </button>
+                }
+
+                @if (IsShowValidationState && IsSuccess)
+                {
+                    <i
+                        class="fa-solid fa-circle-check text-emerald-500 text-sm">
+                    </i>
+                }
+
                 @if (IsShowEmojiButton)
                 {
-                    <SelectEmojiButton OnSelected="OnEmojiSelected"/>
+                    <SelectEmojiButton
+                        OnSelected="OnEmojiSelected"/>
                 }
-            </span>
+
+                @if (EndContent != null)
+                {
+                    @EndContent
+                }
+            </div>
         }
-    </EndContent>
-</LumexTextbox>
+    </div>
+
+    @if (HasError && !string.IsNullOrWhiteSpace(FirstError))
+    {
+        <p
+            class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i
+                class="fa-solid fa-circle-exclamation text-[11px]">
+            </i>
+            <span>@FirstError</span>
+        </p>
+    }
+</div>
 
 @code {
     [Parameter]
-    public bool Required { get; set; }
-    
-    [Parameter]
-    public bool Disabled { get; set; }
-    
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-
-    [Parameter]
-    public ThemeColor Color { get; set; } = ThemeColor.Default;
-    
-    [Parameter]
-    public bool FullWidth { get; set; }
-    
-    [Parameter]
     public InputType Type { get; set; } = InputType.Text;
-    
-    [Parameter]
-    public string Placeholder { get; set; } = string.Empty;
-    
-    [Parameter]
-    public string Label { get; set; } = string.Empty;
-    
-    [Parameter]
-    public string Class { get; set; } = string.Empty;
-    
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
 
     [Parameter]
-    public bool Clearable { get; set; } = false;
-    
-    [Parameter]
-    public bool IsShowEmojiButton { get; set; } = false;
+    public bool IsShowEmojiButton { get; set; }
 
     [Parameter]
-    public bool ShowValidationState { get; set; } = false;
-    
-    [Parameter]
-    public RenderFragment? StartContent { get; set; }
-    
-    [Parameter]
-    public RenderFragment? EndContent { get; set; }
-    
-    [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-    
-    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
+    public bool IsShowValidationState { get; set; }
 
-    private bool IsSuccess => !HasError && !string.IsNullOrWhiteSpace(CurrentValue);
-
-    private ThemeColor ComputedColor
+    [Parameter]
+    public bool ShowValidationState
     {
-        get
-        {
-            if (HasError)
-            {
-                return ThemeColor.Danger;
-            }
-            if (ShowValidationState && IsSuccess)
-            {
-                return ThemeColor.Success;
-            }
-            return Color;
-        }
+        get => IsShowValidationState;
+        set => IsShowValidationState = value;
     }
 
-    private string FirstError =>
-        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+    private bool _isPasswordVisible;
 
-    public bool _isShowEmojiModal { get; set; } = false;
+    private bool IsSuccess => !HasError && !string.IsNullOrWhiteSpace(Value);
 
-    private void OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
+    private bool HasEndElements =>
+        EndContent != null
+        || IsShowEmojiButton
+        || (IsShowValidationState && IsSuccess)
+        || (Type == InputType.Password)
+        || (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(Value));
+
+    private string ResolvedHtmlInputType => Type switch
     {
-        CurrentValue = string.Concat(CurrentValue, emoji.Symbol);
+        InputType.Password => _isPasswordVisible ? "text" : "password",
+        InputType.Email => "email",
+        InputType.Url => "url",
+        InputType.Number => "number",
+        InputType.Tel => "tel",
+        InputType.Search => "search",
+        _ => "text"
+    };
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        await SetValueAsync(e.Value?.ToString() ?? string.Empty);
     }
 
-    protected override bool TryParseValueFromString(
-        string? value,
-        out string result,
-        out string? validationErrorMessage
-    )
+    private void TogglePasswordVisibility()
     {
-        result = value ?? string.Empty;
-        validationErrorMessage = null;
-        return true;
+        _isPasswordVisible = !_isPasswordVisible;
+    }
+
+    private async Task OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
+    {
+        var newValue = string.Concat(Value, emoji.Symbol);
+        await SetValueAsync(newValue);
     }
 }

@@ -51,7 +51,7 @@
                     </div>
                     <div>
                         <InputDateTimeField
-                            Size="Size.Small"
+                            Size="InputSize.Small"
                             Required="true"
                             @bind-Value="@model.PaymentTime"
                             Label="@DashboardLocalizer["PaymentDate"].Value"/>
@@ -60,7 +60,7 @@
                     <div>
                         <InputNumericField
                             TItem="decimal"
-                            Size="Size.Small"
+                            Size="InputSize.Small"
                             Required="true"
                             @bind-Value="@model.Amount"
                             Label="@DashboardLocalizer["Amount"].Value"/>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <InputTextareaField
-                            Size="Size.Small"
+                            Size="InputSize.Small"
                             Label="@DashboardLocalizer["PaymentNoteReference"].Value"
                             Placeholder="@DashboardLocalizer["OptionalPaymentNoteReference"].Value"
                             @bind-Value="model.Description"/>

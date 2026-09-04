@@ -1,28 +1,27 @@
-@inherits InputBase<TimeSpan?>
-@using LumexUI.Common
+@inherits BaseInputField<TimeSpan?>
 
-<div class="@WrapperClass">
-    <LumexTextbox
-        Value="@CurrentValueAsString"
-        ValueChanged="OnValueChanged"
+<div
+    class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
+    <InputTextField
+        Value="@_displayString"
+        ValueChanged="OnStringValueChanged"
         Class="@Class"
         Placeholder="@Placeholder"
         Label="@Label"
-        Invalid="@HasError"
-        Disabled="@Disabled"
-        FullWidth="@FullWidth"
-        Variant="@Variant"
-        LabelPlacement="@LabelPlacement"
-        Color="@Color"
+        Disabled="@IsDisabled"
+        FullWidth="@IsFullWidth"
+        IsFlat="@IsFlat"
         Size="@Size"
-        Clearable="@Clearable"
-        ErrorMessage="@FirstError">
-        <StartContent>@StartContent</StartContent>
-        <EndContent>@EndContent</EndContent>
-    </LumexTextbox>
+        Clearable="@IsClearable"
+        Required="@IsRequired"
+        StartContent="@StartContent"
+        EndContent="@EndContent" />
 
     @if (!string.IsNullOrWhiteSpace(Hint))
     {
-        <p class="mt-1 text-xs text-slate-500">@Hint</p>
+        <p
+            class="mt-1 text-xs text-slate-500">
+            @Hint
+        </p>
     }
 </div>

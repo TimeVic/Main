@@ -1,4 +1,3 @@
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 
@@ -25,10 +24,7 @@ public partial class SmartUserSearchInput : IDisposable
     public string? Label { get; set; }
 
     [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+    public bool IsFlat { get; set; }
 
     [Parameter]
     public string? Placeholder { get; set; }

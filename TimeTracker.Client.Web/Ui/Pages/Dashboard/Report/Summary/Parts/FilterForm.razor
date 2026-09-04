@@ -1,4 +1,3 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Reports
 
 @inherits BaseReactiveComponent
@@ -29,23 +28,19 @@
             @if (_filterState.PeriodType == SummaryReportPeriodType.Custom)
             {
                 <div>
-                    <LumexDatebox 
+                    <InputDateTimeField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.StartDate"
-                        Variant="InputVariant.Outlined"
-                        LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateStart"
                         Label="@DashboardLocalizer["DateFrom"].Value"/>
                 </div>
 
                 <div>
-                    <LumexDatebox 
+                    <InputDateTimeField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.EndDate"
-                        Variant="InputVariant.Outlined"
-                        LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateEnd"
                         Label="@DashboardLocalizer["DateTo"].Value"/>
                 </div>

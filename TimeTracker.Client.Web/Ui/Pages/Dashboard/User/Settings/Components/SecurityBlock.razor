@@ -22,18 +22,18 @@
                 <EditForm Model="_model" Context="passwordFormContext">
                     <DataAnnotationsValidator />
                     <div class="space-y-4">
-                        <LumexTextbox @bind-Value="_model.CurrentPassword"
-                                      Type="InputType.Password"
-                                      Label="@DashboardLocalizer["UserSettings_CurrentPassword"].Value"
-                                      FullWidth="true" />
-                        <LumexTextbox @bind-Value="_model.NewPassword"
-                                      Type="InputType.Password"
-                                      Label="@DashboardLocalizer["UserSettings_NewPassword"].Value"
-                                      FullWidth="true" />
-                        <LumexTextbox @bind-Value="_model.ConfirmPassword"
-                                      Type="InputType.Password"
-                                      Label="@DashboardLocalizer["UserSettings_ConfirmPassword"].Value"
-                                      FullWidth="true" />
+                        <InputTextField @bind-Value="_model.CurrentPassword"
+                                       Type="InputType.Password"
+                                       Label="@DashboardLocalizer["UserSettings_CurrentPassword"].Value"
+                                       FullWidth="true" />
+                        <InputTextField @bind-Value="_model.NewPassword"
+                                       Type="InputType.Password"
+                                       Label="@DashboardLocalizer["UserSettings_NewPassword"].Value"
+                                       FullWidth="true" />
+                        <InputTextField @bind-Value="_model.ConfirmPassword"
+                                       Type="InputType.Password"
+                                       Label="@DashboardLocalizer["UserSettings_ConfirmPassword"].Value"
+                                       FullWidth="true" />
                         <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-sm text-red-600" />
                     </div>
                 </EditForm>

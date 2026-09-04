@@ -1,47 +1,67 @@
-﻿@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Services.Format
 @using TimeTracker.Business.Extensions
 
-<LumexTextbox
+<InputTextField
     Value="@_editValue"
     ValueChanged="@OnChangeValue"
     Class="@Class"
     Placeholder="@Placeholder"
     Type="InputType.Text"
     Label="@Label"
-    Disabled="Disabled"
+    Disabled="@IsDisabled"
     Required="true"
-    Variant="InputVariant.Outlined"
-    Color="ThemeColor.Default"
-    Size="Size.Small"
-    FullWidth="@FullWidth"
-    Clearable="@Clearable">
-</LumexTextbox>
+    Size="@Size"
+    FullWidth="@IsFullWidth"
+    Clearable="@IsClearable">
+</InputTextField>
 
 @code
 {
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
 
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     [Parameter]
-    public string Placeholder { get; set; }
+    public string Placeholder { get; set; } = string.Empty;
 
-    [Parameter] 
-    public Boolean Disabled { get; set; } = false;
+    [Parameter]
+    public bool IsDisabled { get; set; }
 
-    [Parameter] 
-    public Boolean FullWidth { get; set; } = false;
-    
-    [Parameter] 
-    public Boolean Clearable { get; set; } = false;
-    
+    [Parameter]
+    public bool Disabled
+    {
+        get => IsDisabled;
+        set => IsDisabled = value;
+    }
+
+    [Parameter]
+    public bool IsFullWidth { get; set; }
+
+    [Parameter]
+    public bool FullWidth
+    {
+        get => IsFullWidth;
+        set => IsFullWidth = value;
+    }
+
+    [Parameter]
+    public bool IsClearable { get; set; }
+
+    [Parameter]
+    public bool Clearable
+    {
+        get => IsClearable;
+        set => IsClearable = value;
+    }
+
+    [Parameter]
+    public InputSize Size { get; set; } = InputSize.Small;
+
     [Inject]
-    public ITimeParsingService _timeParsingService { get; set; }
-    
+    public ITimeParsingService _timeParsingService { get; set; } = null!;
+
     [Parameter]
     public DateTime? Value
     {
@@ -71,11 +91,7 @@
 
     private DateTime? _originalTime;
     private TimeSpan? _value;
-    private string _editValue;
-
-    protected override void OnInitialized()
-    {
-    }
+    private string _editValue = string.Empty;
 
     private void OnChangeValue(string? value)
     {
