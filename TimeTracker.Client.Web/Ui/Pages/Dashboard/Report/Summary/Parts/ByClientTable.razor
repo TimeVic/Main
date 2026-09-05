@@ -1,4 +1,4 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Shared.Components
@@ -18,21 +18,32 @@
     }
 }
 
-<LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
-    <PropertyColumn Title="@DashboardLocalizer["Client"].Value" Property="@(p => p.ClientName)"/>
-    <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(p => p.Duration)">
-        <Content>
-            @context.Duration.ToReadableShortString()
-        </Content>
-    </PropertyColumn>
-    <PropertyColumn Title="@DashboardLocalizer["Earned"].Value" Property="@(p => p.Amount)">
-        <Content>
-            <AmountDisplay Amount="@context.Amount"/>
-        </Content>
-    </PropertyColumn>
-    <PropertyColumn Title="@DashboardLocalizer["EffectiveHourlyRate"].Value" Property="@(p => p.Amount)">
-        <Content>
-            <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
-        </Content>
-    </PropertyColumn>
-</LumexDataGrid>
+<AppTable
+    TGridItem="SummaryByClientsReportItemDto"
+    Items="@Items.AsQueryable()">
+    <AppPropertyColumn
+        TGridItem="SummaryByClientsReportItemDto"
+        TProp="string"
+        Title="@DashboardLocalizer["Client"].Value"
+        Property="@(p => p.ClientName)"
+        Sortable="true"/>
+    <AppTableColumn
+        TGridItem="SummaryByClientsReportItemDto"
+        Title="@DashboardLocalizer["Duration"].Value"
+        SortBy="@(GridSort<SummaryByClientsReportItemDto>.ByAscending(p => p.Duration))">
+        @context.Duration.ToReadableShortString()
+    </AppTableColumn>
+    <AppTableColumn
+        TGridItem="SummaryByClientsReportItemDto"
+        Title="@DashboardLocalizer["Earned"].Value"
+        SortBy="@(GridSort<SummaryByClientsReportItemDto>.ByAscending(p => p.Amount))">
+        <AmountDisplay
+            Amount="@context.Amount"/>
+    </AppTableColumn>
+    <AppTableColumn
+        TGridItem="SummaryByClientsReportItemDto"
+        Title="@DashboardLocalizer["EffectiveHourlyRate"].Value">
+        <AmountDisplay
+            Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
+    </AppTableColumn>
+</AppTable>

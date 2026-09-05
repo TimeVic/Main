@@ -1,63 +1,70 @@
-@using LumexUI
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Entity
 
 @inherits BaseReactiveComponent
 
-<LumexDataGrid
-    Data="@Projects.AsQueryable()"
-    Radius="@Radius.Medium"
+<AppTable
+    TGridItem="ProjectDto"
+    Items="@Projects.AsQueryable()"
     Class="w-full">
-    <LumexUI.PropertyColumn
+    <AppTableColumn
+        TGridItem="ProjectDto"
         Title="@DashboardLocalizer["Project"]"
-        Property="@(p => p.Name)">
-        <Content>
-            <div class="flex items-center gap-2 py-0.5">
-                <i class="fa-regular fa-folder text-sm text-blue-500"></i>
-                <span class="font-medium text-slate-900">@context.Name</span>
-            </div>
-        </Content>
-    </LumexUI.PropertyColumn>
+        SortBy="@(GridSort<ProjectDto>.ByAscending(p => p.Name))">
+        <div
+            class="flex items-center gap-2 py-0.5">
+            <i
+                class="fa-regular fa-folder text-sm text-blue-500">
+            </i>
+            <span
+                class="font-medium text-slate-900">
+                @context.Name
+            </span>
+        </div>
+    </AppTableColumn>
 
-    <LumexUI.PropertyColumn
+    <AppTableColumn
+        TGridItem="ProjectDto"
         Title="@DashboardLocalizer["DefaultHourlyRate"]"
-        Property="@(p => p.DefaultHourlyRate)">
-        <Content>
-            <span class="text-sm font-medium text-slate-700">@GetFormattedRate(context.DefaultHourlyRate)</span>
-        </Content>
-    </LumexUI.PropertyColumn>
+        SortBy="@(GridSort<ProjectDto>.ByAscending(p => p.DefaultHourlyRate))">
+        <span
+            class="text-sm font-medium text-slate-700">
+            @GetFormattedRate(context.DefaultHourlyRate)
+        </span>
+    </AppTableColumn>
 
-    <LumexUI.PropertyColumn
-        Title="@DashboardLocalizer["ClientProjectsGroupBlock_BillableByDefault"]"
-        Property="@(p => p.IsBillableByDefault)">
-        <Content>
-            @if (context.IsBillableByDefault)
-            {
-                <LumexChip
-                    Size="Size.Small"
-                    Variant="ChipVariant.Flat"
-                    Color="ThemeColor.Success"
-                    Class="inline-flex items-center gap-1">
-                    <i class="fa-solid fa-dollar-sign text-[10px]"></i>
-                    <span>@DashboardLocalizer["ClientProjectsGroupBlock_Billable"]</span>
-                </LumexChip>
-            }
-            else
-            {
-                <LumexChip
-                    Size="Size.Small"
-                    Variant="ChipVariant.Flat"
-                    Color="ThemeColor.Default"
-                    Class="text-slate-500">
-                    <span>@DashboardLocalizer["ClientProjectsGroupBlock_NonBillable"]</span>
-                </LumexChip>
-            }
-        </Content>
-    </LumexUI.PropertyColumn>
+    <AppTableColumn
+        TGridItem="ProjectDto"
+        Title="@DashboardLocalizer["ClientProjectsGroupBlock_BillableByDefault"]">
+        @if (context.IsBillableByDefault)
+        {
+            <span
+                class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400">
+                <i
+                    class="fa-solid fa-dollar-sign text-[10px]">
+                </i>
+                <span>
+                    @DashboardLocalizer["ClientProjectsGroupBlock_Billable"]
+                </span>
+            </span>
+        }
+        else
+        {
+            <span
+                class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                <span>
+                    @DashboardLocalizer["ClientProjectsGroupBlock_NonBillable"]
+                </span>
+            </span>
+        }
+    </AppTableColumn>
 
-    <LumexUI.PropertyColumn
+    <AppTableColumn
+        TGridItem="ProjectDto"
         Title="@DashboardLocalizer["Actions"]"
-        Property="@(p => p.Id)">
-        <Content>
+        Align="Align.End">
+        <div
+            class="flex items-center justify-end">
             <AppButton
                 Class="inline-flex rounded-full"
                 OnClick="@(() => OnEdit(context))"
@@ -66,9 +73,11 @@
                 Variant="ButtonVariant.Light"
                 IconOnly="true">
                 <ChildContent>
-                    <i class="fa-regular fa-pen-to-square"></i>
+                    <i
+                        class="fa-regular fa-pen-to-square">
+                    </i>
                 </ChildContent>
             </AppButton>
-        </Content>
-    </LumexUI.PropertyColumn>
-</LumexDataGrid>
+        </div>
+    </AppTableColumn>
+</AppTable>

@@ -1,18 +1,29 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts
 
 @inherits BaseReactiveComponent
 
-
-<section class="space-y-6">
+<section
+    class="space-y-6">
     <AppCard>
         <AppCardBody>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div
+                class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Members"]</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["MembersBlock_WorkspaceMembersTitle"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["MembersBlock_Description"]</p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">
+                        @DashboardLocalizer["Members"]
+                    </p>
+                    <h2
+                        class="mt-2 text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["MembersBlock_WorkspaceMembersTitle"]
+                    </h2>
+                    <p
+                        class="mt-1 text-sm text-slate-600">
+                        @DashboardLocalizer["MembersBlock_Description"]
+                    </p>
                 </div>
                 <AppButton
                     Size="ComponentSize.Small"
@@ -20,7 +31,9 @@
                     Color="@ComponentColor.Primary"
                     Radius="@ButtonRadius.Full">
                     <StartContent>
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i
+                            class="fa-solid fa-user-plus">
+                        </i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["MembersBlock_InviteMember"]
@@ -30,51 +43,63 @@
         </AppCardBody>
     </AppCard>
 
-    <LumexDataGrid
-        Data="@_state.Value.List.AsQueryable()"
-        Radius="@Radius.Medium"
+    <AppTable
+        TGridItem="WorkspaceMemberDto"
+        Items="@_state.Value.List.AsQueryable()"
         Class="mt-3">
-        <LumexUI.PropertyColumn
+        <AppPropertyColumn
+            TGridItem="WorkspaceMemberDto"
+            TProp="string"
             Title="@DashboardLocalizer["Name"].Value"
-            Property="@(p => p.User.Name)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.User.Name)"
+            Sortable="true" />
+        <AppPropertyColumn
+            TGridItem="WorkspaceMemberDto"
+            TProp="string"
             Title="@DashboardLocalizer["Login"].Value"
-            Property="@(p => p.User.FormattedLogin)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.User.FormattedLogin)"
+            Sortable="true" />
+        <AppPropertyColumn
+            TGridItem="WorkspaceMemberDto"
+            TProp="string"
             Title="@DashboardLocalizer["MembersBlock_Access"].Value"
-            Property="@(p => p.Access.ToString())"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.Access.ToString())" />
+        <AppTableColumn
+            TGridItem="WorkspaceMemberDto"
             Title="@DashboardLocalizer["Actions"].Value"
-            Property="@(p => p.Id)">
-            <Content>
-                @if (context.Access != MembershipAccessType.Owner)
-                {
-                    <div class="flex gap-1">
-                        <AppButton
-                            Class="inline-flex rounded-full"
-                            OnClick="@(() => OnEdit(context))"
-                            Size="ComponentSize.Small"
-                            Color="ComponentColor.Primary"
-                            Variant="ButtonVariant.Light"
-                            IconOnly="true">
-                            <ChildContent>
-                                <i class="fa-regular fa-pen-to-square"></i>
-                            </ChildContent>
-                        </AppButton>
-                        <AppButton
-                            Class="inline-flex rounded-full"
-                            OnClick="@(() => OnDelete(context))"
-                            Size="ComponentSize.Small"
-                            Color="ComponentColor.Danger"
-                            Variant="ButtonVariant.Light"
-                            IconOnly="true">
-                            <ChildContent>
-                                <i class="fa-regular fa-trash-can"></i>
-                            </ChildContent>
-                        </AppButton>
-                    </div>
-                }
-            </Content>
-        </LumexUI.PropertyColumn>
-    </LumexDataGrid>
+            Align="Align.End">
+            @if (context.Access != MembershipAccessType.Owner)
+            {
+                <div
+                    class="flex items-center justify-end gap-1">
+                    <AppButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnEdit(context))"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i
+                                class="fa-regular fa-pen-to-square">
+                            </i>
+                        </ChildContent>
+                    </AppButton>
+                    <AppButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnDelete(context))"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Danger"
+                        Variant="ButtonVariant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i
+                                class="fa-regular fa-trash-can">
+                            </i>
+                        </ChildContent>
+                    </AppButton>
+                </div>
+            }
+        </AppTableColumn>
+    </AppTable>
 </section>

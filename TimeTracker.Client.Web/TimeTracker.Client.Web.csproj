@@ -32,6 +32,7 @@
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.11.0" />
         <PackageReference Include="LumexUI" Version="2.4.0" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.10" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.10" />

@@ -1,18 +1,30 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tags
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags.Parts
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
-<section class="space-y-6">
+<section
+    class="space-y-6">
     <AppCard>
         <AppCardBody>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div
+                class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Tags"]</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_WorkspaceTagsTitle"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TagsBlock_Description"]</p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">
+                        @DashboardLocalizer["Tags"]
+                    </p>
+                    <h2
+                        class="mt-2 text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["TagsBlock_WorkspaceTagsTitle"]
+                    </h2>
+                    <p
+                        class="mt-1 text-sm text-slate-600">
+                        @DashboardLocalizer["TagsBlock_Description"]
+                    </p>
                 </div>
                 <AppButton
                     Size="ComponentSize.Small"
@@ -20,7 +32,9 @@
                     Color="@ComponentColor.Primary"
                     Radius="@ButtonRadius.Full">
                     <StartContent>
-                        <i class="fa-solid fa-plus"></i>
+                        <i
+                            class="fa-solid fa-plus">
+                        </i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["TagsBlock_AddTag"]
@@ -30,62 +44,70 @@
         </AppCardBody>
     </AppCard>
 
-    <LumexDataGrid
-        Data="@_state.Value.List.AsQueryable()"
-        Radius="@Radius.Medium"
+    <AppTable
+        TGridItem="TagDto"
+        Items="@_state.Value.List.AsQueryable()"
         Class="mt-3">
-        <LumexUI.EditColumn
+        <AppPropertyColumn
             Title="@DashboardLocalizer["Name"].Value"
-            Property="@(p => p.Name)"/>
-        <LumexUI.PropertyColumn
-            Title="@DashboardLocalizer["Color"].Value"
-            Property="@(p => p.Color ?? string.Empty)">
-            <Content>
-                <div class="inline-flex items-center gap-2">
-                    @if (!string.IsNullOrEmpty(context.Color))
-                    {
-                        <span
-                            class="inline-block h-4 w-4 rounded border border-slate-200"
-                            style="@GetColorStyle(context.Color)">
-                        </span>
-                        <span class="font-mono text-xs text-slate-600">@context.Color</span>
-                    }
-                    else
-                    {
-                        <span class="text-xs text-slate-400">@DashboardLocalizer["TagsBlock_NoColor"]</span>
-                    }
-                </div>
-            </Content>
-        </LumexUI.PropertyColumn>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.Name)"
+            Sortable="true" />
+        <AppTableColumn
+            Title="@DashboardLocalizer["Color"].Value">
+            <div
+                class="inline-flex items-center gap-2">
+                @if (!string.IsNullOrEmpty(context.Color))
+                {
+                    <span
+                        class="inline-block h-4 w-4 rounded border border-slate-200"
+                        style="@GetColorStyle(context.Color)">
+                    </span>
+                    <span
+                        class="font-mono text-xs text-slate-600">
+                        @context.Color
+                    </span>
+                }
+                else
+                {
+                    <span
+                        class="text-xs text-slate-400">
+                        @DashboardLocalizer["TagsBlock_NoColor"]
+                    </span>
+                }
+            </div>
+        </AppTableColumn>
+        <AppTableColumn
             Title="@DashboardLocalizer["Actions"].Value"
-            Property="@(p => p.Id)">
-            <Content>
-                <div class="inline-flex items-center gap-2">
-                    <AppButton
-                        Class="inline-flex rounded-full"
-                        OnClick="@(() => OnEdit(context))"
-                        Size="ComponentSize.Small"
-                        Color="ComponentColor.Primary"
-                        Variant="ButtonVariant.Light"
-                        IconOnly="true">
-                        <ChildContent>
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </ChildContent>
-                    </AppButton>
-                    <AppButton
-                        Class="inline-flex rounded-full"
-                        OnClick="@(() => OnDeleteClicked(context))"
-                        Size="ComponentSize.Small"
-                        Color="ComponentColor.Danger"
-                        Variant="ButtonVariant.Light"
-                        IconOnly="true">
-                        <ChildContent>
-                            <i class="fa-regular fa-trash-can"></i>
-                        </ChildContent>
-                    </AppButton>
-                </div>
-            </Content>
-        </LumexUI.PropertyColumn>
-    </LumexDataGrid>
+            Align="Align.End">
+            <div
+                class="inline-flex items-center justify-end gap-2">
+                <AppButton
+                    Class="inline-flex rounded-full"
+                    OnClick="@(() => OnEdit(context))"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Primary"
+                    Variant="ButtonVariant.Light"
+                    IconOnly="true">
+                    <ChildContent>
+                        <i
+                            class="fa-regular fa-pen-to-square">
+                        </i>
+                    </ChildContent>
+                </AppButton>
+                <AppButton
+                    Class="inline-flex rounded-full"
+                    OnClick="@(() => OnDeleteClicked(context))"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Danger"
+                    Variant="ButtonVariant.Light"
+                    IconOnly="true">
+                    <ChildContent>
+                        <i
+                            class="fa-regular fa-trash-can">
+                        </i>
+                    </ChildContent>
+                </AppButton>
+            </div>
+        </AppTableColumn>
+    </AppTable>
 </section>

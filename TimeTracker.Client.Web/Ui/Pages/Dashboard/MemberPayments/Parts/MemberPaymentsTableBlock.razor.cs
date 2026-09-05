@@ -1,5 +1,4 @@
 using Fluxor;
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Constants;
@@ -11,7 +10,7 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts;
 public partial class MemberPaymentsTableBlock
 {
     [Inject]
-    public IState<MemberPaymentState> _state { get; set; }
+    public IState<MemberPaymentState> _state { get; set; } = null!;
 
     [Inject]
     public ISecurityManager SecurityManager { get; set; } = null!;
@@ -28,14 +27,14 @@ public partial class MemberPaymentsTableBlock
         await base.OnInitializedAsync();
     }
 
-    private async Task OnRowClickHandler(DataGridRowClickEventArgs<MemberPaymentDto> arg)
+    private async Task OpenUpdateModal(MemberPaymentDto payment)
     {
         if (!CanUpdatePayments)
         {
             return;
         }
 
-        await _modalDialogService.ShowUpdateMemberPaymentModal(arg.Item);
+        await _modalDialogService.ShowUpdateMemberPaymentModal(payment);
     }
 
     private async Task OpenDeleteConfirmation(MemberPaymentDto payment)
