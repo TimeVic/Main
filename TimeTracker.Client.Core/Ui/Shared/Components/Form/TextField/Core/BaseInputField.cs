@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Client.Core.Core.Components;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Models;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Core;
@@ -93,7 +94,7 @@ public abstract class BaseInputField<TValue> : BaseReactiveComponent, IDisposabl
     }
 
     [Parameter]
-    public InputSize Size { get; set; } = InputSize.Medium;
+    public ComponentSize Size { get; set; } = ComponentSize.Medium;
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -124,8 +125,8 @@ public abstract class BaseInputField<TValue> : BaseReactiveComponent, IDisposabl
 
     protected virtual string InputSizeClasses => Size switch
     {
-        InputSize.Small => "h-8 text-xs rounded-lg",
-        InputSize.Large => "h-12 text-base rounded-xl",
+        ComponentSize.Small => "h-8 text-xs rounded-lg",
+        ComponentSize.Large => "h-12 text-base rounded-xl",
         _ => "h-10 text-sm rounded-xl"
     };
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Core.Components;
 using TimeTracker.Client.Core.Store.Tag;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
@@ -13,7 +14,7 @@ public partial class TagsSelect : BaseReactiveComponent, IDisposable
     public string? Label { get; set; }
 
     [Parameter]
-    public SelectSize Size { get; set; } = SelectSize.Medium;
+    public ComponentSize Size { get; set; } = ComponentSize.Medium;
 
     [Parameter]
     public SelectVariant Variant { get; set; } = SelectVariant.Input;

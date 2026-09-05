@@ -24,18 +24,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["ProjectsBlock_WorkspaceProjectsTitle"]</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["ProjectsBlock_Description"]</p>
                 </div>
-                <CustomButton
-                    Size="Size.Small"
+                <AppButton
+                    Size="ComponentSize.Small"
                     OnClick="@OnAdd"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["AddProject"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
         </LumexCardBody>
     </LumexCard>
@@ -61,17 +61,17 @@
             Title="@DashboardLocalizer["Actions"].Value"
             Property="@(p => p.Id)">
             <Content>
-                <CustomButton
+                <AppButton
                     Class="inline-flex rounded-full"
                     OnClick="@(() => OnEdit(context))"
-                    Size="Size.Small"
-                    Color="ThemeColor.Primary"
-                    Variant="Variant.Light"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Primary"
+                    Variant="ButtonVariant.Light"
                     IconOnly="true">
                     <ChildContent>
                         <i class="fa-regular fa-pen-to-square"></i>
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </Content>
         </LumexUI.PropertyColumn>
     </LumexDataGrid>

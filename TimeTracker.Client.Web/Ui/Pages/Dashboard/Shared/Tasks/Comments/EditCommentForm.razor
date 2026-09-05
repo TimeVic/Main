@@ -121,9 +121,9 @@
         }
 
         <div class="mt-3 flex flex-wrap items-center gap-2">
-            <CustomButton
-                Size="Size.Small"
-                Color="ThemeColor.Primary"
+            <AppButton
+                Size="ComponentSize.Small"
+                Color="ComponentColor.Primary"
                 IsLoading="@_isLoading"
                 Disabled="@IsCommentEmpty"
                 OnClick="@Submit">
@@ -131,17 +131,17 @@
                     <i class="fa-regular fa-floppy-disk text-xs"></i>
                 </StartContent>
                 <ChildContent>@SubmitButtonText</ChildContent>
-            </CustomButton>
+            </AppButton>
             @if (!_isNewComment)
             {
-                <CustomButton
-                    Size="Size.Small"
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
+                <AppButton
+                    Size="ComponentSize.Small"
+                    Variant="ButtonVariant.Outlined"
+                    Color="ComponentColor.Default"
                     Disabled="@_isLoading"
                     OnClick="@ResetForm">
                     @DashboardLocalizer["Cancel"]
-                </CustomButton>
+                </AppButton>
             }
         </div>
     </EditForm>;

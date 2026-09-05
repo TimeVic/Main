@@ -105,8 +105,8 @@ else
                     <span>@Localizer["Content_RememberThisSession"]</span>
                 </label>
 
-                <CustomButton
-                    Color="@ThemeColor.Primary"
+                <AppButton
+                    Color="@ComponentColor.Primary"
                     Class="font-semibold w-full"
                     IsLoading="_isLoading"
                     Type="@ButtonType.Submit">
@@ -114,7 +114,7 @@ else
                         <UserIcon></UserIcon>
                     </StartContent>
                     <ChildContent>@Localizer["Content_SignInAndOpenWorkspace"]</ChildContent>
-                </CustomButton>
+                </AppButton>
 
                 <div class="text-center text-sm text-slate-600">
                     <span>@Localizer["Content_NoAccountYet"]</span>
@@ -148,8 +148,8 @@ else
                         Placeholder="@SharedLocalizer["Form_EmailPlaceholder"]"/>
                 </div>
 
-                <CustomButton
-                    Color="@ThemeColor.Default"
+                <AppButton
+                    Color="@ComponentColor.Default"
                     Class="font-semibold w-full"
                     IsLoading="_magicIsLoading"
                     OnClick="@SubmitMagic">
@@ -157,7 +157,7 @@ else
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </StartContent>
                     <ChildContent>@Localizer["Content_SendMagicLink"]</ChildContent>
-                </CustomButton>
+                </AppButton>
 
                 @if (_magicIsSent)
                 {

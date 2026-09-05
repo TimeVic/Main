@@ -98,12 +98,12 @@
                         @if (_activeEntry?.Task == null && _activeEntry?.Project != null)
                         {
                             <div class="w-time-form__add-task-control">
-                                <CustomButton
+                                <AppButton
                                     OnClick="@OpenAddTaskModal"
                                     Class="w-time-form__wide-button"
-                                    Variant="Variant.Outlined"
-                                    Size="Size.Medium"
-                                    Color="ThemeColor.Info"
+                                    Variant="ButtonVariant.Outlined"
+                                    Size="ComponentSize.Medium"
+                                    Color="ComponentColor.Info"
                                     Disabled="@(!_hasActiveEntry)">
                                     <StartContent>
                                         <i class="fa-solid fa-plus"></i>
@@ -111,7 +111,7 @@
                                     <ChildContent>
                                         <span class="w-time-form__responsive-label hidden sm:inline">@DashboardLocalizer["Task"]</span>
                                     </ChildContent>
-                                </CustomButton>
+                                </AppButton>
                             </div>
                         }
 
@@ -133,11 +133,11 @@
                     </div>
 
                     <div class="w-time-form__control w-time-form__timer-button">
-                        <CustomButton
+                        <AppButton
                             OnClick="@(() => ToggleTimeEntry())"
                             Class="w-time-form__wide-button"
-                            Variant="Variant.Solid"
-                            Color="@(_hasActiveEntry ? ThemeColor.Default : ThemeColor.Primary)"
+                            Variant="ButtonVariant.Solid"
+                            Color="@(_hasActiveEntry ? ComponentColor.Default : ComponentColor.Primary)"
                             Disabled="@_state.Value.IsTimeEntryProcessing">
                             <StartContent>
                                 <i class="fa-solid @(_hasActiveEntry ? "fa-stop" : "fa-play")"></i>
@@ -145,24 +145,24 @@
                             <ChildContent>
                                 <span class="w-time-form__responsive-label hidden sm:inline">@(_hasActiveEntry ? DashboardLocalizer["Stop"] : DashboardLocalizer["Start"])</span>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
 
                     @if (_activeEntry != null)
                     {
                         <div class="w-time-form__control w-time-form__timer-button">
-                            <CustomButton
+                            <AppButton
                                 OnClick="@(() => _isEditModalOpened = true)"
                                 Class="w-time-form__wide-button"
-                                Variant="Variant.Outlined"
-                                Size="Size.Medium"
-                                Radius="Radius.Full"
+                                Variant="ButtonVariant.Outlined"
+                                Size="ComponentSize.Medium"
+                                Radius="ButtonRadius.Full"
                                 IconOnly="true"
-                                Color="ThemeColor.Default">
+                                Color="ComponentColor.Default">
                                 <StartContent>
                                     <i class="fa-solid fa-pencil"></i>
                                 </StartContent>
-                            </CustomButton>
+                            </AppButton>
                         </div>
                     }
                 </div>

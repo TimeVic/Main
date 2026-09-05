@@ -52,12 +52,12 @@
 </AppModalBody>
 
 <AppModalFooter>
-    <CustomButton
+    <AppButton
         FullWidth="@true"
         OnClick="@Submit"
         IsLoading="_isLoading"
-        Color="@ThemeColor.Primary"
-        Radius="@Radius.Full">
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
         <StartContent>
             <i
                 class="fa-solid fa-user-plus"></i>
@@ -65,5 +65,5 @@
         <ChildContent>
             @DashboardLocalizer["AddMemberModal_InviteMember"]
         </ChildContent>
-    </CustomButton>
+    </AppButton>
 </AppModalFooter>

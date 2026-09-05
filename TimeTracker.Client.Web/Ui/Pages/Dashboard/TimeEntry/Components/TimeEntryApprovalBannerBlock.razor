@@ -19,11 +19,11 @@
         </div>
 
         <div class="shrink-0 flex items-center gap-2">
-            <CustomButton
-                Color="@(IsOwner ? ThemeColor.Success : ThemeColor.Primary)"
-                Variant="Variant.Solid"
-                Size="Size.Small"
-                Radius="@Radius.Medium"
+            <AppButton
+                Color="@(IsOwner ? ComponentColor.Success : ComponentColor.Primary)"
+                Variant="ButtonVariant.Solid"
+                Size="ComponentSize.Small"
+                Radius="@ButtonRadius.Medium"
                 Disabled="@_isSubmitting"
                 OnClick="@OnSubmitForApproval">
                 @if (_isSubmitting)
@@ -41,7 +41,7 @@
                 <span>
                     @(IsOwner ? DashboardLocalizer["Approvals_Banner_ApproveButton"] : DashboardLocalizer["Approvals_Banner_SubmitButton"])
                 </span>
-            </CustomButton>
+            </AppButton>
         </div>
     </div>
 }

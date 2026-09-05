@@ -4,6 +4,7 @@ using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Core.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Linq.Expressions;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
@@ -16,7 +17,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     public DropDownType Type { get; set; } = DropDownType.Select;
 
     [Parameter]
-    public SelectSize Size { get; set; } = SelectSize.Medium;
+    public ComponentSize Size { get; set; } = ComponentSize.Medium;
 
     [Parameter]
     public SelectVariant Variant { get; set; } = SelectVariant.Input;

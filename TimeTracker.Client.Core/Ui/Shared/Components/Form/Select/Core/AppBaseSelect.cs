@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Core.Components;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
@@ -18,7 +19,7 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
     public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
-    public SelectSize Size { get; set; } = SelectSize.Medium;
+    public ComponentSize Size { get; set; } = ComponentSize.Medium;
 
     [Parameter]
     public bool IsDisabled { get; set; }
@@ -70,10 +71,10 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
     public DropDownType? SelectType { get; set; }
 
     [Parameter]
-    public SelectColor Color { get; set; } = SelectColor.Default;
+    public ComponentColor Color { get; set; } = ComponentColor.Default;
 
     [Parameter]
-    public SelectColor DropDownColor
+    public ComponentColor DropDownColor
     {
         get => Color;
         set => Color = value;
@@ -101,12 +102,12 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
 
             return Color switch
             {
-                SelectColor.Primary => "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 hover:bg-blue-100",
-                SelectColor.Success => "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100",
-                SelectColor.Warning => "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 hover:bg-amber-100",
-                SelectColor.Danger => "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 hover:bg-rose-100",
-                SelectColor.Secondary => "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200",
-                SelectColor.Info => "bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800 hover:bg-sky-100",
+                ComponentColor.Primary => "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 hover:bg-blue-100",
+                ComponentColor.Success => "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100",
+                ComponentColor.Warning => "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 hover:bg-amber-100",
+                ComponentColor.Danger => "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 hover:bg-rose-100",
+                ComponentColor.Secondary => "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200",
+                ComponentColor.Info => "bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800 hover:bg-sky-100",
                 _ => "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-200"
             };
         }

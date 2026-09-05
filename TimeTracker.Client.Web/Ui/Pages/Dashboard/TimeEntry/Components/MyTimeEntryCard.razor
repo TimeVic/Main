@@ -116,28 +116,28 @@
     <div class="shrink-0 flex items-center gap-1" @onclick:stopPropagation="true">
         @if (CanSubmitForApproval)
         {
-            <CustomButton
+            <AppButton
                 OnClick="@(() => OnSubmitForApproval.InvokeAsync(Entry))"
-                Size="Size.Small"
-                Color="ThemeColor.Primary"
-                Variant="Variant.Light"
+                Size="ComponentSize.Small"
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Light"
                 IconOnly="true"
                 Title="@DashboardLocalizer["Approvals_Card_SubmitSingle"].Value">
                 <ChildContent>
                     <i class="fa-solid fa-paper-plane text-blue-600"></i>
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         }
-        <CustomButton
+        <AppButton
             OnClick="@(() => OnClone.InvokeAsync(Entry))"
-            Size="Size.Small"
-            Color="ThemeColor.Default"
-            Variant="Variant.Light"
+            Size="ComponentSize.Small"
+            Color="ComponentColor.Default"
+            Variant="ButtonVariant.Light"
             IconOnly="true">
             <ChildContent>
                 <i class="fa-regular fa-circle-play text-slate-400"></i>
             </ChildContent>
-        </CustomButton>
+        </AppButton>
         <LumexDropdown>
             <LumexDropdownTrigger>
                 <LumexButton

@@ -55,14 +55,14 @@
             }
             @if (CanCreatePayments)
             {
-                <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
+                <AppButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>    
                 </StartContent>
                 <ChildContent>
                     @DashboardLocalizer["AddPayment"]
                 </ChildContent>
-                </CustomButton>
+                </AppButton>
             }
         </div>
     </LumexCardHeader>

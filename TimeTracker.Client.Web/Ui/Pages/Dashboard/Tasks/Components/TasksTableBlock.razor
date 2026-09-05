@@ -44,26 +44,26 @@
                 @if (_selectedTaskIds.Any())
                 {
                     <div class="flex items-center gap-1.5">
-                        <CustomButton
-                            Color="ThemeColor.Warning"
-                            Variant="Variant.Light"
-                            Size="Size.Small"
+                        <AppButton
+                            Color="ComponentColor.Warning"
+                            Variant="ButtonVariant.Light"
+                            Size="ComponentSize.Small"
                             OnClick="@(() => OnSetArchivedSelectedTasks(true))">
                             <StartContent>
                                 <i class="fa-solid fa-box-archive text-xs"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Archive"]</ChildContent>
-                        </CustomButton>
-                        <CustomButton
-                            Color="ThemeColor.Success"
-                            Variant="Variant.Light"
-                            Size="Size.Small"
+                        </AppButton>
+                        <AppButton
+                            Color="ComponentColor.Success"
+                            Variant="ButtonVariant.Light"
+                            Size="ComponentSize.Small"
                             OnClick="@(() => OnSetArchivedSelectedTasks(false))">
                             <StartContent>
                                 <i class="fa-solid fa-rotate-left text-xs"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Restore"]</ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 }
             </div>
@@ -165,7 +165,7 @@
                                                 Class="shrink-0"
                                                 DropDownColor="@task.Status.GetSelectColor()"
                                                 SelectType="DropDownType.DropDown"
-                                                Size="SelectSize.Small"
+                                                Size="ComponentSize.Small"
                                                 Value="@task.Status"
                                                 ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                                         }
@@ -174,7 +174,7 @@
                                             Class="shrink-0"
                                             DropDownColor="@task.Priority.GetSelectColor()"
                                             SelectType="DropDownType.DropDown"
-                                            Size="SelectSize.Small"
+                                            Size="ComponentSize.Small"
                                             Value="@task.Priority"
                                             ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                                         <UserAvatarBlock
@@ -199,7 +199,7 @@
                                     Class="whitespace-nowrap"
                                     DropDownColor="@task.Status.GetSelectColor()"
                                     SelectType="DropDownType.DropDown"
-                                    Size="SelectSize.Small"
+                                    Size="ComponentSize.Small"
                                     Value="@task.Status"
                                     ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                             }
@@ -210,7 +210,7 @@
                                 Class="whitespace-nowrap"
                                 DropDownColor="@task.Priority.GetSelectColor()"
                                 SelectType="DropDownType.DropDown"
-                                Size="SelectSize.Small"
+                                Size="ComponentSize.Small"
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>

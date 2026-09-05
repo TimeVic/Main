@@ -1,28 +1,32 @@
 using LumexUI.Common;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Core.Core.Extensions.Enums;
 
 public static class TaskStatusExtensions
 {
-    public static SelectColor GetSelectColor(this TaskStatus status) => status switch
+    public static ComponentColor GetSelectColor(this TaskStatus status) => status switch
     {
-        TaskStatus.Backlog => SelectColor.Secondary,
-        TaskStatus.Done => SelectColor.Success,
-        TaskStatus.ToDo => SelectColor.Primary,
-        _ => SelectColor.Default
+        TaskStatus.Backlog => ComponentColor.Secondary,
+        TaskStatus.Done => ComponentColor.Success,
+        TaskStatus.ToDo => ComponentColor.Primary,
+        _ => ComponentColor.Default
     };
 
-    public static SelectColor GetSelectColor(this ExtendedTaskStatus status) => status switch
+    public static ComponentColor GetComponentColor(this TaskStatus status) => status.GetSelectColor();
+
+    public static ComponentColor GetSelectColor(this ExtendedTaskStatus status) => status switch
     {
-        ExtendedTaskStatus.Backlog => SelectColor.Secondary,
-        ExtendedTaskStatus.Done => SelectColor.Success,
-        ExtendedTaskStatus.InProgress => SelectColor.Warning,
-        ExtendedTaskStatus.ToDo => SelectColor.Primary,
-        _ => SelectColor.Default
+        ExtendedTaskStatus.Backlog => ComponentColor.Secondary,
+        ExtendedTaskStatus.Done => ComponentColor.Success,
+        ExtendedTaskStatus.InProgress => ComponentColor.Warning,
+        ExtendedTaskStatus.ToDo => ComponentColor.Primary,
+        _ => ComponentColor.Default
     };
+
+    public static ComponentColor GetComponentColor(this ExtendedTaskStatus status) => status.GetSelectColor();
 
     public static ThemeColor GetThemeColor(this TaskStatus status)
     {

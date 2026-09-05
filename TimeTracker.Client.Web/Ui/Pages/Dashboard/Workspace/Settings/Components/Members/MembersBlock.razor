@@ -22,18 +22,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["MembersBlock_WorkspaceMembersTitle"]</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["MembersBlock_Description"]</p>
                 </div>
-                <CustomButton
-                    Size="Size.Small"
+                <AppButton
+                    Size="ComponentSize.Small"
                     OnClick="@OnAdd"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
                         <i class="fa-solid fa-user-plus"></i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["MembersBlock_InviteMember"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
         </LumexCardBody>
     </LumexCard>
@@ -58,28 +58,28 @@
                 @if (context.Access != MembershipAccessType.Owner)
                 {
                     <div class="flex gap-1">
-                        <CustomButton
+                        <AppButton
                             Class="inline-flex rounded-full"
                             OnClick="@(() => OnEdit(context))"
-                            Size="Size.Small"
-                            Color="ThemeColor.Primary"
-                            Variant="Variant.Light"
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Primary"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true">
                             <ChildContent>
                                 <i class="fa-regular fa-pen-to-square"></i>
                             </ChildContent>
-                        </CustomButton>
-                        <CustomButton
+                        </AppButton>
+                        <AppButton
                             Class="inline-flex rounded-full"
                             OnClick="@(() => OnDelete(context))"
-                            Size="Size.Small"
-                            Color="ThemeColor.Danger"
-                            Variant="Variant.Light"
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Danger"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true">
                             <ChildContent>
                                 <i class="fa-regular fa-trash-can"></i>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 }
             </Content>

@@ -37,18 +37,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_WorkspaceTagsTitle"]</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TagsBlock_Description"]</p>
                 </div>
-                <CustomButton
-                    Size="Size.Small"
+                <AppButton
+                    Size="ComponentSize.Small"
                     OnClick="@OnAdd"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["TagsBlock_AddTag"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
         </LumexCardBody>
     </LumexCard>
@@ -85,28 +85,28 @@
             Property="@(p => p.Id)">
             <Content>
                 <div class="inline-flex items-center gap-2">
-                    <CustomButton
+                    <AppButton
                         Class="inline-flex rounded-full"
                         OnClick="@(() => OnEdit(context))"
-                        Size="Size.Small"
-                        Color="ThemeColor.Primary"
-                        Variant="Variant.Light"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Light"
                         IconOnly="true">
                         <ChildContent>
                             <i class="fa-regular fa-pen-to-square"></i>
                         </ChildContent>
-                    </CustomButton>
-                    <CustomButton
+                    </AppButton>
+                    <AppButton
                         Class="inline-flex rounded-full"
                         OnClick="@(() => OnDeleteClicked(context))"
-                        Size="Size.Small"
-                        Color="ThemeColor.Danger"
-                        Variant="Variant.Light"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Danger"
+                        Variant="ButtonVariant.Light"
                         IconOnly="true">
                         <ChildContent>
                             <i class="fa-regular fa-trash-can"></i>
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </Content>
         </LumexUI.PropertyColumn>

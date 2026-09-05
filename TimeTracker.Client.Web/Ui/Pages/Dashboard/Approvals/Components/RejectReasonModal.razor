@@ -44,23 +44,23 @@
                 </EditForm>
             </LumexModalBody>
             <LumexModalFooter>
-                <CustomButton
+                <AppButton
                     FullWidth="@true"
                     OnClick="@OnCancelClicked"
-                    Color="@ThemeColor.Default"
-                    Variant="@Variant.Outlined"
-                    Radius="@Radius.Medium">
+                    Color="@ComponentColor.Default"
+                    Variant="@ButtonVariant.Outlined"
+                    Radius="@ButtonRadius.Medium">
                     @DashboardLocalizer["Cancel"]
-                </CustomButton>
-                <CustomButton
+                </AppButton>
+                <AppButton
                     FullWidth="@true"
                     OnClick="@Submit"
-                    Color="@ThemeColor.Danger"
-                    Variant="@Variant.Solid"
-                    Radius="@Radius.Medium"
+                    Color="@ComponentColor.Danger"
+                    Variant="@ButtonVariant.Solid"
+                    Radius="@ButtonRadius.Medium"
                     Disabled="@string.IsNullOrWhiteSpace(_model.Reason)">
                     @DashboardLocalizer["Approvals_RejectModal_Confirm"]
-                </CustomButton>
+                </AppButton>
             </LumexModalFooter>
         </LumexModalContent>
     </LumexModal>

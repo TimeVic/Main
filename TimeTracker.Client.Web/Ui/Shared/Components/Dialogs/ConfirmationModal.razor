@@ -37,22 +37,22 @@
             }
         </LumexModalBody>
         <LumexModalFooter>
-            <CustomButton
+            <AppButton
                 FullWidth="@true"
                 OnClick="@OnCancelClicked"
-                Color="@ThemeColor.Default"
-                Variant="Variant.Outlined"
-                Radius="@Radius.Medium">
+                Color="@ComponentColor.Default"
+                Variant="ButtonVariant.Outlined"
+                Radius="@ButtonRadius.Medium">
                 @DisplayCancelButtonText
-            </CustomButton>
-            <CustomButton
+            </AppButton>
+            <AppButton
                 FullWidth="@true"
                 OnClick="@OnConfirmClicked"
-                Color="@ThemeColor.Danger"
-                Variant="Variant.Solid"
-                Radius="@Radius.Medium">
+                Color="@ComponentColor.Danger"
+                Variant="ButtonVariant.Solid"
+                Radius="@ButtonRadius.Medium">
                 @DisplayConfirmText
-            </CustomButton>
+            </AppButton>
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>

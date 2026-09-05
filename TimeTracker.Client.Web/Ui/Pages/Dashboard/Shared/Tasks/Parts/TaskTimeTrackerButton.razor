@@ -6,9 +6,9 @@
 <span class="@Class" title="@ButtonTitle">
     @if (IsCurrentTaskTimerActive)
     {
-        <CustomButton
+        <AppButton
             Variant="@Variant"
-            Color="ThemeColor.Default"
+            Color="ComponentColor.Default"
             IconOnly="@IconOnly"
             Size="@Size"
             Disabled="@IsDisabled"
@@ -22,13 +22,13 @@
                     <span class="task-tracker-button-text">@DashboardLocalizer["StopTimer"]</span>
                 }
             </ChildContent>
-        </CustomButton>
+        </AppButton>
     }
     else
     {
-        <CustomButton
+        <AppButton
             Variant="@Variant"
-            Color="ThemeColor.Info"
+            Color="ComponentColor.Info"
             IconOnly="@IconOnly"
             Size="@Size"
             Disabled="@IsDisabled"
@@ -42,6 +42,6 @@
                     <span class="task-tracker-button-text">@DashboardLocalizer["StartTimer"]</span>
                 }
             </ChildContent>
-        </CustomButton>
+        </AppButton>
     }
 </span>

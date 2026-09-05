@@ -28,16 +28,16 @@
         </div>
 
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-5">
-            <CustomButton
-                Color="ThemeColor.Primary"
-                Variant="Variant.Solid"
+            <AppButton
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Solid"
                 IsLoading="@_isSaving"
                 OnClick="@OnChangeLogin">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["UserSettings_SaveLogin"]</ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
     </LumexCardBody>
 </LumexCard>

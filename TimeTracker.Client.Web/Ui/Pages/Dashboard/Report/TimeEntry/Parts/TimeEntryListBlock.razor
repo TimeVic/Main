@@ -89,29 +89,29 @@
                 <div class="flex items-center justify-end gap-1">
                     @if (SecurityManager.CanEditTimeEntry(context))
                     {
-                        <CustomButton
-                            Size="Size.Small"
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Light"
+                        <AppButton
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true"
                             OnClick="@(() => _timeEntryToEdit = context)">
                             <ChildContent>
                                 <i class="fa-regular fa-pen-to-square text-slate-400"></i>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     }
                     @if (SecurityManager.CanDeleteTimeEntry(context))
                     {
-                        <CustomButton
-                            Size="Size.Small"
-                            Color="ThemeColor.Danger"
-                            Variant="Variant.Light"
+                        <AppButton
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Danger"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true"
                             OnClick="@(() => _timeEntryToDelete = context)">
                             <ChildContent>
                                 <i class="fa-regular fa-trash-can text-slate-400"></i>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     }
                 </div>
             </TemplateColumn>

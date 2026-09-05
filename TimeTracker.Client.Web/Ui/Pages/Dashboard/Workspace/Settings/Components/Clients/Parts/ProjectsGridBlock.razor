@@ -58,17 +58,17 @@
         Title="@DashboardLocalizer["Actions"]"
         Property="@(p => p.Id)">
         <Content>
-            <CustomButton
+            <AppButton
                 Class="inline-flex rounded-full"
                 OnClick="@(() => OnEdit(context))"
-                Size="Size.Small"
-                Color="ThemeColor.Primary"
-                Variant="Variant.Light"
+                Size="ComponentSize.Small"
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Light"
                 IconOnly="true">
                 <ChildContent>
                     <i class="fa-regular fa-pen-to-square"></i>
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         </Content>
     </LumexUI.PropertyColumn>
 </LumexDataGrid>

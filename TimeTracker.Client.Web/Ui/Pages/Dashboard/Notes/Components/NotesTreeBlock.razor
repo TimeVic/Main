@@ -59,16 +59,16 @@
                 <p>@(ActiveMode == NoteVisibility.Workspace ? DashboardLocalizer["Notes_EmptyWorkspaceDescription"] : DashboardLocalizer["Notes_EmptyPrivateDescription"])</p>
                 @if (IsEditingAllowed)
                 {
-                    <CustomButton
+                    <AppButton
                     Class="mt-3"
-                    Size="Size.Small"
-                    Color="@ThemeColor.Primary"
+                    Size="ComponentSize.Small"
+                    Color="@ComponentColor.Primary"
                     OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>@DashboardLocalizer["CreateNote"]</ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 }
             </div>
         }

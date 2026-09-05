@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
@@ -93,15 +94,15 @@ public partial class AppSelect<TValue> : AppBaseSelect
 
     protected string InputSizeClasses => Size switch
     {
-        SelectSize.Small => "h-8 px-2.5 py-1 text-xs rounded-lg",
-        SelectSize.Large => "h-12 px-4 py-2.5 text-base rounded-xl",
+        ComponentSize.Small => "h-8 px-2.5 py-1 text-xs rounded-lg",
+        ComponentSize.Large => "h-12 px-4 py-2.5 text-base rounded-xl",
         _ => "h-10 px-3.5 py-2 text-sm rounded-xl"
     };
 
     protected string ButtonSizeClasses => Size switch
     {
-        SelectSize.Small => "px-2 py-1 text-xs rounded-md",
-        SelectSize.Large => "px-4 py-2 text-sm rounded-lg",
+        ComponentSize.Small => "px-2 py-1 text-xs rounded-md",
+        ComponentSize.Large => "px-4 py-2 text-sm rounded-lg",
         _ => "px-3 py-1.5 text-xs rounded-lg"
     };
 

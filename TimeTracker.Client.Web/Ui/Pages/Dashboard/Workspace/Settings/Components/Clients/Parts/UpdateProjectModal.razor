@@ -64,7 +64,7 @@
                             <InputNumericNullableField 
                                 TItem="decimal"
                                 Label="@DashboardLocalizer["HourlyRate"].Value"
-                                Size="InputSize.Small"
+                                Size="ComponentSize.Small"
                                 Step="00.01"
                                 Value="@model.DefaultHourlyRate"
                                 ValueExpression="() => model.DefaultHourlyRate"
@@ -76,14 +76,14 @@
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
-            <CustomButton
+            <AppButton
                 FullWidth="@true"
                 OnClick="@Submit"
                 IsLoading="_state.Value.IsSaving"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
+                Color="@ComponentColor.Primary"
+                Radius="@ButtonRadius.Full">
                 @DashboardLocalizer["Update"]
-            </CustomButton>
+            </AppButton>
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>

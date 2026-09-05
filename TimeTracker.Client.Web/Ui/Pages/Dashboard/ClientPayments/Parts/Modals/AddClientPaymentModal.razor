@@ -31,7 +31,7 @@
                     <div>
                         <ClientsSelect
                             Type="DropDownType.Select"
-                            Size="SelectSize.Small"
+                            Size="ComponentSize.Small"
                             Label="@DashboardLocalizer["Client"].Value"
                             Value="model.ClientId"
                             ValueExpression="() => model.ClientId"
@@ -41,7 +41,7 @@
                     <div>
                         <ProjectsSelect
                             Type="DropDownType.Select"
-                            Size="SelectSize.Small"
+                            Size="ComponentSize.Small"
                             Label="@DashboardLocalizer["Project"].Value"
                             ClientId="model.ClientId"
                             Value="model.ProjectId"
@@ -51,7 +51,7 @@
                     </div>
                     <div>
                         <InputDateField
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Required="true"
                             @bind-Value="@model.PaymentTime"
                             Label="@DashboardLocalizer["PaymentDate"].Value"/>
@@ -60,7 +60,7 @@
                     <div>
                         <InputNumericField
                             TItem="decimal"
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Required="true"
                             @bind-Value="@model.Amount"
                             Label="@DashboardLocalizer["Amount"].Value"/>
@@ -68,7 +68,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <InputTextareaField
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Label="@DashboardLocalizer["PaymentNoteReference"].Value"
                             Placeholder="@DashboardLocalizer["OptionalPaymentNoteReference"].Value"
                             @bind-Value="model.Description"/>
@@ -79,15 +79,15 @@
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
-            <CustomButton
+            <AppButton
                 FullWidth="@true"
                 OnClick="@Submit"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
+                Color="@ComponentColor.Primary"
+                Radius="@ButtonRadius.Full">
                 <ChildContent>
                     @DashboardLocalizer["Create"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>

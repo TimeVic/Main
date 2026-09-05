@@ -33,9 +33,9 @@
             </div>
         </LumexCardHeader>
         <LumexCardFooter>
-            <CustomButton
-                Color="ThemeColor.Danger"
-                Variant="Variant.Outlined"
+            <AppButton
+                Color="ComponentColor.Danger"
+                Variant="ButtonVariant.Outlined"
                 OnClick="@OpenConfirmation">
                 <StartContent>
                     <i class="fa-regular fa-trash-can"></i>
@@ -43,7 +43,7 @@
                 <ChildContent>
                     @DashboardLocalizer["WorkspaceDeletionBlock_DeleteWorkspace"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         </LumexCardFooter>
     </LumexCard>
 }

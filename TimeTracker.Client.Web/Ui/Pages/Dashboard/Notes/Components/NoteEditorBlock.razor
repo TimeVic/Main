@@ -69,47 +69,47 @@
                 <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
                     @if (IsEditing)
                     {
-                        <CustomButton
-                            Size="Size.Small"
-                            Color="@ThemeColor.Default"
-                            Variant="Variant.Outlined"
-                            Radius="@Radius.Full"
+                        <AppButton
+                            Size="ComponentSize.Small"
+                            Color="@ComponentColor.Default"
+                            Variant="ButtonVariant.Outlined"
+                            Radius="@ButtonRadius.Full"
                             Disabled="IsSaving"
                             OnClick="@OnCancelClick">
                             <StartContent>
                                 <i class="fa-solid fa-xmark"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Cancel"]</ChildContent>
-                        </CustomButton>
+                        </AppButton>
                         @if (IsEditingAllowed)
                         {
-                            <CustomButton
-                            Size="Size.Small"
-                            Color="@ThemeColor.Primary"
-                            Radius="@Radius.Full"
+                            <AppButton
+                            Size="ComponentSize.Small"
+                            Color="@ComponentColor.Primary"
+                            Radius="@ButtonRadius.Full"
                             IsLoading="IsSaving"
                             OnClick="@OnSave">
                             <StartContent>
                                 <i class="fa-regular fa-floppy-disk"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         }
                     }
                     else
                     {
                         @if (IsEditingAllowed)
                         {
-                            <CustomButton
-                                Size="Size.Small"
-                                Color="@ThemeColor.Primary"
-                                Radius="@Radius.Full"
+                            <AppButton
+                                Size="ComponentSize.Small"
+                                Color="@ComponentColor.Primary"
+                                Radius="@ButtonRadius.Full"
                                 OnClick="@OnEditClick">
                                 <StartContent>
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </StartContent>
                                 <ChildContent>@DashboardLocalizer["Edit"]</ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         }
                     }
                 </div>

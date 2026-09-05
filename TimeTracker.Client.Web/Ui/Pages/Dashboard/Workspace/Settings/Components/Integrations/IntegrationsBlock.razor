@@ -33,12 +33,12 @@
                 </div>
             </LumexModalBody>
             <LumexModalFooter>
-                <CustomButton
-                    Color="ThemeColor.Primary"
-                    Variant="Variant.Solid"
+                <AppButton
+                    Color="ComponentColor.Primary"
+                    Variant="ButtonVariant.Solid"
                     OnClick="@CloseHelpModal">
                     @DashboardLocalizer["Close"]
-                </CustomButton>
+                </AppButton>
             </LumexModalFooter>
         </LumexModalContent>
     </LumexModal>
@@ -147,12 +147,12 @@
                             </EditForm>
                         </LumexCardBody>
                         <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.ClickUp)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveClickUpAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -160,7 +160,7 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "ClickUp")
                                 </ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         </LumexCardFooter>
                     </LumexCard>
                 </div>
@@ -232,12 +232,12 @@
                             </EditForm>
                         </LumexCardBody>
                         <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Redmine)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveRedmineAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -245,7 +245,7 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Redmine")
                                 </ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         </LumexCardFooter>
                     </LumexCard>
                 </div>
@@ -308,12 +308,12 @@
                             </EditForm>
                         </LumexCardBody>
                         <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Jira)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveJiraAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -321,7 +321,7 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Jira")
                                 </ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         </LumexCardFooter>
                     </LumexCard>
                 </div>

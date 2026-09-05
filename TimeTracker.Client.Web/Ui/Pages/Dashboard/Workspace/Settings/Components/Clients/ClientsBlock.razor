@@ -41,33 +41,33 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <CustomButton
-                            Size="Size.Small"
+                        <AppButton
+                            Size="ComponentSize.Small"
                             OnClick="@OnAdd"
-                            Color="@ThemeColor.Primary"
-                            Variant="Variant.Outlined"
-                            Radius="@Radius.Full">
+                            Color="@ComponentColor.Primary"
+                            Variant="ButtonVariant.Outlined"
+                            Radius="@ButtonRadius.Full">
                             <StartContent>
                                 <i class="fa-solid fa-plus"></i>
                             </StartContent>
                             <ChildContent>
                                 @DashboardLocalizer["AddClient"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
 
-                        <CustomButton
-                            Size="Size.Small"
+                        <AppButton
+                            Size="ComponentSize.Small"
                             OnClick="@OnAddProjectTop"
-                            Color="@ThemeColor.Primary"
-                            Variant="Variant.Solid"
-                            Radius="@Radius.Full">
+                            Color="@ComponentColor.Primary"
+                            Variant="ButtonVariant.Solid"
+                            Radius="@ButtonRadius.Full">
                             <StartContent>
                                 <i class="fa-solid fa-folder-plus"></i>
                             </StartContent>
                             <ChildContent>
                                 @DashboardLocalizer["AddProject"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 </div>
 
@@ -126,18 +126,18 @@
             <i class="fa-regular fa-building mb-3 text-3xl text-slate-400"></i>
             <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["ClientsBlock_Empty"]</p>
             <div class="mt-4 flex items-center gap-3">
-                <CustomButton
+                <AppButton
                     OnClick="@OnAdd"
-                    Size="Size.Small"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Size="ComponentSize.Small"
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["AddClient"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
         </div>
     }

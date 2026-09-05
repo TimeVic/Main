@@ -1,6 +1,6 @@
-namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
+namespace TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 
-public enum SelectColor
+public enum ComponentColor
 {
     Default = 0,
     Primary = 1,

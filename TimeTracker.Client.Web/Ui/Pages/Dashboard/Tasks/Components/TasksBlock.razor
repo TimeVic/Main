@@ -39,7 +39,7 @@
                             @bind-Value="SearchString"
                             Placeholder="@DashboardLocalizer["TasksBlock_SearchTasksPlaceholder"].Value"
                             FullWidth="true"
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Clearable="true">
                             <StartContent>
                                 <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
@@ -67,15 +67,15 @@
                             </LumexDropdownItem>
                         </LumexDropdownMenu>
                     </LumexDropdown>
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Info"
+                    <AppButton
+                        Variant="ButtonVariant.Outlined"
+                        Color="ComponentColor.Info"
                         OnClick="@(() => _isShowAddTaskModal = true)">
                         <StartContent>
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
                         <ChildContent>@DashboardLocalizer["AddTask"]</ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </div>
         </div>
@@ -89,16 +89,16 @@
         <div class="@EmptyStateClass">
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBlock_ProjectEmptyTitle"]</p>
             <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TasksBlock_ProjectEmptyDescription"]</p>
-            <CustomButton
+            <AppButton
                 Class="mt-4"
-                Variant="Variant.Outlined"
-                Color="ThemeColor.Info"
+                Variant="ButtonVariant.Outlined"
+                Color="ComponentColor.Info"
                 OnClick="@(() => _isShowAddTaskListModal = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["AddTasksListModalForm_Title"]</ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
     }
     else if (ContextClient != null)

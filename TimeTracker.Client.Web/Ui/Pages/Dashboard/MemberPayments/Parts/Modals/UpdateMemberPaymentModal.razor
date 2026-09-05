@@ -54,7 +54,7 @@
                     }
                     <div>
                         <InputDateField
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Required="true"
                             @bind-Value="@model.PaymentTime"
                             Label="@DashboardLocalizer["PaymentDate"].Value"/>
@@ -63,7 +63,7 @@
                     <div>
                         <InputNumericField
                             TItem="decimal"
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Required="true"
                             @bind-Value="@model.Amount"
                             Label="@DashboardLocalizer["Amount"].Value"/>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <InputTextareaField
-                            Size="InputSize.Small"
+                            Size="ComponentSize.Small"
                             Label="@DashboardLocalizer["Description"].Value"
                             Placeholder="@DashboardLocalizer["OptionalPaymentNote"].Value"
                             @bind-Value="model.Description"/>
@@ -82,14 +82,14 @@
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
-            <CustomButton
+            <AppButton
                 FullWidth="@true"
                 OnClick="@Submit"
                 IsLoading="_state.Value.IsListLoading"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
+                Color="@ComponentColor.Primary"
+                Radius="@ButtonRadius.Full">
                 @DashboardLocalizer["Update"]
-            </CustomButton>
+            </AppButton>
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>

@@ -50,9 +50,9 @@
                             class="hidden"
                             accept="image/png,image/jpeg,image/gif,image/webp"
                             OnChange="@OnAvatarFileSelected" />
-                        <CustomButton
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Outlined"
+                        <AppButton
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Outlined"
                             IsLoading="@_isUploadingAvatar"
                             Disabled="@_isDeletingAvatar"
                             OnClick="@OnClickChangeAvatar">
@@ -60,17 +60,17 @@
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["UserSettings_ChangeAvatar"]</ChildContent>
-                        </CustomButton>
+                        </AppButton>
                         @if (AuthState.Value.User?.Avatar != null)
                         {
-                            <CustomButton
-                                Color="ThemeColor.Danger"
-                                Variant="Variant.Light"
+                            <AppButton
+                                Color="ComponentColor.Danger"
+                                Variant="ButtonVariant.Light"
                                 IsLoading="@_isDeletingAvatar"
                                 Disabled="@_isUploadingAvatar"
                                 OnClick="@OnClickRemoveAvatar">
                                 @DashboardLocalizer["UserSettings_RemoveAvatar"]
-                            </CustomButton>
+                            </AppButton>
                         }
                     </div>
                 </div>
@@ -110,16 +110,16 @@
         </div>
 
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-5">
-            <CustomButton
-                Color="ThemeColor.Primary"
-                Variant="Variant.Solid"
+            <AppButton
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Solid"
                 IsLoading="@_isSaving"
                 OnClick="@OnSave">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["UserSettings_SaveChanges"]</ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
     </LumexCardBody>
 </LumexCard>

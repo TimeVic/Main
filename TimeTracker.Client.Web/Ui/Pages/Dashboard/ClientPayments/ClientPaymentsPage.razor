@@ -30,14 +30,14 @@
         </div>
         @if (CanCreatePayments)
         {
-            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+            <AppButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
                 <ChildContent>
                     @DashboardLocalizer["AddClientPayment"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         }
     </section>
 
@@ -121,14 +121,14 @@
                     @if (CanCreatePayments)
                     {
                         <div class="mt-5">
-                            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+                            <AppButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
                                 <StartContent>
                                     <i class="fa-solid fa-plus"></i>
                                 </StartContent>
                                 <ChildContent>
                                     @DashboardLocalizer["AddClientPayment"]
                                 </ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         </div>
                     }
                 </div>

@@ -92,38 +92,38 @@
         Property="@(p => p.Id)">
         <Content>
             <div class="flex items-center gap-2" @onclick:stopPropagation="true">
-                <CustomButton
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
+                <AppButton
+                    Variant="ButtonVariant.Outlined"
+                    Color="ComponentColor.Default"
                     OnClick="() => _paymentToView = context"
                     IconOnly="true"
-                    Size="Size.Small">
+                    Size="ComponentSize.Small">
                     <StartContent>
                         <i class="fa-regular fa-eye"></i>
                     </StartContent>
-                </CustomButton>
+                </AppButton>
                 @if (CanUpdatePayments)
                 {
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Primary"
+                    <AppButton
+                        Variant="ButtonVariant.Outlined"
+                        Color="ComponentColor.Primary"
                         OnClick="() => _paymentToUpdate = context"
                         IconOnly="true"
-                        Size="Size.Small">
+                        Size="ComponentSize.Small">
                         <StartContent>
                             <i class="fa-regular fa-pen-to-square"></i>
                         </StartContent>
-                    </CustomButton>
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Danger"
+                    </AppButton>
+                    <AppButton
+                        Variant="ButtonVariant.Outlined"
+                        Color="ComponentColor.Danger"
                         OnClick="() => _paymentToDelete = context"
                         IconOnly="true"
-                        Size="Size.Small">
+                        Size="ComponentSize.Small">
                         <StartContent>
                             <i class="fa-regular fa-trash-can"></i>
                         </StartContent>
-                    </CustomButton>
+                    </AppButton>
                 }
             </div>
         </Content>

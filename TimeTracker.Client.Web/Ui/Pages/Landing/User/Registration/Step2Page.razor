@@ -48,8 +48,8 @@
                     Placeholder="@SharedLocalizer["Form_CreatePasswordPlaceholder"]" />
             </div>
 
-            <CustomButton
-                Color="@ThemeColor.Primary"
+            <AppButton
+                Color="@ComponentColor.Primary"
                 Class="w-full gap-2 bg-emerald-600 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
                 IsLoading="_isLoading"
                 OnClick="@Submit">
@@ -59,7 +59,7 @@
                 <ChildContent>
                     @Localizer["Content_FinishRegistration"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         </EditForm>
 
         <div class="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">

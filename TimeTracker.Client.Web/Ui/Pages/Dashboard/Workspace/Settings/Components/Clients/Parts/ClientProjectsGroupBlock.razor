@@ -40,34 +40,34 @@
                 <div class="flex shrink-0 items-center gap-2">
                     @if (Client != null)
                     {
-                        <CustomButton
+                        <AppButton
                             OnClick="@OnEditClient"
-                            Size="Size.Small"
-                            Color="@ThemeColor.Primary"
-                            Variant="Variant.Light"
-                            Radius="@Radius.Full">
+                            Size="ComponentSize.Small"
+                            Color="@ComponentColor.Primary"
+                            Variant="ButtonVariant.Light"
+                            Radius="@ButtonRadius.Full">
                             <StartContent>
                                 <i class="fa-regular fa-pen-to-square"></i>
                             </StartContent>
                             <ChildContent>
                                 @DashboardLocalizer["EditClient"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     }
 
-                    <CustomButton
+                    <AppButton
                         OnClick="@OnAddProject"
-                        Size="Size.Small"
-                        Color="@ThemeColor.Primary"
-                        Variant="Variant.Solid"
-                        Radius="@Radius.Full">
+                        Size="ComponentSize.Small"
+                        Color="@ComponentColor.Primary"
+                        Variant="ButtonVariant.Solid"
+                        Radius="@ButtonRadius.Full">
                         <StartContent>
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
                         <ChildContent>
                             @DashboardLocalizer["AddProject"]
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </div>
 
@@ -81,20 +81,20 @@
             {
                 <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-6 text-center">
                     <p class="text-sm text-slate-500">@DashboardLocalizer["ClientProjectsGroupBlock_NoProjects"]</p>
-                    <CustomButton
+                    <AppButton
                         Class="mt-3"
                         OnClick="@OnAddProject"
-                        Size="Size.Small"
-                        Color="@ThemeColor.Primary"
-                        Variant="Variant.Light"
-                        Radius="@Radius.Full">
+                        Size="ComponentSize.Small"
+                        Color="@ComponentColor.Primary"
+                        Variant="ButtonVariant.Light"
+                        Radius="@ButtonRadius.Full">
                         <StartContent>
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
                         <ChildContent>
                             @DashboardLocalizer["AddProject"]
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             }
         </div>

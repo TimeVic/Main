@@ -44,9 +44,9 @@
                                 Disabled="@(!_isActive)"
                                 FullWidth="true" />
                         </div>
-                        <CustomButton
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Flat"
+                        <AppButton
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Flat"
                             Disabled="@(!_isActive)"
                             OnClick="CopyAsync">
                             <StartContent>
@@ -55,7 +55,7 @@
                             <ChildContent>
                                 @DashboardLocalizer["ClientShareReport_Copy"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                     @if (!_isActive)
                     {

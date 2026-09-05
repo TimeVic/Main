@@ -37,14 +37,14 @@
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
-            <CustomButton
+            <AppButton
                 FullWidth="@true"
                 OnClick="@Submit"
                 Disabled="_isLoading"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
+                Color="@ComponentColor.Primary"
+                Radius="@ButtonRadius.Full">
                 @DashboardLocalizer["Update"]
-            </CustomButton>
+            </AppButton>
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>

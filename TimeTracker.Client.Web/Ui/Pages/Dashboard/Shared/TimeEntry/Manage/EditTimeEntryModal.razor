@@ -53,18 +53,18 @@
                                     />
                                     @if (_model.Project != null)
                                     {
-                                        <CustomButton
+                                        <AppButton
                                             OnClick="@OpenAddTaskModal"
-                                            Variant="Variant.Outlined"
-                                            Size="Size.Medium"
-                                            Color="ThemeColor.Info">
+                                            Variant="ButtonVariant.Outlined"
+                                            Size="ComponentSize.Medium"
+                                            Color="ComponentColor.Info">
                                             <StartContent>
                                                 <i class="fa-solid fa-plus"></i>
                                             </StartContent>
                                             <ChildContent>
                                                 <span>@DashboardLocalizer["Task"]</span>
                                             </ChildContent>
-                                        </CustomButton>
+                                        </AppButton>
                                     }
                                 </div>
                             }
@@ -82,7 +82,7 @@
                                 <div>
                                     <InputDateField 
                                         TValue="DateTime?"
-                                        Size="InputSize.Small"
+                                        Size="ComponentSize.Small"
                                         Required="true"
                                         Value="@_model.StartTime.Date"
                                         ValueChanged="OnDateChanged"
@@ -151,7 +151,7 @@
                                         <InputNumericNullableField 
                                             TItem="decimal"
                                             Label="@DashboardLocalizer["HourlyRate"].Value"
-                                            Size="InputSize.Small"
+                                            Size="ComponentSize.Small"
                                             Step="00.01"
                                             Value="@_model.HourlyRate"
                                             ValueExpression="() => _model.HourlyRate"

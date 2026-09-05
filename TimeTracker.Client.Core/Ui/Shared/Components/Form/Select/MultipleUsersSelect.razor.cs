@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Core.Components;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
@@ -14,7 +15,7 @@ public partial class MultipleUsersSelect : BaseReactiveComponent, IDisposable
     public string? Label { get; set; }
 
     [Parameter]
-    public SelectSize Size { get; set; } = SelectSize.Medium;
+    public ComponentSize Size { get; set; } = ComponentSize.Medium;
 
     [Parameter]
     public bool Disabled { get; set; }

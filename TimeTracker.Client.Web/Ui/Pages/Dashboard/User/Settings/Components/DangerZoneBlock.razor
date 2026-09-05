@@ -23,15 +23,15 @@
     <div class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-red-200 bg-white p-4">
         <p class="text-sm text-slate-600">@DashboardLocalizer["UserSettings_RequestDeletionDescription"]</p>
         @* TODO: Wire to account deletion request API *@
-        <CustomButton
-            Color="ThemeColor.Danger"
-            Variant="Variant.Outlined"
+        <AppButton
+            Color="ComponentColor.Danger"
+            Variant="ButtonVariant.Outlined"
             OnClick="@(() => _isShowDeletionModal = true)">
             <StartContent>
                 <i class="fa-regular fa-trash-can"></i>
             </StartContent>
             <ChildContent>@DashboardLocalizer["UserSettings_RequestDeletion"]</ChildContent>
-        </CustomButton>
+        </AppButton>
     </div>
 </div>
 

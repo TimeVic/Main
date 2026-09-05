@@ -62,12 +62,12 @@
                             <i class="fa-regular fa-clock" aria-hidden="true"></i>
                             <span>@DashboardLocalizer["WorkspaceSettings_Import_ViewEntries"]</span>
                         </LumexLink>
-                        <CustomButton
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Outlined"
+                        <AppButton
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Outlined"
                             OnClick="@OnResetImport">
                             @DashboardLocalizer["WorkspaceSettings_Import_SelectAnotherFile"]
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 </div>
             </LumexCardBody>
@@ -134,9 +134,9 @@
                 </div>
 
                 <div class="flex justify-end border-t border-slate-100 pt-5">
-                    <CustomButton
-                        Color="ThemeColor.Primary"
-                        Variant="Variant.Solid"
+                    <AppButton
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Solid"
                         IsLoading="@_isImporting"
                         Disabled="@(_selectedFile == null || _isImporting)"
                         OnClick="@OnImportClick">
@@ -146,7 +146,7 @@
                         <ChildContent>
                             @DashboardLocalizer["WorkspaceSettings_Import_Button"]
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </LumexCardBody>
         </LumexCard>
