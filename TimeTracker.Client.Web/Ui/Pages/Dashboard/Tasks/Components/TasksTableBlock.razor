@@ -32,14 +32,15 @@
         {
             <div class="flex items-center justify-between border-t border-slate-200/60 bg-slate-50/70 px-3 py-1.5">
                 <div class="flex items-center gap-2">
-                    <LumexCheckbox
+                    <AppCheckbox
                         Class="text-xs"
+                        Size="ComponentSize.Small"
                         Value="_selectedTaskIds.Count == Tasks.Count"
                         ValueChanged="SelectAllTasks">
                         <span class="text-xs font-medium text-slate-600">
                             @string.Format(DashboardLocalizer["TasksTableBlock_SelectedOfTasks"].Value, _selectedTaskIds.Count, Tasks.Count)
                         </span>
-                    </LumexCheckbox>
+                    </AppCheckbox>
                 </div>
                 @if (_selectedTaskIds.Any())
                 {
@@ -115,7 +116,8 @@
                         @ondragend="@OnDragEnd">
                         <td class="@GetCellBorderClass(task) px-3 py-2 align-top">
                             <div class="flex flex-col items-center">
-                                <LumexCheckbox
+                                <AppCheckbox
+                                    Size="ComponentSize.Small"
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>

@@ -57,7 +57,7 @@
                                                             <div>
                                                                 <p class="text-xs font-medium text-slate-700">@DashboardLocalizer["UpdateMemberModal_HasAccess"]</p>
                                                             </div>
-                                                            <LumexSwitch
+                                                            <AppSwitch
                                                                 Value="@item.HasAccess"
                                                                 Disabled="@(_model.Access == MembershipAccessType.Manager)"
                                                                 ValueChanged="@(v => item.HasAccess = v)"/>
