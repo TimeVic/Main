@@ -40,15 +40,19 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
             EditContext="_editContext"
             novalidate>
             <DataAnnotationsValidator />
-            <div class="border-b border-slate-200 @TabsContainerClass">
-                <nav class="flex flex-wrap gap-x-4" aria-label="@DashboardLocalizer["TaskDetail_Tabs"]">
+            <div
+                class="@TabsContainerClass">
+                <AppTabs
+                    ActiveKey="@_activeTab.ResourceKey"
+                    OnTabChanged="HandleTaskTabChanged"
+                    AriaLabel="@DashboardLocalizer["TaskDetail_Tabs"]">
                     @foreach (var tab in TaskDetailTab.All)
                     {
-                        <button type="button" @onclick="@(() => OnTabSelected(tab))" class="-mb-px shrink-0 border-b-2 px-1 py-3 text-sm font-medium transition @GetTabClass(tab)">
-                            @DashboardLocalizer[tab.ResourceKey]
-                        </button>
+                        <AppTab
+                            Key="@tab.ResourceKey"
+                            Title="@DashboardLocalizer[tab.ResourceKey]" />
                     }
-                </nav>
+                </AppTabs>
             </div>
 
             <div class="task-detail-grid grid @(IsFullPage ? "min-h-[30rem]" : "min-h-0") lg:grid-cols-[minmax(0,1fr)_17rem]">

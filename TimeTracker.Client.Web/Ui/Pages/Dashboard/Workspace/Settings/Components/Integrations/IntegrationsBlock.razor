@@ -36,12 +36,12 @@
     }
     else
     {
-        <LumexTabs
-            Size="Size.Large"
-            Variant="TabVariant.Outlined"
-            Color="ThemeColor.Primary"
-            FullWidth="true">
-            <LumexTab Title="ClickUp">
+        <AppTabs
+            Size="ComponentSize.Medium">
+            <AppTab
+                Key="clickup"
+                Title="ClickUp"
+                Icon="fa-solid fa-list-check">
                 <div class="mt-6 w-full">
                     <AppCard>
                         <AppCardHeader Class="p-6 pb-2">
@@ -125,9 +125,12 @@
                         </AppCardFooter>
                     </AppCard>
                 </div>
-            </LumexTab>
+            </AppTab>
 
-            <LumexTab Title="Redmine">
+            <AppTab
+                Key="redmine"
+                Title="Redmine"
+                Icon="fa-solid fa-diamond">
                 <div class="mt-6 w-full">
                     <AppCard>
                         <AppCardHeader Class="p-6 pb-2">
@@ -210,9 +213,12 @@
                         </AppCardFooter>
                     </AppCard>
                 </div>
-            </LumexTab>
+            </AppTab>
 
-            <LumexTab Title="Jira">
+            <AppTab
+                Key="jira"
+                Title="Jira"
+                Icon="fa-solid fa-layer-group">
                 <div class="mt-6 w-full">
                     <AppCard>
                         <AppCardHeader Class="p-6 pb-2">
@@ -286,7 +292,7 @@
                         </AppCardFooter>
                     </AppCard>
                 </div>
-            </LumexTab>
-        </LumexTabs>
+            </AppTab>
+        </AppTabs>
     }
 </section>
