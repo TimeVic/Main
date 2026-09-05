@@ -14,7 +14,8 @@ public partial class ImportBlock
     private IApiService ApiService { get; set; } = null!;
 
     [Inject]
-    private ToastService ToastService { get; set; } = null!;
+    private IToastService ToastService { get; set; } = null!;
+
 
     [Inject]
     private ILogger<ImportBlock> Logger { get; set; } = null!;

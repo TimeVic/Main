@@ -1,7 +1,13 @@
-namespace TimeTracker.Client.Core.Services.UI;
+namespace TimeTracker.Client.Core.Services.UI.Toast;
 
 public interface IToastService
 {
+    event Action? OnToastsUpdated;
+
+    IReadOnlyList<ToastMessage> ActiveToasts { get; }
+
+    void Dismiss(Guid id);
+
     void ShowError(string summary);
 
     void ShowInfo(string summary);

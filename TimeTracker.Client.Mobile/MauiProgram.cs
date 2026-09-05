@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Fluxor;
 using LumexUI.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +13,9 @@ using TimeTracker.Client.Core.Services.Http.Middleware;
 using TimeTracker.Client.Core.Services.Messaging;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Services.UI;
+using TimeTracker.Client.Core.Services.UI.Toast;
 using TimeTracker.Client.Core.Store.Auth;
+
 using TimeTracker.Client.Mobile.Services;
 using TimeTracker.Client.Mobile.Services.Http;
 using TimeTracker.Client.Mobile.Services.UI;

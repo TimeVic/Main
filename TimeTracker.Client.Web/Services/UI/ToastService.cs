@@ -1,48 +1,90 @@
-﻿using TimeTracker.Client.Core.Services.UI;
+using TimeTracker.Client.Core.Services.UI;
+using TimeTracker.Client.Core.Services.UI.Toast;
 
 namespace TimeTracker.Client.Web.Services.UI;
 
 public class ToastService : IToastService
 {
-    private readonly int _timeout = 3000;
-    public readonly string ToasterId = "tv-toaster-rich-colors-id";
-    
-    private readonly Blazor.Sonner.Services.ToastService _toastService;
+    private const int DefaultDurationMs = 4000;
+    private const int MaxActiveToasts = 5;
 
-    public ToastService(Blazor.Sonner.Services.ToastService toastService)
+    private readonly List<ToastMessage> _activeToasts = new();
+    private readonly object _lock = new();
+
+    public event Action? OnToastsUpdated;
+
+    public IReadOnlyList<ToastMessage> ActiveToasts
     {
-        _toastService = toastService;
-    }
-    
-    public void ShowError(string summary)
-    {
-        _toastService.Error(summary, options: model =>
+        get
         {
-            model.ToasterId = ToasterId;
-        });
+            lock (_lock)
+            {
+                return _activeToasts.ToList();
+            }
+        }
     }
-    
-    public void ShowInfo(string summary)
+
+    public void ShowSuccess(string summary) => AddToast(ToastType.Success, summary);
+
+    public void ShowError(string summary) => AddToast(ToastType.Error, summary);
+
+    public void ShowInfo(string summary) => AddToast(ToastType.Info, summary);
+
+    public void ShowWarning(string summary) => AddToast(ToastType.Warning, summary);
+
+    public void Dismiss(Guid id)
     {
-        _toastService.Info(summary, options: model =>
+        var isRemoved = false;
+        lock (_lock)
         {
-            model.ToasterId = ToasterId;
-        });
+            var item = _activeToasts.FirstOrDefault(t => t.Id == id);
+            if (item != null)
+            {
+                _activeToasts.Remove(item);
+                isRemoved = true;
+            }
+        }
+
+        if (isRemoved)
+        {
+            NotifyUpdated();
+        }
     }
-    
-    public void ShowSuccess(string summary)
+
+    private void AddToast(ToastType type, string message, int durationMs = DefaultDurationMs)
     {
-        _toastService.Success(summary, options: model =>
+        if (string.IsNullOrWhiteSpace(message))
         {
-            model.ToasterId = ToasterId;
-        });
+            return;
+        }
+
+        var toast = new ToastMessage(Guid.NewGuid(), type, message.Trim(), DateTime.UtcNow, durationMs);
+        lock (_lock)
+        {
+            if (_activeToasts.Count >= MaxActiveToasts)
+            {
+                _activeToasts.RemoveAt(0);
+            }
+            _activeToasts.Add(toast);
+        }
+
+        NotifyUpdated();
+
+        if (durationMs > 0)
+        {
+            _ = AutoDismissAsync(toast.Id, durationMs);
+        }
     }
-    
-    public void ShowWarning(string summary)
+
+    private async Task AutoDismissAsync(Guid id, int delayMs)
     {
-        _toastService.Warning(summary, options: model =>
-        {
-            model.ToasterId = ToasterId;
-        });
+        await Task.Delay(delayMs);
+        Dismiss(id);
+    }
+
+    private void NotifyUpdated()
+    {
+        OnToastsUpdated?.Invoke();
     }
 }
+

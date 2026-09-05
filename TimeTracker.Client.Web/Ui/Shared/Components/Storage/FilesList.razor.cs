@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
@@ -38,7 +38,8 @@ public partial class FilesList
     public ILogger<FilesList> _logger { get; set; }
     
     [Inject]
-    public ToastService _toastService { get; set; }
+    public IToastService _toastService { get; set; }
+
     
     [Inject]
     protected IState<AuthState> _authState { get; set; }

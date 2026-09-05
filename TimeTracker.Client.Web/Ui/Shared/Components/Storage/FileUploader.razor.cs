@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -33,7 +33,8 @@ public partial class FileUploader
     public ApiService _apiService { get; set; }
     
     [Inject]
-    public ToastService _toastService { get; set; }
+    public IToastService _toastService { get; set; }
+
     
     [Inject]
     public ILogger<FileUploader> _logger { get; set; }
