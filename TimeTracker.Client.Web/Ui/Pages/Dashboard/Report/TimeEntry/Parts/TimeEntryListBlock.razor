@@ -7,21 +7,6 @@
 
 @inherits BaseReactiveComponent
 
-@if (_timeEntryToEdit != null)
-{
-    <EditTimeEntryModal
-        Entry="_timeEntryToEdit"
-        OnClose="OnCloseEditModal"/>
-}
-
-@if (_timeEntryToDelete != null)
-{
-    <ConfirmationModal
-        DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
-        OnConfirm="OnConfirmDelete"
-        OnCancel="@(() => _timeEntryToDelete = null)"/>
-}
-
 <div class="mt-6">
     <LumexDataGrid
         TItem="TimeEntryDto"
@@ -94,7 +79,7 @@
                             Color="ComponentColor.Default"
                             Variant="ButtonVariant.Light"
                             IconOnly="true"
-                            OnClick="@(() => _timeEntryToEdit = context)">
+                            OnClick="@(() => OnEdit(context))">
                             <ChildContent>
                                 <i class="fa-regular fa-pen-to-square text-slate-400"></i>
                             </ChildContent>
@@ -107,7 +92,7 @@
                             Color="ComponentColor.Danger"
                             Variant="ButtonVariant.Light"
                             IconOnly="true"
-                            OnClick="@(() => _timeEntryToDelete = context)">
+                            OnClick="@(() => OnDelete(context))">
                             <ChildContent>
                                 <i class="fa-regular fa-trash-can text-slate-400"></i>
                             </ChildContent>

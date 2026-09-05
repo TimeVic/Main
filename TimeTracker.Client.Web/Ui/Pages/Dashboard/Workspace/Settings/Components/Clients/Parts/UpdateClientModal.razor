@@ -1,59 +1,52 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Small"
-    @ref="modal">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-regular fa-building"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateClientModal_Title"], Client?.Name)</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateClientModal_Description"]</p>
-                </div>
+<AppModalHeader
+    Title="@string.Format(DashboardLocalizer["UpdateClientModal_Title"], Client?.Name)"
+    Description="@DashboardLocalizer["UpdateClientModal_Description"]">
+    <Icon>
+        <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <i
+                class="fa-regular fa-building"></i>
+        </div>
+    </Icon>
+</AppModalHeader>
+<AppModalBody
+    Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        OnSubmit="@Submit"
+        novalidate>
+        <DataAnnotationsValidator/>
+
+        <div
+            class="grid gap-5">
+            <div>
+                <InputTextField
+                    FullWidth="true"
+                    Label="@DashboardLocalizer["Client"]"
+                    Placeholder="@DashboardLocalizer["ClientName"]"
+                    IsShowEmojiButton="true"
+                    @bind-Value="model.Name"/>
+                <CustomValidationMessage
+                    For="@(() => model.Name)"/>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@model"
-                OnSubmit="@Submit"
-                novalidate>
-                <DataAnnotationsValidator/>
+        </div>
 
-                <div class="grid gap-5">
-                    <div>
-                        <InputTextField
-                            FullWidth="true"
-                            Label="@DashboardLocalizer["Client"]"
-                            Placeholder="@DashboardLocalizer["ClientName"]"
-                            IsShowEmojiButton="true"
-                            @bind-Value="model.Name"/>
-                        <CustomValidationMessage For="@(() => model.Name)"/>
-                    </div>
-                </div>
-
-                <CustomValidationSummary/>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <AppButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                IsLoading="_state.Value.IsSaving"
-                Color="@ComponentColor.Primary"
-                Radius="@ButtonRadius.Full">
-                @DashboardLocalizer["Update"]
-            </AppButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+        <CustomValidationSummary/>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        IsLoading="_state.Value.IsSaving"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        @DashboardLocalizer["Update"]
+    </AppButton>
+</AppModalFooter>

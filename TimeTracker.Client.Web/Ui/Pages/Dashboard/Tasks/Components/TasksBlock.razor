@@ -10,20 +10,8 @@
 @inherits BaseReactiveComponent
 
 <section class="@ContainerClass">
-    @if (ContextProject != null)
-    {
-        <AddTasksListModalForm
-            Project="ContextProject"
-            OnAdded="OnTaskListAdded"
-            @bind-IsOpened="_isShowAddTaskListModal" />
-    }
-
     @if (_taskList != null)
     {
-        <AddTaskModal
-            @bind-IsOpened="_isShowAddTaskModal"
-            TaskList="_taskList" />
-
         <div class="@HeaderClass">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="min-w-0">
@@ -70,7 +58,7 @@
                     <AppButton
                         Variant="ButtonVariant.Outlined"
                         Color="ComponentColor.Info"
-                        OnClick="@(() => _isShowAddTaskModal = true)">
+                        OnClick="@OpenAddTaskModal">
                         <StartContent>
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
@@ -93,7 +81,7 @@
                 Class="mt-4"
                 Variant="ButtonVariant.Outlined"
                 Color="ComponentColor.Info"
-                OnClick="@(() => _isShowAddTaskListModal = true)">
+                OnClick="@OpenAddTaskListModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>

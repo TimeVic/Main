@@ -3,17 +3,7 @@
 
 @inherits BaseReactiveComponent
 
-<AddProjectModal
-    IsOpened="_isAddProjectModalOpened"
-    IsOpenedChanged="isOpened => _isAddProjectModalOpened = isOpened"/>
 
-@if (_projectToUpdate != null)
-{
-    <UpdateProjectModal 
-        Project="_projectToUpdate"
-        IsOpened="_projectToUpdate != null" 
-        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
-}
 
 <section class="space-y-6">
     <AppCard>

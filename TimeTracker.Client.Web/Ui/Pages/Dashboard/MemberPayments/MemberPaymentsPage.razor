@@ -13,10 +13,6 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<AddMemberPaymentModal 
-    IsOpened="_isShowAddMemberPaymentModal" 
-    IsOpenedChanged="isOpened => _isShowAddMemberPaymentModal = isOpened"/>
-
 <div class="space-y-6">
     <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
@@ -55,7 +51,7 @@
             }
             @if (CanCreatePayments)
             {
-                <AppButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
+                <AppButton OnClick="@OpenAddPaymentModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>    
                 </StartContent>

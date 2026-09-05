@@ -6,29 +6,6 @@
 
 @inherits BaseReactiveComponent
 
-@if (_paymentToView != null)
-{
-    <ViewClientPaymentModal
-        ClientPayment="_paymentToView"
-        IsOpened="true"
-        IsOpenedChanged="isOpened => _paymentToView = isOpened ? _paymentToView : null"/>
-}
-
-@if (_paymentToUpdate != null)
-{
-    <UpdateClientPaymentModal
-        ClientPayment="_paymentToUpdate"
-        IsOpened="true"
-        IsOpenedChanged="isOpened => _paymentToUpdate = isOpened ? _paymentToUpdate : null"/>
-}
-
-@if (_paymentToDelete != null)
-{
-    <ConfirmationModal
-        OnClose="@(() => _paymentToDelete = null)"
-        OnConfirm="OnDeleteClientPayment"/>
-}
-
 <LumexDataGrid
     T="ClientPaymentDto"
     Class="min-w-full divide-y divide-slate-200"
@@ -95,7 +72,7 @@
                 <AppButton
                     Variant="ButtonVariant.Outlined"
                     Color="ComponentColor.Default"
-                    OnClick="() => _paymentToView = context"
+                    OnClick="() => OpenViewModal(context)"
                     IconOnly="true"
                     Size="ComponentSize.Small">
                     <StartContent>
@@ -107,7 +84,7 @@
                     <AppButton
                         Variant="ButtonVariant.Outlined"
                         Color="ComponentColor.Primary"
-                        OnClick="() => _paymentToUpdate = context"
+                        OnClick="() => OpenUpdateModal(context)"
                         IconOnly="true"
                         Size="ComponentSize.Small">
                         <StartContent>
@@ -117,7 +94,7 @@
                     <AppButton
                         Variant="ButtonVariant.Outlined"
                         Color="ComponentColor.Danger"
-                        OnClick="() => _paymentToDelete = context"
+                        OnClick="() => OpenDeleteConfirmation(context)"
                         IconOnly="true"
                         Size="ComponentSize.Small">
                         <StartContent>

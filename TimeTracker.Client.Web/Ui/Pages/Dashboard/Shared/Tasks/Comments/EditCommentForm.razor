@@ -1,20 +1,10 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Business.Extensions
-@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
-@if (_isDeleteConfirmationOpen)
-{
-    <ConfirmationModal
-        Title="@DashboardLocalizer["TaskComment_DeleteTitle"].Value"
-        Subtitle="@DashboardLocalizer["TaskComment_DeleteSubtitle"].Value"
-        ConfirmText="@DashboardLocalizer["Delete"].Value"
-        OnClose="@CloseDeleteConfirmation"
-        OnCancel="@CloseDeleteConfirmation"
-        OnConfirm="@OnConfirmDelete" />
-}
+
 
 <article class="@ContainerClass">
     @if (!_isNewComment)

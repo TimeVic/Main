@@ -1,83 +1,75 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report
 
 @inherits BaseReactiveComponent
 @inject UiHelperService UiHelperService
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="OnCloseModal"
-    Size="ModalSize.Medium">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <i class="fa-solid fa-link"></i>
-            </div>
+<AppModalHeader Class="flex items-center gap-3">
+    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+        <i class="fa-solid fa-link"></i>
+    </div>
+    <div>
+        <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["ClientShareReport_Title"]</h2>
+        <p class="mt-1 text-sm text-slate-600">@string.Format(DashboardLocalizer["ClientShareReport_Description"].Value, ClientName)</p>
+    </div>
+</AppModalHeader>
+<AppModalBody Class="space-y-5 pt-3">
+    @if (_isLoading)
+    {
+        <div class="flex justify-center py-8"><LumexSpinner/></div>
+    }
+    else
+    {
+        <div class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
             <div>
-                <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["ClientShareReport_Title"]</h2>
-                <p class="mt-1 text-sm text-slate-600">@string.Format(DashboardLocalizer["ClientShareReport_Description"].Value, ClientName)</p>
+                <p class="text-sm font-semibold text-slate-800">@DashboardLocalizer["ClientShareReport_LinkAccess"]</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ClientShareReport_LinkAccessDescription"]</p>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="space-y-5 pt-3">
-            @if (_isLoading)
-            {
-                <div class="flex justify-center py-8"><LumexSpinner/></div>
-            }
-            else
-            {
-                <div class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div>
-                        <p class="text-sm font-semibold text-slate-800">@DashboardLocalizer["ClientShareReport_LinkAccess"]</p>
-                        <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ClientShareReport_LinkAccessDescription"]</p>
-                    </div>
-                    <AppSwitch
-                        Value="@_isActive"
-                        ValueChanged="OnIsActiveChanged"/>
+            <AppSwitch
+                Value="@_isActive"
+                ValueChanged="OnIsActiveChanged"/>
+        </div>
+
+        <div>
+            <div class="flex items-end gap-2">
+                <div class="flex-1">
+                    <InputTextField
+                        Value="@_shareUrl"
+                        Label="@DashboardLocalizer["ClientShareReport_Link"].Value"
+                        Disabled="@(!_isActive)"
+                        FullWidth="true" />
                 </div>
-
-                <div>
-                    <div class="flex items-end gap-2">
-                        <div class="flex-1">
-                            <InputTextField
-                                Value="@_shareUrl"
-                                Label="@DashboardLocalizer["ClientShareReport_Link"].Value"
-                                Disabled="@(!_isActive)"
-                                FullWidth="true" />
-                        </div>
-                        <AppButton
-                            Color="ComponentColor.Default"
-                            Variant="ButtonVariant.Flat"
-                            Disabled="@(!_isActive)"
-                            OnClick="CopyAsync">
-                            <StartContent>
-                                <i class="fa-regular fa-copy"></i>
-                            </StartContent>
-                            <ChildContent>
-                                @DashboardLocalizer["ClientShareReport_Copy"]
-                            </ChildContent>
-                        </AppButton>
-                    </div>
-                    @if (!_isActive)
-                    {
-                        <p class="mt-2 text-xs text-amber-700">@DashboardLocalizer["ClientShareReport_InactiveHint"]</p>
-                    }
-                </div>
-
-                <button
-                    type="button"
-                    class="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 transition hover:text-blue-800"
-                    @onclick="RegenerateAsync">
-                    <i class="fa-solid fa-rotate"></i>
-                    @DashboardLocalizer["ClientShareReport_Regenerate"]
-                </button>
-
-                <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 text-sm text-slate-700">
-                    <AppCheckbox
-                        Value="@_isShowTasks"
-                        ValueChanged="OnIsShowTasksChanged"/>
-                    <span>@DashboardLocalizer["ClientShareReport_ShowTasks"]</span>
-                </label>
+                <AppButton
+                    Color="ComponentColor.Default"
+                    Variant="ButtonVariant.Flat"
+                    Disabled="@(!_isActive)"
+                    OnClick="CopyAsync">
+                    <StartContent>
+                        <i class="fa-regular fa-copy"></i>
+                    </StartContent>
+                    <ChildContent>
+                        @DashboardLocalizer["ClientShareReport_Copy"]
+                    </ChildContent>
+                </AppButton>
+            </div>
+            @if (!_isActive)
+            {
+                <p class="mt-2 text-xs text-amber-700">@DashboardLocalizer["ClientShareReport_InactiveHint"]</p>
             }
-        </LumexModalBody>
-    </LumexModalContent>
-</LumexModal>
+        </div>
+
+        <button
+            type="button"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 transition hover:text-blue-800"
+            @onclick="RegenerateAsync">
+            <i class="fa-solid fa-rotate"></i>
+            @DashboardLocalizer["ClientShareReport_Regenerate"]
+        </button>
+
+        <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 text-sm text-slate-700">
+            <AppCheckbox
+                Value="@_isShowTasks"
+                ValueChanged="OnIsShowTasksChanged"/>
+            <span>@DashboardLocalizer["ClientShareReport_ShowTasks"]</span>
+        </label>
+    }
+</AppModalBody>

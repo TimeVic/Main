@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Constants.Ui;
 using TimeTracker.Client.Core.Services.Security;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Client;
 using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Project;
@@ -47,10 +48,10 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
     [Inject]
     public ISecurityManager _securityManager { get; set; }
 
+    [Inject]
+    public IAppModalDialogService _modalDialogService { get; set; } = null!;
+
     private Guid? _clientId;
-    private bool _isAddClientModalOpened;
-    private bool _isAddProjectModalOpened;
-    private Guid? _projectClientIdToAdd;
 
     private bool IsCanCreateClient => _securityManager.HasPermission(WorkspacePermission.CreateClient);
     private bool IsCanCreateProject => _securityManager.HasPermission(WorkspacePermission.CreateProject);
@@ -156,38 +157,44 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
         OnValueChanged(project);
     }
 
-    private Task OnAddFirstClient()
+    private async Task OnAddFirstClient()
     {
         if (!IsCanCreateClient)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _isAddClientModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAsync<AddClientModal>(
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Small,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            }
+        );
     }
 
-    private Task OnAddProject(Guid clientId)
+    private async Task OnAddProject(Guid clientId)
     {
         if (!IsCanCreateProject)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _projectClientIdToAdd = clientId;
-        _isAddProjectModalOpened = true;
-        return Task.CompletedTask;
-    }
-
-    private Task OnAddProjectModalOpenedChanged(bool isOpened)
-    {
-        _isAddProjectModalOpened = isOpened;
-        if (!isOpened)
-        {
-            _projectClientIdToAdd = null;
-        }
-
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAsync<AddProjectModal>(
+            parameters: new Dictionary<string, object?>
+            {
+                { nameof(AddProjectModal.InitialClientId), clientId }
+            },
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Small,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            }
+        );
     }
 
     public new void Dispose()

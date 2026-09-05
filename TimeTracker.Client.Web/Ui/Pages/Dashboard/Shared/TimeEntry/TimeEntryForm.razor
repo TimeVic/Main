@@ -6,23 +6,6 @@
 @inherits BaseReactiveComponent
 
 <div class="w-time-form @(IsShort ? "w-time-form--short" : "") @Class">
-    @if (_isEditModalOpened)
-    {
-        <EditTimeEntryModal 
-            Entry="_activeEntry"
-            OnClose="@(() => _isEditModalOpened = false)"/>
-    }
-
-    @if (_isAddTaskModalOpened && _activeEntry?.Project != null)
-    {
-        <AddTaskModal
-            ProjectId="_activeEntry.Project.Id"
-            TimeEntryId="_activeEntry.Id"
-            IsOpened="_isAddTaskModalOpened"
-            IsOpenedChanged="@((isOpened) => _isAddTaskModalOpened = isOpened)"
-            OnAdded="@OnTaskAdded"/>
-    }
-
     @{
         var shellClass = IsShort
             ? "w-time-form__shell w-full"
@@ -152,7 +135,7 @@
                     {
                         <div class="w-time-form__control w-time-form__timer-button">
                             <AppButton
-                                OnClick="@(() => _isEditModalOpened = true)"
+                                OnClick="@OpenEditModal"
                                 Class="w-time-form__wide-button"
                                 Variant="ButtonVariant.Outlined"
                                 Size="ComponentSize.Medium"

@@ -8,7 +8,9 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Services.Security;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
 
@@ -34,11 +36,13 @@ public partial class EditCommentForm: IDisposable
     
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = null!;
     
     private AddRequest _model = new();
     private bool _isLoading;
     private bool _isEditMode;
-    private bool _isDeleteConfirmationOpen;
     private EditForm? _form;
     private EditContext _editContext = null!;
     private Guid? _loadedCommentId;
@@ -160,19 +164,24 @@ public partial class EditCommentForm: IDisposable
         FillFormFromComment();
     }
 
-    private void OpenDeleteConfirmation()
+    private async Task OpenDeleteConfirmation()
     {
-        _isDeleteConfirmationOpen = true;
-    }
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(new AppConfirmationOptions
+        {
+            Title = DashboardLocalizer["TaskComment_DeleteTitle"].Value,
+            Message = DashboardLocalizer["TaskComment_DeleteSubtitle"].Value,
+            ConfirmText = DashboardLocalizer["Delete"].Value,
+            Type = AppConfirmationType.Alert
+        });
 
-    private void CloseDeleteConfirmation()
-    {
-        _isDeleteConfirmationOpen = false;
+        if (confirmed)
+        {
+            await OnConfirmDelete();
+        }
     }
 
     private async Task OnConfirmDelete()
     {
-        _isDeleteConfirmationOpen = false;
         _isLoading = true;
         try
         {

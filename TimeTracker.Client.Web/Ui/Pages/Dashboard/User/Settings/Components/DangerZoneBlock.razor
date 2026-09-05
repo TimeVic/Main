@@ -1,18 +1,7 @@
 @using LumexUI.Common
-@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
-@if (_isShowDeletionModal)
-{
-    <ConfirmationModal
-        Title="@DashboardLocalizer["UserSettings_RequestDeletionConfirmTitle"].Value"
-        Message="@DashboardLocalizer["UserSettings_RequestDeletionConfirmMessage"].Value"
-        ConfirmText="@DashboardLocalizer["UserSettings_RequestDeletion"].Value"
-        OnCancel="@(() => _isShowDeletionModal = false)"
-        OnClose="@(() => _isShowDeletionModal = false)"
-        OnConfirm="@OnRequestDeletionConfirmed" />
-}
 
 <div class="rounded-2xl border border-red-200 bg-red-50/30 p-6">
     <div class="mb-5">
@@ -26,7 +15,7 @@
         <AppButton
             Color="ComponentColor.Danger"
             Variant="ButtonVariant.Outlined"
-            OnClick="@(() => _isShowDeletionModal = true)">
+            OnClick="RequestDeletionAsync">
             <StartContent>
                 <i class="fa-regular fa-trash-can"></i>
             </StartContent>

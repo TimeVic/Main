@@ -1,15 +1,15 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components.Modals;
 
 public partial class RenameNoteNodeModal
 {
-    [Parameter]
-    public bool IsOpened { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     [Parameter]
     public bool IsSaving { get; set; }
@@ -18,14 +18,10 @@ public partial class RenameNoteNodeModal
     public NoteTreeNodeDto? Node { get; set; }
 
     [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
-
-    [Parameter]
     public EventCallback<RenameNoteNodeRequest> OnSubmit { get; set; }
 
     private RenameNoteNodeRequest _model = new();
     private EditForm _form = null!;
-    private LumexModal _modal = null!;
 
     protected override void OnParametersSet()
     {
@@ -54,10 +50,9 @@ public partial class RenameNoteNodeModal
         }
 
         await OnSubmit.InvokeAsync(_model);
-    }
-
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok(_model));
+        }
     }
 }

@@ -1,28 +1,9 @@
 @using LumexUI.Common
-@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
 @if (IsDeletionAvailable)
 {
-    @if (_isConfirmationOpened)
-    {
-        <ConfirmationModal
-            Title="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmTitle"].Value"
-            Subtitle="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmSubtitle"].Value"
-            ConfirmText="@DashboardLocalizer["Delete"].Value"
-            OnClose="@CloseConfirmation"
-            OnCancel="@CloseConfirmation"
-            OnConfirm="@DeleteWorkspaceAsync">
-            <ChildContent>
-                <InputTextField
-                    FullWidth="true"
-                    Label="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmationLabel"]"
-                    Placeholder="@Workspace!.Name"
-                    @bind-Value="_confirmationName"/>
-            </ChildContent>
-        </ConfirmationModal>
-    }
 
     <AppCard>
         <AppCardHeader>

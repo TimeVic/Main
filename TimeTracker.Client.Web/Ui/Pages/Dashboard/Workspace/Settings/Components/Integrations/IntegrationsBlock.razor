@@ -4,45 +4,6 @@
 
 @inherits BaseReactiveComponent
 
-@if (_helpInfo != null)
-{
-    <LumexModal
-        Open="true"
-        OnClose="@CloseHelpModal"
-        Size="ModalSize.Large">
-        <LumexModalContent>
-            <LumexModalHeader Class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
-                    <i class="fa-solid fa-circle-info"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["IntegrationsBlock_ConnectionTitle"], _helpInfo.Name)</h2>
-                    <p class="mt-1 text-sm text-slate-600">@_helpInfo.Summary</p>
-                </div>
-            </LumexModalHeader>
-            <LumexModalBody Class="pt-3">
-                <div class="space-y-4 text-sm text-slate-700">
-                    <p>@_helpInfo.TokenInstruction</p>
-                    <p>@_helpInfo.FieldsInstruction</p>
-                    <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
-                        <div class="flex items-start gap-3">
-                            <i class="fa-solid fa-key mt-1"></i>
-                            <p>@DashboardLocalizer["IntegrationsBlock_ConnectionCheckNotice"]</p>
-                        </div>
-                    </div>
-                </div>
-            </LumexModalBody>
-            <LumexModalFooter>
-                <AppButton
-                    Color="ComponentColor.Primary"
-                    Variant="ButtonVariant.Solid"
-                    OnClick="@CloseHelpModal">
-                    @DashboardLocalizer["Close"]
-                </AppButton>
-            </LumexModalFooter>
-        </LumexModalContent>
-    </LumexModal>
-}
 
 <section class="space-y-6">
     <div class="rounded-3xl border border-cyan-200 bg-cyan-50 p-5 text-cyan-950">

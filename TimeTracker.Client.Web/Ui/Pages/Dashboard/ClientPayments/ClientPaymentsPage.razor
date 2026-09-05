@@ -16,10 +16,6 @@
 @layout TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 @implements IDisposable
 
-<AddClientPaymentModal
-    IsOpened="_isShowAddClientPaymentModal"
-    IsOpenedChanged="isOpened => _isShowAddClientPaymentModal = isOpened"/>
-
 <div class="space-y-6">
     <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
@@ -30,7 +26,7 @@
         </div>
         @if (CanCreatePayments)
         {
-            <AppButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+            <AppButton OnClick="@OpenAddPaymentModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
@@ -121,7 +117,7 @@
                     @if (CanCreatePayments)
                     {
                         <div class="mt-5">
-                            <AppButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+                            <AppButton OnClick="@OpenAddPaymentModal">
                                 <StartContent>
                                     <i class="fa-solid fa-plus"></i>
                                 </StartContent>

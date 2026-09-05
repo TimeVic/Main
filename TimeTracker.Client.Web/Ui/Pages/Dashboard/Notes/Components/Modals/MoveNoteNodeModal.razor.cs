@@ -1,14 +1,14 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components.Modals;
 
 public partial class MoveNoteNodeModal
 {
-    [Parameter]
-    public bool IsOpened { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     [Parameter]
     public bool IsSaving { get; set; }
@@ -20,32 +20,24 @@ public partial class MoveNoteNodeModal
     public IReadOnlyList<NoteTreeNodeDto> Nodes { get; set; } = Array.Empty<NoteTreeNodeDto>();
 
     [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
-
-    [Parameter]
     public EventCallback<MoveNoteNodeRequest> OnSubmit { get; set; }
 
     private Guid? _selectedParentId;
     private Guid? _nodeId;
-    private bool _wasOpened;
-    private LumexModal _modal = null!;
 
     protected override void OnParametersSet()
     {
         if (Node == null)
         {
             _nodeId = null;
-            _wasOpened = false;
             return;
         }
 
-        if (_nodeId != Node.Id || !_wasOpened)
+        if (_nodeId != Node.Id)
         {
             _nodeId = Node.Id;
             _selectedParentId = null;
         }
-
-        _wasOpened = IsOpened;
     }
 
     private void OnParentChanged(Guid? parentId)
@@ -53,19 +45,22 @@ public partial class MoveNoteNodeModal
         _selectedParentId = parentId;
     }
 
-    private Task Submit()
+    private async Task Submit()
     {
-        return Node == null
-            ? Task.CompletedTask
-            : OnSubmit.InvokeAsync(new MoveNoteNodeRequest
-            {
-                NoteId = Node.Id,
-                ParentId = _selectedParentId
-            });
-    }
+        if (Node == null)
+        {
+            return;
+        }
 
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
+        var request = new MoveNoteNodeRequest
+        {
+            NoteId = Node.Id,
+            ParentId = _selectedParentId
+        };
+        await OnSubmit.InvokeAsync(request);
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok(request));
+        }
     }
 }

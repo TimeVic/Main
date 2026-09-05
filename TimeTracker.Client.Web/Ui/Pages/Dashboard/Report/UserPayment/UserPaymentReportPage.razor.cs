@@ -1,16 +1,17 @@
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Api.Shared.Dto.Model.Report.UserPaymentReport;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Report;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.UserPayment;
 
 public partial class UserPaymentReportPage
 {
+    [Inject] private IModalDialogProviderService _modalDialogService { get; set; } = default!;
+
     private readonly HashSet<Guid> _expandedClientIds = [];
-    private Guid _sharingClientId;
-    private string _sharingClientName = string.Empty;
-    private bool _isShareModalOpened;
 
     private UserPaymentReportResponse? _report => ReportsState.Value.UserPaymentReportData;
 
@@ -49,15 +50,7 @@ public partial class UserPaymentReportPage
 
     private void OpenShareModal(UserPaymentReportClientDto client)
     {
-        _sharingClientId = client.Id;
-        _sharingClientName = client.Name;
-        _isShareModalOpened = true;
-    }
-
-    private Task OnShareModalOpenedChanged(bool isOpened)
-    {
-        _isShareModalOpened = isOpened;
-        return Task.CompletedTask;
+        _modalDialogService.ShowClientShareReportModal(client.Id, client.Name);
     }
 
     private string GetClientPaymentsUrl(Guid clientId)

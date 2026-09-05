@@ -3,15 +3,6 @@
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
 
-<AddClientModal
-    IsOpened="_isAddClientModalOpened"
-    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened" />
-
-<AddProjectModal
-    IsOpened="_isAddProjectModalOpened"
-    IsOpenedChanged="OnAddProjectModalOpenedChanged"
-    InitialClientId="_projectClientIdToAdd" />
-
 <div
     class="@Class @(FullWidth ? "w-full" : "")">
     <AppSelect

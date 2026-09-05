@@ -27,9 +27,6 @@ public partial class TimeEntryForm : IDisposable
     [Inject]
     private IModalDialogProviderService _modalDialogService { get; set; } = default!;
     
-    private bool _isEditModalOpened = false;
-    private bool _isAddTaskModalOpened = false;
-    
     private TimeEntryDto? _activeEntry
     {
         get
@@ -111,14 +108,32 @@ public partial class TimeEntryForm : IDisposable
         await UpdateTimeEntry(_activeEntry);
     }
 
-    private void OpenAddTaskModal()
+    private async Task OpenAddTaskModal()
     {
         if (!_hasActiveEntry || _activeEntry?.Project == null || _activeEntry.Task != null)
         {
             return;
         }
 
-        _isAddTaskModalOpened = true;
+        await _modalDialogService.ShowAddTaskModal(
+            projectId: _activeEntry.Project.Id,
+            timeEntryId: _activeEntry.Id,
+            onClose: result =>
+            {
+                if (result.Data is TaskFullDto task)
+                {
+                    _ = OnTaskAdded(task);
+                }
+            }
+        );
+    }
+
+    private async Task OpenEditModal()
+    {
+        if (_activeEntry != null)
+        {
+            await _modalDialogService.ShowEditTimeEntryModal(_activeEntry);
+        }
     }
 
     private Task OnTaskAdded(TaskFullDto? task)

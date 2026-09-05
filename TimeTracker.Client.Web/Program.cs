@@ -23,7 +23,7 @@ using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Services.DateTimes;
 using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Web.Services.UI.Modal;
-using TimeTracker.Client.Web.Ui.Components.Core.Modal;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Web.Services.LastOpenedEntity;
 using TimeTracker.Client.Web.Services.Http;
 using Microsoft.AspNetCore.Components;

@@ -1,89 +1,92 @@
-@using LumexUI
-@using LumexUI.Common
-@using LumexUI.Shared.Icons
-
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Medium"
-    @ref="modal">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateProjectModal_Title"], model.Name)</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateProjectModal_Description"]</p>
+<AppModalHeader
+    Title="@string.Format(DashboardLocalizer["UpdateProjectModal_Title"], model.Name)"
+    Description="@DashboardLocalizer["UpdateProjectModal_Description"]">
+    <Icon>
+        <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <i
+                class="fa-regular fa-pen-to-square"></i>
+        </div>
+    </Icon>
+</AppModalHeader>
+<AppModalBody
+    Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        novalidate>
+        <DataAnnotationsValidator/>
+
+        <div
+            class="flex flex-col gap-5">
+            <div>
+                <InputTextField
+                    FullWidth="true"
+                    Label="@DashboardLocalizer["Project"]"
+                    Placeholder="@DashboardLocalizer["ProjectName"]"
+                    @bind-Value="model.Name"/>
+            </div>
+
+            <div>
+                <ClientsSelect
+                    Label="@DashboardLocalizer["Client"].Value"
+                    Value="@model.ClientId"
+                    Clearable="true"
+                    SelectedItemChanged="OnClientChanged"/>
+            </div>
+
+            <div
+                class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                <div
+                    class="flex items-start justify-between gap-4">
+                    <div>
+                        <p
+                            class="text-sm font-semibold text-slate-900">
+                            @DashboardLocalizer["UpdateProjectModal_BillHourlyByDefault"]
+                        </p>
+                        <p
+                            class="mt-1 text-xs text-slate-500">
+                            @DashboardLocalizer["UpdateProjectModal_BillHourlyByDefaultDescription"]
+                        </p>
+                    </div>
+                    <label
+                        class="inline-flex cursor-pointer items-center gap-3 rounded-2xl px-3 py-2">
+                        <AppSwitch
+                            @bind-Value="model.IsBillableByDefault"/>
+                    </label>
                 </div>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@model"
-                novalidate>
-                <DataAnnotationsValidator/>
-
-                <div class="flex flex-col gap-5">
-                    <div>
-                        <InputTextField
-                            FullWidth="true"
-                            Label="@DashboardLocalizer["Project"]"
-                            Placeholder="@DashboardLocalizer["ProjectName"]"
-                            @bind-Value="model.Name"/>
-                    </div>
-
-                    <div>
-                        <ClientsSelect
-                            Label="@DashboardLocalizer["Client"].Value"
-                            Value="@model.ClientId"
-                            Clearable="true"
-                            SelectedItemChanged="OnClientChanged"/>
-                    </div>
-
-                    <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                        <div class="flex items-start justify-between gap-4">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UpdateProjectModal_BillHourlyByDefault"]</p>
-                                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UpdateProjectModal_BillHourlyByDefaultDescription"]</p>
-                            </div>
-                            <label class="inline-flex cursor-pointer items-center gap-3 rounded-2xl px-3 py-2">
-                                <AppSwitch @bind-Value="model.IsBillableByDefault"/>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    @if (model.IsBillableByDefault)
-                    {
-                        <div>
-                            <InputNumericNullableField 
-                                TItem="decimal"
-                                Label="@DashboardLocalizer["HourlyRate"].Value"
-                                Size="ComponentSize.Small"
-                                Step="00.01"
-                                Value="@model.DefaultHourlyRate"
-                                ValueExpression="() => model.DefaultHourlyRate"
-                                ValueChanged="OnChangeDefaultHourlyRate"/>
-                            <p class="mt-1 text-xs text-slate-500">@string.Format(DashboardLocalizer["UpdateProjectModal_RateCurrencyHint"], AuthState.Value.Workspace!.Currency.Code)</p>
-                        </div>    
-                    }
-                </div>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <AppButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                IsLoading="_state.Value.IsSaving"
-                Color="@ComponentColor.Primary"
-                Radius="@ButtonRadius.Full">
-                @DashboardLocalizer["Update"]
-            </AppButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+            
+            @if (model.IsBillableByDefault)
+            {
+                <div>
+                    <InputNumericNullableField 
+                        TItem="decimal"
+                        Label="@DashboardLocalizer["HourlyRate"].Value"
+                        Size="ComponentSize.Small"
+                        Step="00.01"
+                        Value="@model.DefaultHourlyRate"
+                        ValueExpression="() => model.DefaultHourlyRate"
+                        ValueChanged="OnChangeDefaultHourlyRate"/>
+                    <p
+                        class="mt-1 text-xs text-slate-500">
+                        @string.Format(DashboardLocalizer["UpdateProjectModal_RateCurrencyHint"], AuthState.Value.Workspace!.Currency.Code)
+                    </p>
+                </div>    
+            }
+        </div>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        IsLoading="_state.Value.IsSaving"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        @DashboardLocalizer["Update"]
+    </AppButton>
+</AppModalFooter>

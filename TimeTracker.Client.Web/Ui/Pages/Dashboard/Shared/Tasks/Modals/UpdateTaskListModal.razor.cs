@@ -1,32 +1,27 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.TasksList;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 
 public partial class UpdateTaskListModal
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
     public required TaskListDto TaskList { get; set; }
-
-    [Parameter]
-    public required bool IsOpened { get; set; } = false;
-
-    [Parameter]
-    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
 
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private EditForm _form = null!;
-    private LumexModal _modal = null!;
-    private bool _wasOpened = false;
 
     protected override void OnParametersSet()
     {
-        if (_model.TaskListId != TaskList.Id || IsOpened && !_wasOpened)
+        if (_model.TaskListId != TaskList.Id)
         {
             _model = new UpdateRequest
             {
@@ -35,8 +30,6 @@ public partial class UpdateTaskListModal
                 Name = TaskList.Name
             };
         }
-
-        _wasOpened = IsOpened;
     }
 
     private async Task Submit()
@@ -54,7 +47,10 @@ public partial class UpdateTaskListModal
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 ToastService.ShowInfo(DashboardLocalizer["UpdateTaskListModal_TaskListUpdated"].Value);
-                await OnCloseModal();
+                if (ModalInstance != null)
+                {
+                    await ModalInstance.Close(AppModalResult.Ok(responseDto));
+                }
             }
         }
         catch (Exception e)
@@ -67,11 +63,5 @@ public partial class UpdateTaskListModal
         }
 
         StateHasChanged();
-    }
-
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
     }
 }

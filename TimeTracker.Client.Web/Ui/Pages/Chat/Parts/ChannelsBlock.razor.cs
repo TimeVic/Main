@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Client.Core.Services.Messaging;
 using TimeTracker.Client.Core.Store.Messaging.Channels;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Chat.Parts;
 
@@ -13,6 +14,9 @@ public partial class ChannelsBlock: IDisposable
     
     [Inject] 
     private MessagingWebSocketClientService _webSocketClientService { get; set; }
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,5 +49,10 @@ public partial class ChannelsBlock: IDisposable
         {
             Dispatcher.Dispatch(new SetSelectedAction(channel));   
         }
+    }
+
+    private void OpenAddChannelModal()
+    {
+        _modalDialogService.ShowAddChannelModal();
     }
 }

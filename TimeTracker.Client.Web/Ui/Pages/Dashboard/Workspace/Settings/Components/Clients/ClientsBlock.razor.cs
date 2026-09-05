@@ -4,6 +4,8 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Store.Client;
 using TimeTracker.Client.Core.Store.Project;
 
+using TimeTracker.Client.Web.Services.UI;
+
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients;
 
 public partial class ClientsBlock
@@ -14,30 +16,24 @@ public partial class ClientsBlock
     [Inject]
     private IState<ProjectState> _projectState { get; set; } = default!;
 
-    private bool _isAddClientModalOpened { get; set; }
-    private bool _isAddProjectModalOpened { get; set; }
-    private Guid? _initialProjectClientId { get; set; }
-    private ClientDto? _clientToUpdate { get; set; }
-    private ProjectDto? _projectToUpdate { get; set; }
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
+
     private string _searchQuery { get; set; } = string.Empty;
 
-    private Task OnAdd()
+    private async Task OnAdd()
     {
-        _isAddClientModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddClientModal();
     }
 
-    private Task OnAddProjectTop()
+    private async Task OnAddProjectTop()
     {
-        _initialProjectClientId = null;
-        _isAddProjectModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddProjectModal();
     }
 
-    private Task OnEditClient(ClientDto client)
+    private async Task OnEditClient(ClientDto client)
     {
-        _clientToUpdate = client;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateClientModal(client);
     }
 
     private IEnumerable<ClientDto> GetFilteredClients()
@@ -90,27 +86,13 @@ public partial class ClientsBlock
         return projects.Where(p => p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
-    private Task OnAddProject(ClientDto? client)
+    private async Task OnAddProject(ClientDto? client)
     {
-        _initialProjectClientId = client?.Id;
-        _isAddProjectModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddProjectModal(client?.Id);
     }
 
-    private Task OnEditProject(ProjectDto project)
+    private async Task OnEditProject(ProjectDto project)
     {
-        _projectToUpdate = project;
-        return Task.CompletedTask;
-    }
-
-    private Task OnAddProjectModalOpenedChanged(bool isOpened)
-    {
-        _isAddProjectModalOpened = isOpened;
-        if (!isOpened)
-        {
-            _initialProjectClientId = null;
-        }
-
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateProjectModal(project);
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
-using TimeTracker.Client.Web.Ui.Components.Core.Modal;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts;
 

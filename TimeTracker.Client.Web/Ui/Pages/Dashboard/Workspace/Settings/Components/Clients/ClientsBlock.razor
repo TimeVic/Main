@@ -4,31 +4,6 @@
 
 @inherits BaseReactiveComponent
 
-<AddClientModal
-    IsOpened="_isAddClientModalOpened"
-    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
-
-@if (_clientToUpdate != null)
-{
-    <UpdateClientModal
-        Client="_clientToUpdate"
-        IsOpened="_clientToUpdate != null"
-        IsOpenedChanged="isOpened => { _clientToUpdate = isOpened ? _clientToUpdate : null; }"/>
-}
-
-<AddProjectModal
-    IsOpened="_isAddProjectModalOpened"
-    InitialClientId="_initialProjectClientId"
-    IsOpenedChanged="OnAddProjectModalOpenedChanged"/>
-
-@if (_projectToUpdate != null)
-{
-    <UpdateProjectModal
-        Project="_projectToUpdate"
-        IsOpened="_projectToUpdate != null"
-        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
-}
-
 <section class="space-y-6">
     <AppCard Class="border border-slate-200/80 shadow-xs">
         <AppCardBody Class="p-5">

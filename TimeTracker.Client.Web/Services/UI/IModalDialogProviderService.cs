@@ -1,14 +1,9 @@
-using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Client.Web.Ui.Components.Core.Modal;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Services.UI;
 
-public interface IModalDialogProviderService
+public partial interface IModalDialogProviderService
 {
-    Task<AppModalResult> ShowEditTaskModal(TaskDto task, Action<AppModalResult>? onClose = null);
-
-    Task<AppModalResult> ShowAddWorkspaceMemberModal(Action<AppModalResult>? onClose = null);
-
     Task<bool> ShowConfirmationAsync(
         string message,
         string? title = null,
@@ -16,4 +11,6 @@ public interface IModalDialogProviderService
         string? cancelText = null,
         AppConfirmationType type = AppConfirmationType.Alert
     );
+
+    Task<bool> ShowConfirmationAsync(AppConfirmationOptions options);
 }

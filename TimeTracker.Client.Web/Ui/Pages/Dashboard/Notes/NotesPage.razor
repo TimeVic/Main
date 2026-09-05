@@ -13,51 +13,6 @@
     Title="@($"TimeVic - {DashboardLocalizer["Notes"]}")"
     Robots="@SiteMetadata.NoIndexRobots" />
 
-@if (CanManageTree)
-{
-<CreateFolderModal
-    IsOpened="State.IsCreateFolderModalOpened"
-    IsSaving="State.IsCreatingNode"
-    ParentId="State.ActiveParentId"
-    Visibility="@ActiveModalVisibility"
-    IsOpenedChanged="@OnCreateFolderModalChanged"
-    OnSubmit="@CreateFolder"/>
-
-<CreateNoteModal
-    IsOpened="State.IsCreateNoteModalOpened"
-    IsSaving="State.IsCreatingNode"
-    ParentId="State.ActiveParentId"
-    Visibility="@ActiveModalVisibility"
-    IsOpenedChanged="@OnCreateNoteModalChanged"
-    OnSubmit="@CreateDocument"/>
-
-<RenameNoteNodeModal
-    IsOpened="@(State.NodeToRename != null)"
-    IsSaving="State.IsRenamingNode"
-    Node="State.NodeToRename"
-    IsOpenedChanged="@OnRenameModalChanged"
-    OnSubmit="@RenameNode"/>
-
-<MoveNoteNodeModal
-    IsOpened="@(State.NodeToMove != null)"
-    IsSaving="State.IsMovingNode"
-    Node="State.NodeToMove"
-    Nodes="State.FlatNodes"
-    IsOpenedChanged="@OnMoveModalChanged"
-    OnSubmit="@MoveNode"/>
-}
-
-@if (CanManageTree && State.NodeToArchive != null)
-{
-    <ConfirmationModal
-        Title="@DashboardLocalizer["Notes_ArchiveConfirmTitle"].Value"
-        Subtitle="@DashboardLocalizer["Notes_ArchiveConfirmSubtitle"].Value"
-        ConfirmText="@DashboardLocalizer["Archive"].Value"
-        OnClose="@CloseArchiveConfirmation"
-        OnCancel="@CloseArchiveConfirmation"
-        OnConfirm="@ArchiveNode"/>
-}
-
 <section class="space-y-5">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>

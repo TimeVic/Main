@@ -1,0 +1,39 @@
+@inherits BaseReactiveComponent
+
+<AppModalHeader
+    Title="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmTitle"].Value"
+    Subtitle="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmSubtitle"].Value"
+    HasCloseButton="true">
+    <Icon>
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600">
+            <i class="fa-regular fa-trash-can"></i>
+        </div>
+    </Icon>
+</AppModalHeader>
+
+<AppModalBody Class="space-y-4">
+    <InputTextField
+        FullWidth="true"
+        Label="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmationLabel"]"
+        Placeholder="@Workspace?.Name"
+        @bind-Value="_confirmationName" />
+</AppModalBody>
+
+<AppModalFooter Class="flex items-center justify-end gap-2.5">
+    <AppButton
+        Color="@ComponentColor.Default"
+        Variant="ButtonVariant.Outlined"
+        Radius="@ButtonRadius.Medium"
+        Disabled="@_isLoading"
+        OnClick="Cancel">
+        @DashboardLocalizer["Cancel"]
+    </AppButton>
+    <AppButton
+        Color="@ComponentColor.Danger"
+        Variant="ButtonVariant.Solid"
+        Radius="@ButtonRadius.Medium"
+        IsLoading="@_isLoading"
+        OnClick="Submit">
+        @DashboardLocalizer["Delete"]
+    </AppButton>
+</AppModalFooter>

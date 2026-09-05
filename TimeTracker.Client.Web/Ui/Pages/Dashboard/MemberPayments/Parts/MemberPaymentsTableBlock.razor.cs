@@ -16,10 +16,10 @@ public partial class MemberPaymentsTableBlock
     [Inject]
     public ISecurityManager SecurityManager { get; set; } = null!;
 
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private bool _isLoading => _state.Value.IsListLoading;
-    
-    private MemberPaymentDto? _paymentToDelete;
-    private MemberPaymentDto? _paymentToUpdate;
 
     private bool CanUpdatePayments => SecurityManager.HasPermission(WorkspacePermission.UpdateMemberPayment);
 
@@ -28,19 +28,25 @@ public partial class MemberPaymentsTableBlock
         await base.OnInitializedAsync();
     }
 
-    private Task OnRowClickHandler(DataGridRowClickEventArgs<MemberPaymentDto> arg)
+    private async Task OnRowClickHandler(DataGridRowClickEventArgs<MemberPaymentDto> arg)
     {
         if (!CanUpdatePayments)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _paymentToUpdate = arg.Item;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateMemberPaymentModal(arg.Item);
     }
 
-    private void OnDeleteMemberPayment()
+    private async Task OpenDeleteConfirmation(MemberPaymentDto payment)
     {
-        Dispatcher.Dispatch(new DeleteMemberPaymentAction(_paymentToDelete!.Id));
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["Delete"].Value,
+            DashboardLocalizer["AreYouSure"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new DeleteMemberPaymentAction(payment.Id));
+        }
     }
 }

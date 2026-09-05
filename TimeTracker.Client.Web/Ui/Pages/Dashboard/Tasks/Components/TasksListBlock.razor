@@ -6,36 +6,6 @@
 @inherits BaseReactiveComponent
 
 <aside class="@ContainerClass">
-    <AddClientModal
-        IsOpened="_isAddClientModalOpened"
-        IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened" />
-
-    <AddProjectModal
-        IsOpened="_isAddProjectModalOpened"
-        InitialClientId="_clientForNewProject?.Id"
-        IsOpenedChanged="OnAddProjectModalOpenedChanged" />
-
-    <AddTasksListModalForm
-        Project="_selectedProject"
-        OnAdded="OnTasksListAdded"
-        @bind-IsOpened="_isAddTaskListModalOpened" />
-
-    @if (_taskListToManage != null)
-    {
-        <UpdateTaskListModal
-            @bind-IsOpened="_isShowUpdateTaskListModal"
-            TaskList="_taskListToManage" />
-    }
-
-    @if (_isShowDeleteTaskListConfirmation)
-    {
-        <ConfirmationModal
-            Title="@DashboardLocalizer["TasksBlock_DeleteTaskListTitle"].Value"
-            Subtitle="@DashboardLocalizer["TasksBlock_DeleteTaskListSubtitle"].Value"
-            OnClose="@(() => _isShowDeleteTaskListConfirmation = false)"
-            OnConfirm="OnDeleteTaskList" />
-    }
-
     <div class="flex min-h-0 flex-1 flex-col">
         <div class="border-b border-slate-200 p-4">
             <div class="min-w-0">

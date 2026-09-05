@@ -53,6 +53,9 @@ public partial class UpdateTaskForm: IDisposable
 
     [Inject]
     private IState<TimeEntryState> _timeEntryState { get; set; } = null!;
+
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
     
     private ICollection<Guid> _allowedUserIds
     {
@@ -74,7 +77,6 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
-    private TimeEntryDto? _timeEntryToEdit;
     private bool _isTaskTimeEntriesLoading;
     private bool _isTaskTimeEntriesHasMore;
     private int _taskTimeEntriesPage = 1;
@@ -146,6 +148,12 @@ public partial class UpdateTaskForm: IDisposable
         {
             _isTaskTimeEntriesLoading = false;
         }
+    }
+
+    private async Task OpenEditTimeEntryModal(TimeEntryDto entry)
+    {
+        await _modalDialogService.ShowEditTimeEntryModal(entry);
+        await LoadTaskTimeEntries(true);
     }
 
     public void SetTitle(string title)

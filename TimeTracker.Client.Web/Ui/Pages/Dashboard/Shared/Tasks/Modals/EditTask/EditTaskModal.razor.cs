@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Client.Web.Ui.Components.Core.Modal;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 

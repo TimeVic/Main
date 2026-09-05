@@ -1,15 +1,18 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 
 public partial class AddTaskModal
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
     public TaskListDto? TaskList { get; set; }
 
@@ -20,26 +23,18 @@ public partial class AddTaskModal
     public Guid? ProjectId { get; set; }
     
     [Parameter]
-    public required bool IsOpened { get; set; } = false;
-    
-    [Parameter]
-    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
-    
-    [Parameter]
     public virtual EventCallback<TaskFullDto?> OnAdded { get; set; }
 
     [Parameter]
     public Guid? TimeEntryId { get; set; }
 
     [Inject]
-    private IState<TimeTracker.Client.Core.Store.TasksList.TasksListState> _tasksListState { get; set; }
+    private IState<TimeTracker.Client.Core.Store.TasksList.TasksListState> _tasksListState { get; set; } = default!;
     
     private AddRequest model = new();
     private bool _isLoading = false;
-    private bool _isValid = false;
     private bool _isShowMoreOptions = false;
-    private EditForm _form;
-    private LumexModal modal;
+    private EditForm _form = default!;
     private TaskListDto? _selectedTaskList;
 
     private void ToggleMoreOptions()
@@ -87,7 +82,10 @@ public partial class AddTaskModal
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 Dispatcher.Dispatch(new SetOverdueTasksListItemAction(responseDto));
                 await OnAdded.InvokeAsync(responseDto);
-                await OnCloseModal();
+                if (ModalInstance != null)
+                {
+                    await ModalInstance.Close(AppModalResult.Ok(responseDto));
+                }
             }
         }
         catch (Exception e)
@@ -104,11 +102,5 @@ public partial class AddTaskModal
     private void OnTaskListSelected(TaskListDto? taskList)
     {
         _selectedTaskList = taskList;
-    }
-    
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
     }
 }

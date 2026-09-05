@@ -1,22 +1,41 @@
-﻿using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Client.Web.Pages.Dashboard.Tag.Parts;
+using TimeTracker.Client.Core.Services.UI.Modal;
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tags;
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags.Parts;
 
 namespace TimeTracker.Client.Web.Services.UI;
 
 public partial class ModalDialogProviderService
 {
-    public async Task ShowAddTagModal()
+    public Task<AppModalResult> ShowAddTagModal(Action<AppModalResult>? onClose = null)
     {
-        await _mudDialogService.ShowAsync<AddTagModal>("Add new tag");
+        return _appModalDialogService.ShowAsync<AddTagModal>(
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Small,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            },
+            onClose: onClose
+        );
     }
-    
-    public async Task ShowUpdateTagModal(TagDto item)
+
+    public Task<AppModalResult> ShowUpdateTagModal(TagDto tag, Action<AppModalResult>? onClose = null)
     {
-        var parameters = new DialogParameters<UpdateTagModal>
-        {
-            { x => x.Tag, item },
-        };
-        await _mudDialogService.ShowAsync<UpdateTagModal>("Update tag", parameters);
+        return _appModalDialogService.ShowAsync<UpdateTagModal>(
+            parameters: new Dictionary<string, object?>
+            {
+                [nameof(UpdateTagModal.Tag)] = tag
+            },
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Large,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            },
+            onClose: onClose
+        );
     }
 }

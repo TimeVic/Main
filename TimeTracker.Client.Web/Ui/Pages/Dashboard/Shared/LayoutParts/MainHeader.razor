@@ -3,23 +3,10 @@
 @using LumexUI.Shared.Icons
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry
-@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Components
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Modals
 @using TimeTracker.Client.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
-
-@if (IsWorkspaceCreationAvailable)
-{
-    <AddWorkspaceModal
-        IsOpened="_isShowAddWorkspaceModal"
-        IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
-}
-
-
-<SupportModal
-    IsOpened="_isSupportModalOpened"
-    IsOpenedChanged="@((isOpened) => _isSupportModalOpened = isOpened)" />
 
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
     <LumexNavbar
@@ -140,7 +127,7 @@
                         {
                             <LumexDropdownItem
                                 Color="ThemeColor.Info"
-                                OnClick="@(() => _isShowAddWorkspaceModal = true)"
+                                OnClick="@OpenAddWorkspaceModal"
                                 ShowDivider="true">
                                 <StartContent>
                                     <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>

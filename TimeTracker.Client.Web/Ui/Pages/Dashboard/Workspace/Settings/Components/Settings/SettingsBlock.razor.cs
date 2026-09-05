@@ -5,7 +5,8 @@ using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Common;
 using TimeTracker.Client.Core.Store.Workspace;
 
-using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Components;
+using TimeTracker.Client.Web.Services.UI;
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Modals;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings;
 
@@ -16,7 +17,14 @@ public partial class SettingsBlock
     
     [Inject]
     public IState<WorkspaceState> _workspaceState { get; set; }
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = null!;
     
     private WorkspaceDto? _workspace => _authState.Value.Workspace;
-    private bool _isShowAddWorkspaceModal = false;
+
+    private async Task OpenAddWorkspaceModal()
+    {
+        await _modalDialogService.ShowAddWorkspaceModal();
+    }
 }

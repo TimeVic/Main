@@ -1,86 +1,38 @@
-@using LumexUI.Common
-
 @inherits BaseReactiveComponent
-
-@if (_isShowPasswordModal)
-{
-    <LumexModal Open="true" OnClose="@(() => _isShowPasswordModal = false)" Size="ModalSize.Small">
-        <LumexModalContent>
-            <LumexModalHeader>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["UserSettings_ChangePasswordModalTitle"]</h2>
-                </div>
-            </LumexModalHeader>
-            <LumexModalBody Class="pt-3">
-                <p class="mb-4 text-sm leading-6 text-slate-600">@DashboardLocalizer["UserSettings_ChangePasswordModalDescription"]</p>
-                @if (!string.IsNullOrWhiteSpace(_errorMessage))
-                {
-                    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
-                        @_errorMessage
-                    </div>
-                }
-                <EditForm Model="_model" Context="passwordFormContext">
-                    <DataAnnotationsValidator />
-                    <div class="space-y-4">
-                        <InputTextField @bind-Value="_model.CurrentPassword"
-                                       Type="InputType.Password"
-                                       Label="@DashboardLocalizer["UserSettings_CurrentPassword"].Value"
-                                       FullWidth="true" />
-                        <InputTextField @bind-Value="_model.NewPassword"
-                                       Type="InputType.Password"
-                                       Label="@DashboardLocalizer["UserSettings_NewPassword"].Value"
-                                       FullWidth="true" />
-                        <InputTextField @bind-Value="_model.ConfirmPassword"
-                                       Type="InputType.Password"
-                                       Label="@DashboardLocalizer["UserSettings_ConfirmPassword"].Value"
-                                       FullWidth="true" />
-                        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-sm text-red-600" />
-                    </div>
-                </EditForm>
-            </LumexModalBody>
-            <LumexModalFooter>
-                <AppButton
-                    FullWidth="true"
-                    Disabled="@_isSaving"
-                    OnClick="@CloseModal"
-                    Color="@ComponentColor.Default"
-                    Variant="ButtonVariant.Outlined"
-                    Radius="@ButtonRadius.Medium">
-                    @DashboardLocalizer["Cancel"]
-                </AppButton>
-                <AppButton
-                    FullWidth="true"
-                    IsLoading="@_isSaving"
-                    OnClick="@OnChangePassword"
-                    Color="@ComponentColor.Primary"
-                    Variant="ButtonVariant.Solid"
-                    Radius="@ButtonRadius.Medium">
-                    @DashboardLocalizer["UserSettings_SavePassword"]
-                </AppButton>
-            </LumexModalFooter>
-        </LumexModalContent>
-    </LumexModal>
-}
 
 <AppCard>
     <AppCardHeader>
         <div>
-            <h2 class="text-lg font-semibold text-slate-900">@DashboardLocalizer["UserSettings_SecuritySection"]</h2>
-            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserSettings_SecuritySectionDescription"]</p>
+            <h2
+                class="text-lg font-semibold text-slate-900">
+                @DashboardLocalizer["UserSettings_SecuritySection"]
+            </h2>
+            <p
+                class="mt-1 text-sm text-slate-500">
+                @DashboardLocalizer["UserSettings_SecuritySectionDescription"]
+            </p>
         </div>
     </AppCardHeader>
     <AppCardBody>
-        <div class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+        <div
+            class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
             <div>
-                <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UserSettings_PasswordTitle"]</p>
-                <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["UserSettings_ChangePasswordDescription"]</p>
+                <p
+                    class="text-sm font-semibold text-slate-900">
+                    @DashboardLocalizer["UserSettings_PasswordTitle"]
+                </p>
+                <p
+                    class="mt-0.5 text-sm text-slate-500">
+                    @DashboardLocalizer["UserSettings_ChangePasswordDescription"]
+                </p>
             </div>
             <AppButton
                 Color="ComponentColor.Default"
                 Variant="ButtonVariant.Outlined"
-                OnClick="@(() => _isShowPasswordModal = true)">
+                OnClick="@OpenChangePasswordModal">
                 <StartContent>
-                    <i class="fa-solid fa-lock"></i>
+                    <i
+                        class="fa-solid fa-lock"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["UserSettings_ChangePassword"]</ChildContent>
             </AppButton>

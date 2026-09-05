@@ -1,37 +1,35 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Notes
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes
 
 @inherits BaseReactiveComponent
 
 <div class="notes-node-modal">
-    <LumexModal Open="IsOpened" OnClose="@OnCloseModal" Size="ModalSize.Small" @ref="_modal">
-        <LumexModalContent>
-            <LumexModalHeader Class="flex items-center gap-3">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-solid fa-folder-tree"></i>
-                </div>
-                <div class="min-w-0">
-                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["Notes_MoveTitle"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["Notes_MoveDescription"]</p>
-                </div>
-            </LumexModalHeader>
-            <LumexModalBody Class="pt-3">
-                <MoveNoteFolderSelect
-                    Nodes="Nodes"
-                    SelectedFolderId="_selectedParentId"
-                    SelectedFolderIdChanged="@OnParentChanged"/>
-            </LumexModalBody>
-            <LumexModalFooter>
-                <AppButton
-                    FullWidth="true"
-                    Color="ComponentColor.Primary"
-                    Radius="@ButtonRadius.Full"
-                    IsLoading="IsSaving"
-                    OnClick="@Submit">
-                    @DashboardLocalizer["Notes_Move"]
-                </AppButton>
-            </LumexModalFooter>
-        </LumexModalContent>
-    </LumexModal>
+    <AppModalHeader
+        Title="@DashboardLocalizer["Notes_MoveTitle"]"
+        Description="@DashboardLocalizer["Notes_MoveDescription"]">
+        <Icon>
+            <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <i
+                    class="fa-solid fa-folder-tree"></i>
+            </div>
+        </Icon>
+    </AppModalHeader>
+    <AppModalBody
+        Class="pt-3">
+        <MoveNoteFolderSelect
+            Nodes="Nodes"
+            SelectedFolderId="_selectedParentId"
+            SelectedFolderIdChanged="@OnParentChanged"/>
+    </AppModalBody>
+    <AppModalFooter>
+        <AppButton
+            FullWidth="true"
+            Color="ComponentColor.Primary"
+            Radius="@ButtonRadius.Full"
+            IsLoading="IsSaving"
+            OnClick="@Submit">
+            @DashboardLocalizer["Notes_Move"]
+        </AppButton>
+    </AppModalFooter>
 </div>

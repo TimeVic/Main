@@ -1,97 +1,108 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants
 
 @inherits BaseReactiveComponent
 
 <div class="update-member-modal">
-    <LumexModal
-        Open="IsOpened"
-        OnClose="@OnCloseModal"
-        Size="ModalSize.Large"
-        ScrollBehavior="ScrollBehavior.Inside">
-        <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateMemberModal_Title"], Member.User.Name)</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateMemberModal_Description"]</p>
-                </div>
+    <AppModalHeader
+        Title="@string.Format(DashboardLocalizer["UpdateMemberModal_Title"], Member.User.Name)"
+        Description="@DashboardLocalizer["UpdateMemberModal_Description"]">
+        <Icon>
+            <div
+                class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <i
+                    class="fa-regular fa-pen-to-square"></i>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@_model"
-                novalidate>
-                <DataAnnotationsValidator/>
+        </Icon>
+    </AppModalHeader>
+    <AppModalBody
+        Class="pt-3">
+        <EditForm
+            Context="form"
+            @ref="_form"
+            Model="@_model"
+            novalidate>
+            <DataAnnotationsValidator/>
 
-                <div class="space-y-5">
-                    <EnumSelect
-                        TItem="MembershipAccessType"
-                        Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
-                        AllowedValues="_allowedAccessLevels"
-                        Value="@_model.Access"
-                        ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
+            <div
+                class="space-y-5">
+                <EnumSelect
+                    TItem="MembershipAccessType"
+                    Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
+                    AllowedValues="_allowedAccessLevels"
+                    Value="@_model.Access"
+                    ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
 
-                    @if (_model.ProjectsAccess.Any())
-                    {
-                        <div>
-                            <p class="mb-2 text-sm font-semibold text-slate-700">@DashboardLocalizer["UpdateMemberModal_ProjectAccess"]</p>
-                            <div class="space-y-4">
-                                @foreach (var group in GetProjectAccessGroups())
-                                {
-                                    <section class="space-y-2">
-                                        <p class="text-sm font-semibold text-slate-900">@group.ClientName</p>
-                                        <div class="space-y-3">
-                                            @foreach (var item in group.ProjectsAccess)
-                                            {
-                                                var projectName = GetProjectName(item.ProjectId);
-                                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                                                    <p class="text-sm font-semibold text-slate-900">@projectName</p>
-                                                    <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-                                                        <div class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
-                                                            <div>
-                                                                <p class="text-xs font-medium text-slate-700">@DashboardLocalizer["UpdateMemberModal_HasAccess"]</p>
-                                                            </div>
-                                                            <AppSwitch
-                                                                Value="@item.HasAccess"
-                                                                Disabled="@(_model.Access == MembershipAccessType.Manager)"
-                                                                ValueChanged="@(v => item.HasAccess = v)"/>
+                @if (_model.ProjectsAccess.Any())
+                {
+                    <div>
+                        <p
+                            class="mb-2 text-sm font-semibold text-slate-700">
+                            @DashboardLocalizer["UpdateMemberModal_ProjectAccess"]
+                        </p>
+                        <div
+                            class="space-y-4">
+                            @foreach (var group in GetProjectAccessGroups())
+                            {
+                                <section
+                                    class="space-y-2">
+                                    <p
+                                        class="text-sm font-semibold text-slate-900">
+                                        @group.ClientName
+                                    </p>
+                                    <div
+                                        class="space-y-3">
+                                        @foreach (var item in group.ProjectsAccess)
+                                        {
+                                            var projectName = GetProjectName(item.ProjectId);
+                                            <div
+                                                class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                                                <p
+                                                    class="text-sm font-semibold text-slate-900">
+                                                    @projectName
+                                                </p>
+                                                <div
+                                                    class="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                                                    <div
+                                                        class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
+                                                        <div>
+                                                            <p
+                                                                class="text-xs font-medium text-slate-700">
+                                                                @DashboardLocalizer["UpdateMemberModal_HasAccess"]
+                                                            </p>
                                                         </div>
-                                                        <InputNumericNullableField
-                                                            TItem="decimal"
-                                                            Label="@DashboardLocalizer["HourlyRate"]"
-                                                            Size="ComponentSize.Small"
-                                                            Step="00.01"
-                                                            Value="@item.HourlyRate"
-                                                            ValueExpression="() => item.HourlyRate"
-                                                            ValueChanged="@(v => item.HourlyRate = v)"/>
+                                                        <AppSwitch
+                                                            Value="@item.HasAccess"
+                                                            Disabled="@(_model.Access == MembershipAccessType.Manager)"
+                                                            ValueChanged="@(v => item.HasAccess = v)"/>
                                                     </div>
+                                                    <InputNumericNullableField
+                                                        TItem="decimal"
+                                                        Label="@DashboardLocalizer["HourlyRate"]"
+                                                        Size="ComponentSize.Small"
+                                                        Step="00.01"
+                                                        Value="@item.HourlyRate"
+                                                        ValueExpression="() => item.HourlyRate"
+                                                        ValueChanged="@(v => item.HourlyRate = v)"/>
                                                 </div>
-                                            }
-                                        </div>
-                                    </section>
-                                }
-                            </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </section>
+                            }
                         </div>
-                    }
-                </div>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <AppButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                IsLoading="_isLoading"
-                Color="@ComponentColor.Primary"
-                Radius="@ButtonRadius.Full">
-                @DashboardLocalizer["Save"]
-            </AppButton>
-        </LumexModalFooter>
-        </LumexModalContent>
-    </LumexModal>
+                    </div>
+                }
+            </div>
+        </EditForm>
+    </AppModalBody>
+    <AppModalFooter>
+        <AppButton
+            FullWidth="@true"
+            OnClick="@Submit"
+            IsLoading="_isLoading"
+            Color="@ComponentColor.Primary"
+            Radius="@ButtonRadius.Full">
+            @DashboardLocalizer["Save"]
+        </AppButton>
+    </AppModalFooter>
 </div>

@@ -2,6 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components;
 
@@ -10,18 +11,16 @@ public partial class ProjectsBlock
     [Inject] 
     private IState<ProjectState> _state { get; set; }
 
-    private bool _isAddProjectModalOpened { get; set; }
-    private ProjectDto? _projectToUpdate { get; set; }
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
 
-    private Task OnAdd()
+    private void OnAdd()
     {
-        _isAddProjectModalOpened = true;
-        return Task.CompletedTask;
+        _modalDialogService.ShowAddProjectModal();
     }
     
-    private Task OnEdit(ProjectDto context)
+    private void OnEdit(ProjectDto context)
     {
-        _projectToUpdate = context;
-        return Task.CompletedTask;
+        _modalDialogService.ShowUpdateProjectModal(context);
     }
 }

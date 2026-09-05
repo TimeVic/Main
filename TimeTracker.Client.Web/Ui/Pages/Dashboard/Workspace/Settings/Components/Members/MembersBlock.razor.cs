@@ -2,7 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
-using TimeTracker.Client.Web.Ui.Components.Core.Modal;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts;
 using TimeTracker.Client.Web.Services.UI;
 
@@ -16,8 +16,6 @@ public partial class MembersBlock
     [Inject]
     private IModalDialogProviderService _modalDialogService { get; set; } = default!;
 
-    private WorkspaceMemberDto? _memberToUpdate { get; set; }
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -29,10 +27,9 @@ public partial class MembersBlock
         await _modalDialogService.ShowAddWorkspaceMemberModal();
     }
 
-    private Task OnEdit(WorkspaceMemberDto member)
+    private async Task OnEdit(WorkspaceMemberDto member)
     {
-        _memberToUpdate = member;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateWorkspaceMemberModal(member);
     }
 
     private Task OnDelete(WorkspaceMemberDto member)
