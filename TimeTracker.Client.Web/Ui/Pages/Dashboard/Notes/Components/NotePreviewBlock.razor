@@ -2,12 +2,14 @@
 
 @inject MarkdownService MarkdownService
 
-<section class="min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm">
-    <div class="border-b border-slate-200 p-4">
-        <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Preview"]</p>
-        <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_PreviewDescription"]</p>
-    </div>
-    <div class="max-w-none p-4 text-slate-700">
+<AppCard Class="min-h-[720px] shadow-sm">
+    <AppCardHeader Class="border-b border-slate-200 p-4">
+        <div>
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Preview"]</p>
+            <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_PreviewDescription"]</p>
+        </div>
+    </AppCardHeader>
+    <AppCardBody Class="max-w-none p-4 text-slate-700">
         @if (IsLoading)
         {
             <LumexSkeleton Class="h-[340px] w-full rounded-xl"/>
@@ -20,8 +22,8 @@
         {
             @((MarkupString)MarkdownService.ToHtml(MarkdownContent))
         }
-    </div>
-</section>
+    </AppCardBody>
+</AppCard>
 
 @code {
     [Parameter]

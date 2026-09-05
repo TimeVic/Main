@@ -2,8 +2,8 @@
 
 @inherits BaseReactiveComponent
 
-<LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
-    <LumexCardBody>
+<AppCard Class="border-slate-200 bg-slate-50/50 shadow-none">
+    <AppCardBody>
         <div class="@FilterGridClass">
             @if (!IsTeamSummary)
             {
@@ -46,8 +46,8 @@
                 </div>
             }
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>
 
 @code {
     [Parameter]

@@ -2,12 +2,12 @@
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Shared.Components
 
-<LumexCard Class="mt-10">
-    <LumexCardHeader>
+<AppCard Class="mt-10">
+    <AppCardHeader>
         <SummarySectionHeader
             Title="@DashboardLocalizer["TeamPerformance"].Value"/>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
             <PropertyColumn Title="@DashboardLocalizer["Member"].Value" Property="@(item => item.Name)">
                 <Content><div class="font-medium text-slate-900">@context.Name</div><div class="text-xs text-slate-500">@context.Email</div></Content>
@@ -18,5 +18,5 @@
             <PropertyColumn Title="@DashboardLocalizer["Margin"].Value" Property="@(item => item.GrossProfit)"><Content><span class="@(context.GrossProfit < 0 ? "text-red-600" : "text-emerald-700")"><AmountDisplay Amount="@context.GrossProfit"/></span></Content></PropertyColumn>
             <PropertyColumn Title="@DashboardLocalizer["MarginPercent"].Value" Property="@(item => item.MarginPercent)"><Content>@(context.MarginPercent?.ToString("0.#") ?? "—")</Content></PropertyColumn>
         </LumexDataGrid>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

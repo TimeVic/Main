@@ -42,12 +42,12 @@
     }
     else if (_reportData == null || (_reportData.ClientBalances.Count == 0 && _reportData.MemberBalances.Count == 0))
     {
-        <LumexCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
-            <LumexCardBody>
+        <AppCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
+            <AppCardBody>
                 <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoTrackedWorkYet"]</p>
                 <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["WorkspaceFinancialSummaryPage_NoTrackedWorkDescription"]</p>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
     else
     {

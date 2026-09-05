@@ -2,14 +2,14 @@
 
 @inherits BaseReactiveComponent
 
-<LumexCard>
-    <LumexCardHeader>
+<AppCard>
+    <AppCardHeader>
         <div>
             <h2 class="text-lg font-semibold text-slate-900">@DashboardLocalizer["UserSettings_LoginSection"]</h2>
             <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserSettings_LoginSectionDescription"]</p>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         @if (!string.IsNullOrWhiteSpace(_errorMessage))
         {
             <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
@@ -39,5 +39,5 @@
                 <ChildContent>@DashboardLocalizer["UserSettings_SaveLogin"]</ChildContent>
             </AppButton>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

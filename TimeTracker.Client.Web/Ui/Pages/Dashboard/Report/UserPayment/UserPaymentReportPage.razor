@@ -43,21 +43,21 @@
     }
     else if (_report == null || !_report.Clients.Any())
     {
-        <LumexCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
-            <LumexCardBody Class="py-10 text-center">
+        <AppCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
+            <AppCardBody Class="py-10 text-center">
                 <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                     <i class="fa-solid fa-chart-pie text-xl"></i>
                 </div>
                 <p class="text-sm font-semibold text-slate-700">@DashboardLocalizer["UserPaymentReport_EmptyTitle"]</p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EmptyDescription"]</p>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
     else
     {
         <section class="grid gap-4 md:grid-cols-3">
-            <LumexCard>
-                <LumexCardBody Class="p-4">
+            <AppCard>
+                <AppCardBody Class="p-4">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalEarned"]</p>
                     <p class="mt-2 text-2xl font-bold text-slate-900">
                         <AmountDisplay Amount="@_report.Totals.Earned"/>
@@ -73,21 +73,21 @@
                     {
                         <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EarnedSubtitle"]</p>
                     }
-                </LumexCardBody>
-            </LumexCard>
+                </AppCardBody>
+            </AppCard>
 
-            <LumexCard>
-                <LumexCardBody Class="p-4">
+            <AppCard>
+                <AppCardBody Class="p-4">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalReceived"]</p>
                     <p class="mt-2 text-2xl font-bold text-emerald-700">
                         <AmountDisplay Amount="@_report.Totals.Received"/>
                     </p>
                     <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_ReceivedSubtitle"]</p>
-                </LumexCardBody>
-            </LumexCard>
+                </AppCardBody>
+            </AppCard>
 
-            <LumexCard Class="@GetOutstandingCardClass(_report.Totals.Outstanding)">
-                <LumexCardBody Class="p-4">
+            <AppCard Class="@GetOutstandingCardClass(_report.Totals.Outstanding)">
+                <AppCardBody Class="p-4">
                     <div class="flex items-center justify-between">
                         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["OutstandingBalance"]</p>
                         <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium @GetOutstandingBadgeClass(_report.Totals.Outstanding)">
@@ -98,18 +98,18 @@
                         <AmountDisplay Amount="@_report.Totals.Outstanding"/>
                     </p>
                     <p class="mt-1 text-xs text-slate-500">@GetOutstandingBadgeText(_report.Totals.Outstanding)</p>
-                </LumexCardBody>
-            </LumexCard>
+                </AppCardBody>
+            </AppCard>
         </section>
 
-        <LumexCard Class="overflow-hidden">
-            <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <AppCard Class="overflow-hidden">
+            <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</p>
                     <p class="text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_ClientBalancesDescription"]</p>
                 </div>
-            </LumexCardHeader>
-            <LumexCardBody Class="p-0">
+            </AppCardHeader>
+            <AppCardBody Class="p-0">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-slate-200 text-sm">
                         <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -336,7 +336,7 @@
                         </tfoot>
                     </table>
                 </div>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
 </div>

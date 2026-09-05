@@ -7,15 +7,15 @@
 <section class="space-y-6">
     <WorkspaceModeInfoBlock OnCreateWorkspaceClicked="@(() => _isShowAddWorkspaceModal = true)" />
 
-    <LumexCard>
-        <LumexCardHeader>
+    <AppCard>
+        <AppCardHeader>
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["SettingsBlock_General"]</p>
                 <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["SettingsBlock_WorkspaceProfileTitle"]</h2>
                 <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["SettingsBlock_Description"]</p>
             </div>
-        </LumexCardHeader>
-        <LumexCardBody>
+        </AppCardHeader>
+        <AppCardBody>
             <div>
                 @if (_workspace != null)
                 {
@@ -33,17 +33,17 @@
                     }
                 }
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
     
-    <LumexCard>
-        <LumexCardBody>
+    <AppCard>
+        <AppCardBody>
             @if (_workspaceState.Value.List.Any())
             {
                 <UpdateWorkspaceForm></UpdateWorkspaceForm>
             }
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 
     <WorkspaceDeletionBlock></WorkspaceDeletionBlock>
 

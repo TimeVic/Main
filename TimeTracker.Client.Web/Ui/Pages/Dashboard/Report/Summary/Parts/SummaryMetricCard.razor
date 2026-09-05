@@ -1,7 +1,7 @@
 @inherits BaseReactiveComponent
 
-<LumexCard Class="@CardClass">
-    <LumexCardBody Class="flex h-full flex-col p-4">
+<AppCard Class="@CardClass">
+    <AppCardBody Class="flex h-full flex-col p-4">
         <div class="flex items-start justify-between gap-3">
             <p class="@TitleClass" title="@TooltipText">@Title</p>
             @if (!string.IsNullOrWhiteSpace(BadgeText))
@@ -30,8 +30,8 @@
         {
             <a href="@ActionHref" class="@ActionClass">@ActionText</a>
         }
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>
 
 @code {
     [Parameter]

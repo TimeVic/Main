@@ -5,8 +5,8 @@
 
 @inherits BaseReactiveComponent
 
-<LumexCard Class="mt-10">
-    <LumexCardHeader>
+<AppCard Class="mt-10">
+    <AppCardHeader>
         <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SummarySectionHeader
                 Title="@string.Format(DashboardLocalizer["SummaryBy"].Value, PeriodLabel)"/>
@@ -21,8 +21,8 @@
                 </span>
             </div>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
             @if (Items.Any() && _trackedDaysCount > 0)
             {
@@ -84,5 +84,5 @@
                 @DashboardLocalizer["StartTrackingEarnings"]
             </div>
         }
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

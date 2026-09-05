@@ -1,15 +1,15 @@
 @using LumexUI.Common
 @inherits BaseReactiveComponent
 
-<LumexCard>
-    <LumexCardHeader>
+<AppCard>
+    <AppCardHeader>
         <div>
             <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["UserSettings_PreferencesSection"]</p>
             <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["UserSettings_PreferencesSection"]</h2>
             <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UserSettings_PreferencesSectionDescription"]</p>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         <div class="max-w-xs">
             <LanguagesSelect
                 Label="@DashboardLocalizer["Language"].Value"
@@ -27,5 +27,5 @@
                 <ChildContent>@DashboardLocalizer["UserSettings_SaveChanges"]</ChildContent>
             </AppButton>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

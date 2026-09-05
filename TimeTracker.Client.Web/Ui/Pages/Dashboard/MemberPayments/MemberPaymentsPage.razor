@@ -27,17 +27,17 @@
         </div>
     </section>
 
-    <LumexCard>
-        <LumexCardBody Class="p-4">
+    <AppCard>
+        <AppCardBody Class="p-4">
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Payments"]</p>
             <p class="mt-2 text-2xl font-bold text-slate-900">@_state.Value.TotalCount</p>
             <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["SavedCurrentWorkspace"]</p>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 </div>
 
-<LumexCard Class="mt-6 overflow-x-auto pb-2">
-    <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+<AppCard Class="mt-6 overflow-x-auto pb-2">
+    <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Payments"]</p>
             <p class="text-sm text-slate-500">@DashboardLocalizer["MemberPaymentsDescription"]</p>
@@ -65,8 +65,8 @@
                 </AppButton>
             }
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         @if (_state.Value.TotalCount == 0)
         {
             <div class="px-4 py-8 text-center text-sm text-slate-500">
@@ -85,5 +85,5 @@
                 TotalItems="@_state.Value.TotalCount"
                 IsLoading="@_state.Value.IsListLoading"/>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

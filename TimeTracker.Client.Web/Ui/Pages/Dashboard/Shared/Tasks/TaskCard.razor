@@ -1,13 +1,14 @@
-﻿@using TimeTracker.Client.Core.Core.Extensions.Enums
+@using TimeTracker.Client.Core.Core.Extensions.Enums
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 @inherits BaseComponent
 
-<FluentCard
-    @onclick="@OnClickTask"
-    Style="cursor: pointer"
-    Class="@("pa-2" + Class)">
-    <FluentStack>
+<AppCard
+    IsHoverable="true"
+    Class="@($"cursor-pointer {Class}")"
+    OnClick="@OnClickTask">
+    <AppCardBody Class="p-2">
+        <FluentStack>
         <FluentStack Orientation="Orientation.Horizontal">
             <TaskIdBadge
                 IsClickable="false"
@@ -99,4 +100,5 @@
             }
         </FluentStack>
     </FluentStack>
-</FluentCard>
+    </AppCardBody>
+</AppCard>

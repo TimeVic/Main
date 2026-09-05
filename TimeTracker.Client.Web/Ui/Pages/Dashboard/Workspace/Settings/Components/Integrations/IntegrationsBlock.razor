@@ -64,14 +64,14 @@
 
     @if (_isLoading)
     {
-        <LumexCard>
-            <LumexCardBody>
+        <AppCard>
+            <AppCardBody>
                 <div class="flex items-center justify-center gap-3 py-12 text-sm font-medium text-slate-500">
                     <i class="fa-solid fa-circle-notch animate-spin text-cyan-600"></i>
                     <span>@DashboardLocalizer["IntegrationsBlock_Loading"]</span>
                 </div>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
     else
     {
@@ -82,15 +82,15 @@
             FullWidth="true">
             <LumexTab Title="ClickUp">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="ClickUp"
                                 IconClass="fa-solid fa-list-check"
                                 IsActive="@IsActive(_settings.IntegrationClickUp)"
                                 OnHelpClick="@(() => ShowHelp(ClickUpHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="clickUpFormContext"
                                 @ref="_clickUpForm"
@@ -145,8 +145,8 @@
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
                             <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.ClickUp)"
@@ -161,22 +161,22 @@
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "ClickUp")
                                 </ChildContent>
                             </AppButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
             </LumexTab>
 
             <LumexTab Title="Redmine">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="Redmine"
                                 IconClass="fa-solid fa-diamond"
                                 IsActive="@IsActive(_settings.IntegrationRedmine)"
                                 OnHelpClick="@(() => ShowHelp(RedmineHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="redmineFormContext"
                                 @ref="_redmineForm"
@@ -230,8 +230,8 @@
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
                             <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Redmine)"
@@ -246,22 +246,22 @@
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Redmine")
                                 </ChildContent>
                             </AppButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
             </LumexTab>
 
             <LumexTab Title="Jira">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="Jira"
                                 IconClass="fa-solid fa-layer-group"
                                 IsActive="@IsActive(_settings.IntegrationJira)"
                                 OnHelpClick="@(() => ShowHelp(JiraHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="jiraFormContext"
                                 @ref="_jiraForm"
@@ -306,8 +306,8 @@
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
                             <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Jira)"
@@ -322,8 +322,8 @@
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Jira")
                                 </ChildContent>
                             </AppButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
             </LumexTab>
         </LumexTabs>

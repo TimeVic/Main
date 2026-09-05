@@ -2,8 +2,8 @@
 
 @inherits BaseReactiveComponent
 
-<LumexCard Class="mt-10">
-    <LumexCardHeader>
+<AppCard Class="mt-10">
+    <AppCardHeader>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SummarySectionHeader
                 Title="@DashboardLocalizer["GroupedSummary"].Value"/>
@@ -12,8 +12,8 @@
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@PeriodLabel</span>
             }
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         @if (ReportData?.GroupedByDay != null)
         {
             <ByDateTable Items="@ReportData.GroupedByDay"></ByDateTable>
@@ -34,8 +34,8 @@
         {
             <ByMonthTable Items="@ReportData.GroupedByMonth"></ByMonthTable>
         }
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>
 
 @code {
     [Parameter]
