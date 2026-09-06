@@ -16,14 +16,12 @@
 </AppModalHeader>
 
 <AppModalBody>
-    <div
-        class="add-member-modal">
-        <EditForm
-            Context="form"
-            @ref="_form"
-            Model="@_model"
-            novalidate>
-            <DataAnnotationsValidator/>
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@_model"
+        novalidate>
+        <DataAnnotationsValidator/>
 
             <div
                 class="flex flex-col gap-4">
@@ -45,7 +43,6 @@
                 </div>
             </div>
         </EditForm>
-    </div>
 </AppModalBody>
 
 <AppModalFooter>

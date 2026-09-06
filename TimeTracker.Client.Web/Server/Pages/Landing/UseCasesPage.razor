@@ -2,7 +2,6 @@
 @page "/uk/use-cases"
 @attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
 
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Services
 @using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
 @namespace TimeTracker.Client.Web.Ui.Pages.Landing
@@ -86,9 +85,7 @@
 
             <aside class="lg:pl-4">
                 <AppCard
-                    Radius="@Radius.Large"
-                    Shadow="@Shadow.Large"
-                    Class="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 text-white">
+                    Class="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 text-white shadow-xl">
                     <AppCardHeader Class="border-b border-white/10 px-6 py-5">
                         <div class="flex w-full items-start justify-between gap-4">
                             <div>
@@ -156,9 +153,7 @@
 
             <div class="mt-10 grid gap-6 xl:grid-cols-3">
                 <AppCard
-                    Radius="@Radius.Large"
-                    Shadow="@Shadow.Medium"
-                    Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70">
+                    Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70 shadow-md">
                     <AppCardBody Class="h-full gap-6 p-7">
                         <div class="flex items-center justify-between gap-4">
                             <AppBadge
@@ -204,8 +199,6 @@
                 </AppCard>
 
                 <AppCard
-                    Radius="@Radius.Large"
-                    Shadow="@Shadow.Large"
                     Class="h-full rounded-[2rem] border border-red-200 bg-gradient-to-br from-white via-red-50 to-emerald-50 shadow-lg shadow-red-100/80 xl:-translate-y-3">
                     <AppCardHeader Class="border-b border-red-100 px-7 py-6">
                         <div class="flex w-full items-center justify-between gap-4">
@@ -271,9 +264,7 @@
                 </AppCard>
 
                 <AppCard
-                    Radius="@Radius.Large"
-                    Shadow="@Shadow.Medium"
-                    Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70">
+                    Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70 shadow-md">
                     <AppCardBody Class="h-full gap-6 p-7">
                         <div class="flex items-center justify-between gap-4">
                             <AppBadge
@@ -324,9 +315,7 @@
     <section class="border-b border-slate-200 bg-slate-50">
         <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
             <AppCard
-                Radius="@Radius.Large"
-                Shadow="@Shadow.Medium"
-                Class="rounded-[2rem] border border-slate-200 bg-white">
+                Class="rounded-[2rem] border border-slate-200 bg-white shadow-md">
                 <AppCardBody Class="gap-6 p-8 text-center sm:p-10">
                     <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white">
                         <i class="fa-solid fa-ban"></i>
@@ -354,8 +343,6 @@
     <section class="bg-white">
         <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <AppCard
-                Radius="@Radius.Large"
-                Shadow="@Shadow.Large"
                 Class="rounded-[2rem] border border-slate-200 bg-slate-950 text-white shadow-2xl">
                 <AppCardBody Class="gap-8 p-8 sm:p-10 lg:p-12">
                     <div class="max-w-3xl">

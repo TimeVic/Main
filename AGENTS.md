@@ -148,14 +148,11 @@ Context type is serialized as JSON; its `FullName` is stored for handler resolut
 - All HTML and Razor templates must be formatted with opening and closing tags on new lines and indented appropriately.
 - When a Blazor component has more than one attribute, place each attribute on a separate line.
 
-### Lumex UI & Tailwind CSS Guidelines
-- Built on **Tailwind CSS v4** and uses **TailwindMerge.NET** for automatic class conflict resolution.
-- **Slots**: Customize multi-slot components via child sub-components (e.g. `<LumexCardBody Class="p-4">`), slot objects (`Classes="@(new CardSlots() { Body = "p-4" })"`), or `data-slot` selectors.
-- **Forms & Inputs**:
-  - For standard dashboard forms, use `Variant="InputVariant.Outlined"` and `LabelPlacement="LabelPlacement.Outside"`.
-  - Standardize modal sizes with `Size="ModalSize.Small"` or `ModalSize.Medium` (avoid `ModalSize.Large` for small forms).
-- **Enums & Tokens**: Use Lumex enums (`ThemeColor`, `Variant`, `InputVariant`, `LabelPlacement`, `Size`) instead of hardcoded ad-hoc CSS classes.
-- **Documentation**: Refer to [https://lumexui.org/llms.txt](https://lumexui.org/llms.txt) for component specifications.
+### UI Components & Tailwind CSS Guidelines
+- Built on **Tailwind CSS v4**.
+- **Custom Native Components**: All UI components are native Blazor components located in `TimeTracker.Client.Core/Ui/Shared/Components/` (`Dropdown/`, `Popover/`, `Modal/`, `Form/`, `Button/`, `Card/`, `Table/`, `Tabs/`, `Badge/`, `Spinner/`).
+- **Do NOT use external UI component libraries** (e.g. LumexUI, MudBlazor). Use the built-in native components or create new ones in `TimeTracker.Client.Core/Ui/Shared/Components/`.
+- **Component Enums & Tokens**: Use shared component enums from `TimeTracker.Client.Core.Ui.Shared.Components.Enums` (`ComponentColor`, `ComponentSize`, `ButtonVariant`, `ButtonRadius`, `BadgeVariant`, `BadgeRadius`, `SpinnerVariant`, `DropdownAlignment`, `PopoverPlacement`, `PopoverTriggerMode`).
 
 ### Localization Rules for UI Components
 Do not hardcode user-facing text in Razor/HTML/C# components. All visible strings must be added to localization resource files for both supported locales:

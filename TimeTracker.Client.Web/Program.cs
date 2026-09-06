@@ -18,7 +18,6 @@ using Toolbelt.Blazor.Extensions.DependencyInjection;
 using TimeTracker.Client.Core.Services.Messaging;
 using TimeTracker.Client.Web.Services.Notification;
 using ToastService = TimeTracker.Client.Web.Services.UI.ToastService;
-using LumexUI.Extensions;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Services.DateTimes;
 using TimeTracker.Client.Web.Services.UI;
@@ -111,9 +110,6 @@ builder.Services.AddScoped<UserLocaleService>();
 builder.Services.AddScoped<IUserLocaleService>(sp => sp.GetRequiredService<UserLocaleService>());
 builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 builder.Services.AddScoped<ILastOpenedEntityService, LastOpenedEntityService>();
-
-// Lumex UI
-builder.Services.AddLumexServices();
 
 // Store
 builder.Services.AddFluxor(

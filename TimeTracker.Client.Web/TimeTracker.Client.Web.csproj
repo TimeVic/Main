@@ -30,7 +30,6 @@
         <PackageReference Include="Blazor-ApexCharts" Version="7.0.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.11.0" />
-        <PackageReference Include="LumexUI" Version="2.4.0" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.10" />
@@ -365,7 +364,7 @@
             StandardErrorImportance="high" />
     </Target>
     
-    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish" Condition="Exists('bin/lumexui')">
+    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
 

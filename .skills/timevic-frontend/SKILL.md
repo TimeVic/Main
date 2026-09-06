@@ -7,7 +7,7 @@ description: Build and maintain the TimeVic frontend. Use for Blazor WebAssembly
 
 ## Overview
 
-Use this skill to implement frontend changes in `TimeTracker.Web`. The app is a Blazor WebAssembly project using Razor components, code-behind classes, LumexUI, Fluxor state, shared API DTOs, and Less/CSS assets.
+Use this skill to implement frontend changes in `TimeTracker.Web`. The app is a Blazor WebAssembly project using Razor components, code-behind classes, native custom UI components, Fluxor state, shared API DTOs, and Less/CSS assets.
 
 ## Project Map
 
@@ -32,7 +32,7 @@ Use this skill to implement frontend changes in `TimeTracker.Web`. The app is a 
 
 ## Component Rules
 
-- Prefer existing LumexUI components and local component abstractions over new custom controls.
+- Prefer native custom UI components in `TimeTracker.Client.Core/Ui/Shared/Components/` and local component abstractions.
 - Preserve existing split files: `Component.razor`, `Component.razor.cs`, and optional `Component.razor.less`.
 - Use dependency injection and inherited base classes the same way nearby components do.
 - Avoid adding user-facing instructional copy inside product UI unless the requested feature requires it.

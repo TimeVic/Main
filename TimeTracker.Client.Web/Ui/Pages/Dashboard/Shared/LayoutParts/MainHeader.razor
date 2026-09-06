@@ -1,33 +1,21 @@
-@using LumexUI
-@using LumexUI.Common
-@using LumexUI.Shared.Icons
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Modals
 @using TimeTracker.Client.Web.Ui.Shared.Components.Layout
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
 @inherits BaseReactiveComponent
 
-<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
-    <LumexNavbar
-        Height="4.5rem"
-        MaxWidth="@MaxWidth.Full"
-        Blurred="false"
-        Classes="@NavbarClasses">
-        <LumexNavbarContent Class="lg:hidden gap-3">
-            <LumexNavbarMenuToggle />
-            <LumexNavbarBrand>
-                <AppLogoBlock
-                    IsShowBeta="false"
-                    Url='@UrlService.GetDashboardUrl("report/summary")'
-                    LogoWrapClass="flex items-center"
-                    LogoClass="h-8 w-auto"
-                    LogoWidth="148"
-                    LogoHeight="32" />
-            </LumexNavbarBrand>
-        </LumexNavbarContent>
-
-        <LumexNavbarBrand Class="hidden shrink-0 lg:flex">
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm">
+    <nav class="flex h-[4.5rem] w-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 lg:hidden">
+            <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
+                aria-label="Toggle navigation"
+                @onclick="ToggleMobileMenu">
+                <i class="fa-solid @(_isMobileMenuOpen ? "fa-xmark" : "fa-bars") text-lg" aria-hidden="true"></i>
+            </button>
             <AppLogoBlock
                 IsShowBeta="false"
                 Url='@UrlService.GetDashboardUrl("report/summary")'
@@ -35,14 +23,24 @@
                 LogoClass="h-8 w-auto"
                 LogoWidth="148"
                 LogoHeight="32" />
-        </LumexNavbarBrand>
+        </div>
 
-        <LumexNavbarContent Class="hidden min-w-0 flex-1 gap-2 overflow-x-auto lg:flex">
+        <div class="hidden shrink-0 lg:flex">
+            <AppLogoBlock
+                IsShowBeta="false"
+                Url='@UrlService.GetDashboardUrl("report/summary")'
+                LogoWrapClass="flex items-center"
+                LogoClass="h-8 w-auto"
+                LogoWidth="148"
+                LogoHeight="32" />
+        </div>
+
+        <div class="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
             <MainMenu />
-        </LumexNavbarContent>
+        </div>
 
-        <LumexNavbarContent Align="@Align.End" Class="shrink-0 gap-2">
-            <LumexNavbarItem>
+        <div class="flex shrink-0 items-center gap-2">
+            <div>
                 <button
                     type="button"
                     class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
@@ -51,10 +49,11 @@
                     @onclick="@OpenSupportModal">
                     <i class="fa-regular fa-circle-question text-lg" aria-hidden="true"></i>
                 </button>
-            </LumexNavbarItem>
+            </div>
+
             @if (IsTeamInvitationAvailable)
             {
-                <LumexNavbarItem>
+                <div>
                     <AppButton
                         Class="group border border-slate-200 px-3.5 py-2 text-sm font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-blue-600"
                         Color="ComponentColor.Default"
@@ -68,11 +67,12 @@
                             @DashboardLocalizer["MainHeader_InviteTeam"]
                         </ChildContent>
                     </AppButton>
-                </LumexNavbarItem>
+                </div>
             }
-            <LumexNavbarItem>
-                <LumexDropdown>
-                    <LumexDropdownTrigger>
+
+            <div class="relative">
+                <AppDropdown Alignment="DropdownAlignment.Right" MenuClass="w-64 p-2">
+                    <Trigger>
                         <AppButton
                             Class="min-w-[180px] justify-start max-[420px]:min-w-0"
                             Variant="ButtonVariant.Outlined">
@@ -89,27 +89,26 @@
                                 <i class="fa-solid fa-chevron-down text-xs text-slate-500"></i>
                             </EndContent>
                         </AppButton>
-                    </LumexDropdownTrigger>
-                    <LumexDropdownMenu Class="p-3">
-                        <LumexDropdownItem
-                            Disabled="@true"
-                            Class="h-14 gap-2 opacity-100">
-                            <div class="flex items-center gap-2">
-                                <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" Class="text-[11px]" />
-                                <div class="inline-flex flex-col items-start">
-                                    <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
-                                    <span class="text-tiny text-default-500">@AuthState.Value.User?.FormattedLogin</span>
-                                </div>
+                    </Trigger>
+                    <Menu>
+                        <div class="px-3 py-2 flex items-center gap-2">
+                            <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" Class="text-[11px]" />
+                            <div class="inline-flex flex-col items-start min-w-0">
+                                <span class="text-sm font-medium text-slate-800 truncate">@AuthState.Value.User?.Name</span>
+                                <span class="text-xs text-slate-400 truncate">@AuthState.Value.User?.FormattedLogin</span>
                             </div>
-                        </LumexDropdownItem>
-                        <LumexDropdownItem
-                            ShowDivider="true"
-                            Disabled="true">
+                        </div>
+
+                        <div class="my-1 border-t border-slate-100 dark:border-slate-700/60"></div>
+
+                        <div class="px-3 py-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                             @DashboardLocalizer["Workspace"]
-                        </LumexDropdownItem>
+                        </div>
+
                         @foreach (var workspace in WorkspaceState.Value.List)
                         {
-                            <LumexDropdownItem
+                            <AppDropdownItem
+                                Text="@workspace.Name"
                                 Description="@(workspace.Id == AuthState.Value.Workspace?.Id ? DashboardLocalizer["CurrentWorkspace"].Value : null)"
                                 OnClick="@(() => OnSelectWorkspace(workspace))">
                                 <StartContent>
@@ -121,55 +120,65 @@
                                 <ChildContent>
                                     @workspace.Name
                                 </ChildContent>
-                            </LumexDropdownItem>
+                            </AppDropdownItem>
                         }
+
                         @if (IsWorkspaceCreationAvailable)
                         {
-                            <LumexDropdownItem
-                                Color="ThemeColor.Info"
-                                OnClick="@OpenAddWorkspaceModal"
-                                ShowDivider="true">
+                            <AppDropdownItem
+                                ShowDivider="true"
+                                Color="ComponentColor.Info"
+                                OnClick="@OpenAddWorkspaceModal">
                                 <StartContent>
-                                    <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
+                                    <i class="fa-solid fa-square-plus text-slate-500 shrink-0"></i>
                                 </StartContent>
                                 <ChildContent>@DashboardLocalizer["NewWorkspace"]</ChildContent>
-                            </LumexDropdownItem>
+                            </AppDropdownItem>
                         }
-                        <LumexDropdownItem
+
+                        <AppDropdownItem
                             ShowDivider="true"
                             OnClick="@OnNavigateToUserSettings">
-                            @DashboardLocalizer["Settings"]
-                        </LumexDropdownItem>
-                        <LumexDropdownItem OnClick="@OnClickLogout">
+                            <StartContent>
+                                <i class="fa-solid fa-gear text-slate-400"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Settings"]</ChildContent>
+                        </AppDropdownItem>
+
+                        <AppDropdownItem OnClick="@OnClickLogout">
+                            <StartContent>
+                                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400"></i>
+                            </StartContent>
                             <ChildContent>
-                                @DashboardLocalizer["LogOut"]
+                                <div class="flex items-center justify-between w-full">
+                                    <span>@DashboardLocalizer["LogOut"]</span>
+                                </div>
                             </ChildContent>
-                            <EndContent>
-                                <LogoutIcon Size="16"/>
-                            </EndContent>
-                        </LumexDropdownItem>
-                    </LumexDropdownMenu>
-                </LumexDropdown>
-            </LumexNavbarItem>
+                        </AppDropdownItem>
+                    </Menu>
+                </AppDropdown>
+            </div>
+
             @if (IsWorkspaceSettingsAvailable)
             {
-                <LumexNavbarItem>
-                    <LumexLink
-                        Href='@UrlService.GetDashboardUrl("workspace/settings")'
-                        Class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
-                        Underline="@Underline.None">
+                <div>
+                    <a
+                        href='@UrlService.GetDashboardUrl("workspace/settings")'
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200">
                         <i class="fa-solid fa-sliders" aria-hidden="true"></i>
                         <span class="sr-only">@DashboardLocalizer["Settings"]</span>
-                    </LumexLink>
-                </LumexNavbarItem>
+                    </a>
+                </div>
             }
-        </LumexNavbarContent>
+        </div>
+    </nav>
 
-        @* Keep the mobile menu stretched across the viewport because the dashboard header also renders the timer form below the navbar. *@
-        <LumexNavbarMenu Class="lg:hidden !fixed !inset-x-0 !top-[var(--navbar-height)] !bottom-auto !z-50 h-[calc(100dvh-var(--navbar-height))] overflow-y-auto border-t border-slate-200 bg-white px-4 pb-6 pt-3">
+    @if (_isMobileMenuOpen)
+    {
+        <div class="lg:hidden fixed inset-x-0 top-[4.5rem] z-50 h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-slate-200 bg-white px-4 pb-6 pt-3">
             <MainMenu IsMobile="true" />
-        </LumexNavbarMenu>
-    </LumexNavbar>
+        </div>
+    }
 
     <div class="px-4 pb-3 sm:px-6 lg:px-8">
         <div class="min-w-0">

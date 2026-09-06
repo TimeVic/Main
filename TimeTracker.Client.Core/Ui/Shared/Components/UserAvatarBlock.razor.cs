@@ -8,7 +8,16 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components;
 public partial class UserAvatarBlock
 {
     [Parameter]
-    public UserDto User { get; set; } = null!;
+    public UserDto? User { get; set; }
+
+    [Parameter]
+    public string? Src { get; set; }
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter]
+    public string? Initials { get; set; }
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -22,17 +31,23 @@ public partial class UserAvatarBlock
     [Inject]
     private UrlService UrlService { get; set; } = null!;
 
-    private string Initials => string.IsNullOrWhiteSpace(User?.Initials) ? "?" : User.Initials;
+    private string ResolvedInitials => !string.IsNullOrWhiteSpace(Initials)
+        ? Initials
+        : (!string.IsNullOrWhiteSpace(User?.Initials)
+            ? User.Initials
+            : (!string.IsNullOrWhiteSpace(Name) ? Name.Substring(0, Math.Min(2, Name.Length)).ToUpper() : "?"));
 
-    private string TitleText => User?.Name ?? string.Empty;
+    private string TitleText => !string.IsNullOrWhiteSpace(Name) ? Name : (User?.Name ?? string.Empty);
 
     private string AltText => TitleText;
 
-    private string AvatarKey => User?.Avatar?.Id.ToString() ?? $"avatar-empty-{User?.Id}";
+    private string AvatarKey => !string.IsNullOrWhiteSpace(Src)
+        ? Src
+        : (User?.Avatar?.Id.ToString() ?? $"avatar-empty-{User?.Id}");
 
-    private string? AvatarUrl => User?.Avatar == null
-        ? null
-        : UrlService.GetStorageImageUrl(User.Avatar, ImageSize);
+    private string? AvatarUrl => !string.IsNullOrWhiteSpace(Src)
+        ? Src
+        : (User?.Avatar == null ? null : UrlService.GetStorageImageUrl(User.Avatar, ImageSize));
 
     private string AvatarClass => string.Join(
         " ",

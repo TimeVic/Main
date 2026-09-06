@@ -1,6 +1,5 @@
 using System.Net;
 using Fluxor;
-using LumexUI.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Services.Format;
@@ -67,7 +66,6 @@ public static class MauiProgram
         builder.Services.AddScoped<UserDateTimeProviderService>();
         builder.Services.AddScoped<IUserLocaleService, MobileUserLocaleService>();
         builder.Services.AddScoped<IToastService, MobileToastService>();
-        builder.Services.AddLumexServices();
         builder.Services.AddFluxor(options =>
         {
             options.ScanAssemblies(typeof(MauiProgram).Assembly, typeof(AuthState).Assembly);

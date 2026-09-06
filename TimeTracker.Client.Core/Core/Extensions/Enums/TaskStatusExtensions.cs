@@ -1,4 +1,3 @@
-using LumexUI.Common;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -27,38 +26,6 @@ public static class TaskStatusExtensions
     };
 
     public static ComponentColor GetComponentColor(this ExtendedTaskStatus status) => status.GetSelectColor();
-
-    public static ThemeColor GetThemeColor(this TaskStatus status)
-    {
-        switch (status)
-        {
-            case TaskStatus.Backlog:
-                return ThemeColor.Secondary;
-            case TaskStatus.Done:
-                return ThemeColor.Success;
-            case TaskStatus.ToDo:
-                return ThemeColor.Primary;
-        }
-
-        throw new Exception($"BadgeStyle not found for TaskStatus: {status}");
-    }
-
-    public static ThemeColor GetThemeColor(this ExtendedTaskStatus status)
-    {
-        switch (status)
-        {
-            case ExtendedTaskStatus.Backlog:
-                return ThemeColor.Secondary;
-            case ExtendedTaskStatus.Done:
-                return ThemeColor.Success;
-            case ExtendedTaskStatus.InProgress:
-                return ThemeColor.Warning;
-            case ExtendedTaskStatus.ToDo:
-                return ThemeColor.Primary;
-        }
-
-        throw new Exception($"BadgeStyle not found for ExtendedTaskStatus: {status}");
-    }
 
     public static string GetStatusCssClass(this TaskStatus status) => status switch
     {

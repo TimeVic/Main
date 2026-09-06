@@ -1,6 +1,6 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
@@ -34,8 +34,8 @@
                             </StartContent>
                         </InputTextField>
                     </div>
-                    <LumexDropdown>
-                        <LumexDropdownTrigger>
+                    <AppDropdown Alignment="DropdownAlignment.Right">
+                        <Trigger>
                             <AppButton
                                 IconOnly="true"
                                 Size="ComponentSize.Small"
@@ -45,16 +45,16 @@
                                 <i class="fa-solid fa-filter text-xs"></i>
                                 <span class="sr-only">@DashboardLocalizer["TasksBlock_Filters"]</span>
                             </AppButton>
-                        </LumexDropdownTrigger>
-                        <LumexDropdownMenu>
-                            <LumexDropdownItem OnClick="OnToggleShowArchived">
+                        </Trigger>
+                        <Menu>
+                            <AppDropdownItem OnClick="OnToggleShowArchived">
                                 <span class="flex items-center gap-2">
                                     <i class="fa-solid @(_isShowArchived ? "fa-square-check" : "fa-square") w-4 text-xs"></i>
                                     <span>@DashboardLocalizer["TasksBlock_ShowArchived"]</span>
                                 </span>
-                            </LumexDropdownItem>
-                        </LumexDropdownMenu>
-                    </LumexDropdown>
+                            </AppDropdownItem>
+                        </Menu>
+                    </AppDropdown>
                     <AppButton
                         Variant="ButtonVariant.Outlined"
                         Color="ComponentColor.Info"

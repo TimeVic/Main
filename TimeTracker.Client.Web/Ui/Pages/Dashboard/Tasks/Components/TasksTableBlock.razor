@@ -3,7 +3,8 @@
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Client.Core.Constants.Ui
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 
@@ -236,23 +237,23 @@
                         <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right whitespace-nowrap">
                             <div class="flex items-center justify-end gap-1 shrink-0">
                                 <TaskTimeTrackerButton Task="@task" />
-                                <LumexDropdown>
-                                    <LumexDropdownTrigger>
+                                <AppDropdown Alignment="DropdownAlignment.Right">
+                                    <Trigger>
                                         <AppButton
                                             IconOnly="true"
                                             Size="ComponentSize.Small"
                                             Variant="ButtonVariant.Outlined">
                                             <i class="fa-solid fa-ellipsis-h"></i>
                                         </AppButton>
-                                    </LumexDropdownTrigger>
-                                    <LumexDropdownMenu>
-                                        <LumexDropdownItem
-                                            Color="@ThemeColor.Warning"
+                                    </Trigger>
+                                    <Menu>
+                                        <AppDropdownItem
+                                            Color="@ComponentColor.Warning"
                                             OnClick="@(() => OnArchiveTask(task))">
                                             @DashboardLocalizer["TasksTableBlock_ArchiveThisTask"]
-                                        </LumexDropdownItem>
-                                    </LumexDropdownMenu>
-                                </LumexDropdown>
+                                        </AppDropdownItem>
+                                    </Menu>
+                                </AppDropdown>
                             </div>
                         </td>
                     </tr>

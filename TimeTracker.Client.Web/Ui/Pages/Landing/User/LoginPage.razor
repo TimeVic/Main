@@ -1,6 +1,5 @@
 @page "/login"
 @page "/uk/login"
-@using LumexUI.Shared.Icons
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 @using TimeTracker.Client.Web.Services
@@ -109,7 +108,7 @@ else
                     IsLoading="_isLoading"
                     Type="@ButtonType.Submit">
                     <StartContent>
-                        <UserIcon></UserIcon>
+                        <i class="fa-solid fa-user"></i>
                     </StartContent>
                     <ChildContent>@Localizer["Content_SignInAndOpenWorkspace"]</ChildContent>
                 </AppButton>

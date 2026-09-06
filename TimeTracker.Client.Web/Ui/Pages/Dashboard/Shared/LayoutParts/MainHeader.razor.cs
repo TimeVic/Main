@@ -1,5 +1,4 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Constants;
@@ -18,23 +17,21 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
 public partial class MainHeader : IDisposable
 {
-    private static readonly NavbarSlots NavbarClasses = new()
+    private bool _isMobileMenuOpen;
+
+    private void ToggleMobileMenu()
     {
-        Base = "bg-white/95",
-        Wrapper = "max-w-none px-4 sm:px-6 lg:px-8 gap-3",
-        Content = "gap-2",
-        Item = "shrink-0",
-        Menu = "gap-1"
-    };
+        _isMobileMenuOpen = !_isMobileMenuOpen;
+    }
 
     [Inject]
-    public IState<AuthState> AuthState { get; set; }
+    public IState<AuthState> AuthState { get; set; } = null!;
     
     [Inject]
-    public IState<WorkspaceState> WorkspaceState { get; set; }
+    public IState<WorkspaceState> WorkspaceState { get; set; } = null!;
 
     [Inject]
-    public WorkspaceInitializationService _workspaceInitialization { get; set; }
+    public WorkspaceInitializationService _workspaceInitialization { get; set; } = null!;
 
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;

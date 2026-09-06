@@ -1,5 +1,5 @@
-@using LumexUI
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
@@ -98,8 +98,8 @@
                                             <span class="min-w-0 flex-1 truncate text-sm font-medium">@project.Name</span>
                                             <span class="shrink-0 text-[10px] font-medium text-slate-400">@GetProjectTaskListsCountText(project)</span>
                                         </button>
-                                        <LumexDropdown>
-                                            <LumexDropdownTrigger>
+                                        <AppDropdown Alignment="DropdownAlignment.Right">
+                                            <Trigger>
                                                 <AppButton
                                                     IconOnly="true"
                                                     Size="ComponentSize.Small"
@@ -107,16 +107,16 @@
                                                     Class="text-slate-500">
                                                     <i class="fa-solid fa-ellipsis-h text-xs"></i>
                                                 </AppButton>
-                                            </LumexDropdownTrigger>
-                                            <LumexDropdownMenu>
-                                                <LumexDropdownItem OnClick="@(() => OpenAddTaskListModal(project))">
+                                            </Trigger>
+                                            <Menu>
+                                                <AppDropdownItem OnClick="@(() => OpenAddTaskListModal(project))">
                                                     <span class="flex items-center gap-2">
                                                         <i class="fa-solid fa-plus w-4 text-xs"></i>
                                                         @DashboardLocalizer["AddTasksListModalForm_Title"]
                                                     </span>
-                                                </LumexDropdownItem>
-                                            </LumexDropdownMenu>
-                                        </LumexDropdown>
+                                                </AppDropdownItem>
+                                            </Menu>
+                                        </AppDropdown>
                                     </div>
 
                                     @if (isProjectExpanded)
@@ -138,8 +138,8 @@
                                                                 @GetTasksCountText(taskList)
                                                             </span>
                                                         </button>
-                                                        <LumexDropdown>
-                                                            <LumexDropdownTrigger>
+                                                        <AppDropdown Alignment="DropdownAlignment.Right">
+                                                            <Trigger>
                                                                 <AppButton
                                                                     IconOnly="true"
                                                                     Size="ComponentSize.Small"
@@ -147,25 +147,24 @@
                                                                     Class="text-slate-500">
                                                                     <i class="fa-solid fa-ellipsis-h text-xs"></i>
                                                                 </AppButton>
-                                                            </LumexDropdownTrigger>
-                                                            <LumexDropdownMenu>
-                                                                <LumexDropdownItem OnClick="@(() => OpenEditTaskList(taskList))">
+                                                            </Trigger>
+                                                            <Menu>
+                                                                <AppDropdownItem OnClick="@(() => OpenEditTaskList(taskList))">
                                                                     <span class="flex items-center gap-2">
                                                                         <i class="fa-solid fa-pen w-4 text-xs"></i>
                                                                         @DashboardLocalizer["TasksBlock_EditTaskList"]
                                                                     </span>
-                                                                </LumexDropdownItem>
-                                                                <LumexDropdownItem
-                                                                    Color="@ThemeColor.Danger"
-                                                                    Class="text-danger"
+                                                                </AppDropdownItem>
+                                                                <AppDropdownItem
+                                                                    Color="@ComponentColor.Danger"
                                                                     OnClick="@(() => OpenDeleteTaskListConfirmation(taskList))">
                                                                     <span class="flex items-center gap-2">
                                                                         <i class="fa-solid fa-trash w-4 text-xs"></i>
                                                                         @DashboardLocalizer["TasksBlock_DeleteTaskListTitle"]
                                                                     </span>
-                                                                </LumexDropdownItem>
-                                                            </LumexDropdownMenu>
-                                                        </LumexDropdown>
+                                                                </AppDropdownItem>
+                                                            </Menu>
+                                                        </AppDropdown>
                                                     </div>
                                                 }
                                             </div>

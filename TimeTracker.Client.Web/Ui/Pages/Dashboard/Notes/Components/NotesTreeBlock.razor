@@ -1,6 +1,6 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Notes
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Models
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
 
 @inherits BaseReactiveComponent
 
@@ -13,30 +13,30 @@
             </div>
             @if (IsEditingAllowed)
             {
-                <LumexDropdown>
-                <LumexDropdownTrigger>
-                    <AppButton
-                        IconOnly="true"
-                        Size="ComponentSize.Small"
-                        Variant="ButtonVariant.Outlined">
-                        <i class="fa-solid fa-ellipsis-h"></i>
-                    </AppButton>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu>
-                    <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-folder w-4 text-xs"></i>
-                            @DashboardLocalizer["NewFolder"]
-                        </span>
-                    </LumexDropdownItem>
-                    <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
-                            @DashboardLocalizer["NewNote"]
-                        </span>
-                    </LumexDropdownItem>
-                </LumexDropdownMenu>
-                </LumexDropdown>
+                <AppDropdown Alignment="DropdownAlignment.Right">
+                    <Trigger>
+                        <AppButton
+                            IconOnly="true"
+                            Size="ComponentSize.Small"
+                            Variant="ButtonVariant.Outlined">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </AppButton>
+                    </Trigger>
+                    <Menu>
+                        <AppDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-folder w-4 text-xs"></i>
+                                @DashboardLocalizer["NewFolder"]
+                            </span>
+                        </AppDropdownItem>
+                        <AppDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
+                                @DashboardLocalizer["NewNote"]
+                            </span>
+                        </AppDropdownItem>
+                    </Menu>
+                </AppDropdown>
             }
         </div>
     </div>
