@@ -1,7 +1,5 @@
 @page "/login"
 @page "/uk/login"
-@using LumexUI
-@using LumexUI.Common
 @using LumexUI.Shared.Icons
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
@@ -21,7 +19,7 @@
 @if (!CommonState.Value.IsInitialized)
 {
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-100" aria-busy="true">
-        <LumexSpinner Size="@Size.Large" />
+        <AppSpinner Size="ComponentSize.Large" />
     </div>
 }
 else

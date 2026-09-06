@@ -5,6 +5,15 @@
 @source "../../TimeTracker.Client.Core/**/*.razor";
 @source "../../TimeTracker.Client.Core/**/*.cs";
 
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 @layer components {
     /* Lumex popovers are portaled into the dialog; the dialog must not clip dropdowns that extend outside modal content. */
     dialog[data-slot="base"] {

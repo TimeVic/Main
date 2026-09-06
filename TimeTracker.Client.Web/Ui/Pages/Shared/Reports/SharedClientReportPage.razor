@@ -18,7 +18,7 @@
 @if (_isLoading)
 {
     <main class="flex min-h-screen items-center justify-center">
-        <LumexSpinner/>
+        <AppSpinner/>
     </main>
 }
 else if (_report == null)
@@ -139,7 +139,7 @@ else
                                             @if (IsTasksLoading(project.Id) && !GetProjectTasks(project.Id).Any())
                                             {
                                                 <div class="flex justify-center py-4">
-                                                    <LumexSpinner/>
+                                                    <AppSpinner/>
                                                 </div>
                                             }
                                             else

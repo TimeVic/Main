@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
 @inherits BaseReactiveComponent
@@ -28,7 +26,7 @@
                 OnClick="@OnSubmitForApproval">
                 @if (_isSubmitting)
                 {
-                    <LumexSpinner Size="Size.Small" Color="ThemeColor.Default" Class="mr-1.5" />
+                    <AppSpinner Size="ComponentSize.Small" Color="ComponentColor.Default" Class="mr-1.5" />
                 }
                 else if (IsOwner)
                 {

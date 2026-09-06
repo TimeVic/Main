@@ -1,5 +1,4 @@
 @page "/board/{WorkspaceId:guid}/workspace/choose-mode"
-@using LumexUI
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Shared.Components
@@ -66,7 +65,7 @@
                 class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-base font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50">
                 @if (_isLoading && _selectedMode == WorkspaceMode.Solo)
                 {
-                    <LumexSpinner Size="LumexUI.Common.Size.Small" />
+                    <AppSpinner Size="ComponentSize.Small" />
                 }
                 else
                 {
@@ -121,7 +120,7 @@
                 class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3.5 text-base font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50">
                 @if (_isLoading && _selectedMode == WorkspaceMode.Team)
                 {
-                    <LumexSpinner Size="LumexUI.Common.Size.Small" />
+                    <AppSpinner Size="ComponentSize.Small" />
                 }
                 else
                 {

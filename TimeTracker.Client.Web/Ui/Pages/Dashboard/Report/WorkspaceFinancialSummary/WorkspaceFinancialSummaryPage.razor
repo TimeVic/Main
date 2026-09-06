@@ -24,7 +24,7 @@
     @if (_state.Value.IsLoading)
     {
         <div class="flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
-            <LumexSpinner/>
+            <AppSpinner/>
         </div>
     }
     else if (_reportData == null || (_reportData.ClientBalances.Count == 0 && _reportData.MemberBalances.Count == 0))

@@ -2,7 +2,6 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadUserPaymentReport)]
 @using TimeTracker.Api.Shared.Constants
 @using Fluxor
-@using LumexUI.Common
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Store.Report
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
@@ -34,7 +33,7 @@
     @if (ReportsState.Value.IsLoading)
     {
         <div class="flex justify-center rounded-2xl border border-slate-200 bg-white py-12">
-            <LumexSpinner/>
+            <AppSpinner/>
         </div>
     }
     else if (_report == null || !_report.Clients.Any())

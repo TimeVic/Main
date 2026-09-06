@@ -12,7 +12,7 @@
     <AppCardBody Class="max-w-none p-4 text-slate-700">
         @if (IsLoading)
         {
-            <LumexSkeleton Class="h-[340px] w-full rounded-xl"/>
+            <AppSkeleton Class="h-[340px] w-full rounded-xl"/>
         }
         else if (string.IsNullOrWhiteSpace(MarkdownContent))
         {

@@ -4,7 +4,7 @@
     @if (IsLoading && !Items.Any())
     {
         <div class="flex justify-center py-6">
-            <LumexSpinner Size="@Size.Medium" />
+            <AppSpinner Size="ComponentSize.Medium" />
         </div>
     }
     else if (!Items.Any())

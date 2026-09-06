@@ -1,11 +1,10 @@
-@using LumexUI.Common
 @inherits BaseReactiveComponent
 
 <div id="tv-chat-container" class="flex-1 space-y-4 overflow-y-auto flex-grow bg-slate-50 px-4 py-5 sm:px-6">
     @if (State.Value.IsListLoading)
     {
         <div class="flex justify-center">
-            <LumexSpinner Variant="@SpinnerVariant.DotsFade" />
+            <AppSpinner Variant="SpinnerVariant.DotsFade" />
         </div>
     }
     @if (_messages.Any())
