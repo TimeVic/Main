@@ -19,12 +19,19 @@ public partial class MemberPaymentsPage
     [Inject]
     public ISecurityManager SecurityManager { get; set; }
 
-    private bool _isShowAddMemberPaymentModal = false;
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private Guid _memberFilterId = Guid.Empty;
     private bool CanManageOtherMemberPayments =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
     private bool CanCreatePayments => SecurityManager.HasPermission(WorkspacePermission.CreateMemberPayment);
+
+    private async Task OpenAddPaymentModal()
+    {
+        await _modalDialogService.ShowAddMemberPaymentModal();
+    }
 
     protected override void OnInitialized()
     {

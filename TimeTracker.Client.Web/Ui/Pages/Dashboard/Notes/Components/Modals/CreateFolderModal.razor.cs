@@ -1,15 +1,15 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components.Modals;
 
 public partial class CreateFolderModal
 {
-    [Parameter]
-    public bool IsOpened { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     [Parameter]
     public bool IsSaving { get; set; }
@@ -21,9 +21,6 @@ public partial class CreateFolderModal
     public NoteVisibility Visibility { get; set; } = NoteVisibility.Workspace;
 
     [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
-
-    [Parameter]
     public EventCallback<CreateNoteFolderRequest> OnSubmit { get; set; }
 
     private readonly CreateNoteFolderRequest _model = new()
@@ -32,16 +29,11 @@ public partial class CreateFolderModal
     };
 
     private EditForm _form = null!;
-    private LumexModal _modal = null!;
 
     protected override void OnParametersSet()
     {
         _model.ParentId = ParentId;
         _model.Visibility = Visibility;
-        if (!IsOpened)
-        {
-            ResetModel();
-        }
     }
 
     private Task SubmitForm(EditContext editContext)
@@ -57,23 +49,9 @@ public partial class CreateFolderModal
         }
 
         await OnSubmit.InvokeAsync(_model);
-    }
-
-    private void OnVisibilityChanged(NoteVisibility? visibility)
-    {
-        _model.Visibility = visibility ?? NoteVisibility.Workspace;
-    }
-
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
-    }
-
-    private void ResetModel()
-    {
-        _model.ParentId = ParentId;
-        _model.Title = string.Empty;
-        _model.Visibility = Visibility;
-        _model.SortOrder = null;
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok(_model));
+        }
     }
 }

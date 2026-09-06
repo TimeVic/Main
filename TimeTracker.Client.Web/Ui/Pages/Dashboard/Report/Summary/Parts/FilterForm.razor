@@ -1,18 +1,16 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Reports
 
 @inherits BaseReactiveComponent
 
-<LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
-    <LumexCardBody>
+<AppCard Class="border-slate-200 bg-slate-50/50 shadow-none">
+    <AppCardBody>
         <div class="@FilterGridClass">
             @if (!IsTeamSummary)
             {
                 <div>
-                <EnumDropDown
+                <EnumSelect
                     Label="@DashboardLocalizer["GroupBy"].Value"
                     TItem="SummaryReportType"
-                    DropDownColor="ThemeColor.Default"
                     AllowedValues="@(Enum.GetValues<SummaryReportType>())"
                     Value="@_filterState.ReportType"
                     ValueChanged="OnChangeReportType"/>
@@ -20,10 +18,9 @@
             }
 
             <div>
-                <EnumDropDown
+                <EnumSelect
                     Label="@DashboardLocalizer["Period"].Value"
                     TItem="SummaryReportPeriodType"
-                    DropDownColor="ThemeColor.Default"
                     Value="@_filterState.PeriodType"
                     ValueChanged="OnChangePeriodType"/>
             </div>
@@ -31,30 +28,26 @@
             @if (_filterState.PeriodType == SummaryReportPeriodType.Custom)
             {
                 <div>
-                    <LumexDatebox 
+                    <InputDateField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.StartDate"
-                        Variant="InputVariant.Outlined"
-                        LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateStart"
                         Label="@DashboardLocalizer["DateFrom"].Value"/>
                 </div>
 
                 <div>
-                    <LumexDatebox 
+                    <InputDateField 
                         TValue="DateTime?"
                         Required="true"
                         Value="@_filterState.EndDate"
-                        Variant="InputVariant.Outlined"
-                        LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateEnd"
                         Label="@DashboardLocalizer["DateTo"].Value"/>
                 </div>
             }
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>
 
 @code {
     [Parameter]

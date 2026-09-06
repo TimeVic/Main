@@ -1,0 +1,28 @@
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+@typeparam TItem where TItem: struct, IConvertible
+@inherits AppBaseSelect
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="TItem?"
+        IsMultiple="@IsMultiple"
+        Value="@Value"
+        ValueChanged="@OnSingleValueChanged"
+        Values="@InternalValues"
+        ValuesChanged="@OnMultipleValuesChanged"
+        Items="@_list"
+        ItemText="@GetLocalizedDisplayName"
+        ItemIcon="@GetItemIcon"
+        Label="@Label"
+        Placeholder="@LocalizedPlaceholder"
+        IsDisabled="@Disabled"
+        IsClearable="@(Clearable || AllowClear)"
+        IsFullWidth="@FullWidth"
+        Variant="@ResolvedVariant"
+        Color="@DropDownColor"
+        Size="@Size">
+    </AppSelect>
+</div>

@@ -1,93 +1,80 @@
-@using LumexUI.Common
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Large"
-    @ref="modal">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <i class="fa-regular fa-pen-to-square"></i>
+<AppModalHeader Class="flex items-center gap-3">
+    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+        <i class="fa-regular fa-pen-to-square"></i>
+    </div>
+    <div>
+        <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["EditClientPayment"]</h2>
+        <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["EditClientPaymentHelper"]</p>
+    </div>
+</AppModalHeader>
+<AppModalBody Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        novalidate>
+        <DataAnnotationsValidator/>
+
+        <div class="grid gap-x-4 gap-y-5 md:grid-cols-2">
+            <div>
+                <ClientsSelect
+                    Type="DropDownType.Select"
+                    Label="@DashboardLocalizer["Client"].Value"
+                    Value="model.ClientId"
+                    ValueExpression="() => model.ClientId"
+                    SelectedItemChanged="OnChangeClient"/>
+                <CustomValidationMessage For="@(() => model.ClientId)"/>
             </div>
             <div>
-                <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["EditClientPayment"]</h2>
-                <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["EditClientPaymentHelper"]</p>
+                <ProjectsSelect
+                    Type="DropDownType.Select"
+                    Label="@DashboardLocalizer["Project"].Value"
+                    ClientId="model.ClientId"
+                    Value="model.ProjectId"
+                    ValueExpression="() => model.ProjectId"
+                    SelectedItemChanged="OnProjectSelected"
+                    Disabled="@(model.ClientId == Guid.Empty)"/>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@model"
-                novalidate>
-                <DataAnnotationsValidator/>
+            <div>
+                <InputDateField
+                    Required="true"
+                    @bind-Value="@model.PaymentTime"
+                    Label="@DashboardLocalizer["PaymentDate"].Value"/>
+                <CustomValidationMessage For="@(() => model.PaymentTime)"/>
+            </div>
+            <div>
+                <InputNumericField
+                    TItem="decimal"
+                    Required="true"
+                    @bind-Value="@model.Amount"
+                    Label="@DashboardLocalizer["Amount"].Value"/>
+                <CustomValidationMessage For="@(() => model.Amount)"/>
+            </div>
+            <div class="md:col-span-2">
+                <InputTextareaField
+                    Size="ComponentSize.Small"
+                    Label="@DashboardLocalizer["PaymentNoteReference"].Value"
+                    Placeholder="@DashboardLocalizer["OptionalPaymentNoteReference"].Value"
+                    @bind-Value="model.Description"/>
+            </div>
+        </div>
 
-                <div class="grid gap-x-4 gap-y-5 md:grid-cols-2">
-                    <div>
-                        <ClientsDropDown
-                            Type="DropDownType.Select"
-                            Size="Size.Small"
-                            Label="@DashboardLocalizer["Client"].Value"
-                            Value="model.ClientId"
-                            ValueExpression="() => model.ClientId"
-                            SelectedItemChanged="OnChangeClient"/>
-                        <CustomValidationMessage For="@(() => model.ClientId)"/>
-                    </div>
-                    <div>
-                        <ProjectsDropDown
-                            Type="DropDownType.Select"
-                            Size="Size.Small"
-                            Label="@DashboardLocalizer["Project"].Value"
-                            ClientId="model.ClientId"
-                            Value="model.ProjectId"
-                            ValueExpression="() => model.ProjectId"
-                            SelectedItemChanged="OnProjectSelected"
-                            Disabled="@(model.ClientId == Guid.Empty)"/>
-                    </div>
-                    <div>
-                        <InputDateTimeField
-                            Size="Size.Small"
-                            Required="true"
-                            @bind-Value="@model.PaymentTime"
-                            Label="@DashboardLocalizer["PaymentDate"].Value"/>
-                        <CustomValidationMessage For="@(() => model.PaymentTime)"/>
-                    </div>
-                    <div>
-                        <InputNumericField
-                            TItem="decimal"
-                            Size="Size.Small"
-                            Required="true"
-                            @bind-Value="@model.Amount"
-                            Label="@DashboardLocalizer["Amount"].Value"/>
-                        <CustomValidationMessage For="@(() => model.Amount)"/>
-                    </div>
-                    <div class="md:col-span-2">
-                        <InputTextareaField
-                            Size="Size.Small"
-                            Label="@DashboardLocalizer["PaymentNoteReference"].Value"
-                            Placeholder="@DashboardLocalizer["OptionalPaymentNoteReference"].Value"
-                            @bind-Value="model.Description"/>
-                    </div>
-                </div>
-
-                <CustomValidationSummary/>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <CustomButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
-                <ChildContent>
-                    @DashboardLocalizer["Save"]
-                </ChildContent>
-            </CustomButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+        <CustomValidationSummary/>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        <ChildContent>
+            @DashboardLocalizer["Save"]
+        </ChildContent>
+    </AppButton>
+</AppModalFooter>

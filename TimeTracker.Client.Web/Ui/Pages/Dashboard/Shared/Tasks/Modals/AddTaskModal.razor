@@ -1,128 +1,110 @@
-@using LumexUI
-@using LumexUI.Common
-@using LumexUI.Shared.Icons
-
 @inherits BaseReactiveComponent
 
-<LumexModal 
-    Open="IsOpened" 
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Large"
-    @ref="modal">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <i class="fa-regular fa-rectangle-list"></i>
-            </div>
-            <div>
-                <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["AddTaskModal_Title"]</h3>
-                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["AddTaskModal_Description"]</p>
-            </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@model"
-                OnValidSubmit="@Submit"
-                novalidate>
-                <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
+<AppModalHeader Class="flex items-center gap-3">
+    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+        <i class="fa-regular fa-rectangle-list"></i>
+    </div>
+    <div>
+        <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["AddTaskModal_Title"]</h3>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["AddTaskModal_Description"]</p>
+    </div>
+</AppModalHeader>
+<AppModalBody Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        OnValidSubmit="@Submit"
+        novalidate>
+        <DataAnnotationsValidator/>
+        <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
 
-                <div class="flex flex-col gap-6">
-                    @if (TaskList != null || TaskListId.HasValue)
-                    {
-                        <div>
-                            <p class="text-xs text-slate-500">
-                                @DashboardLocalizer["AddTaskModal_TaskWillBeAddedTo"]
-                                <span class="font-semibold text-slate-700">@_selectedTaskList?.Name</span>
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <div>
-                            <TaskListsDropDown
-                                Label="@DashboardLocalizer["TasksListBlock_Title"].Value"
-                                Variant="InputVariant.Outlined"
-                                LabelPlacement="LabelPlacement.Outside"
-                                ProjectId="@ProjectId"
-                                Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
-                                Disabled="@_isLoading"
-                                Class="w-full"
-                                FullWidth="true"
-                                SelectedItemChanged="@OnTaskListSelected"/>
-                        </div>
-                    }
-                    
+        <div class="flex flex-col gap-6">
+            @if (TaskList != null || TaskListId.HasValue)
+            {
+                <div>
+                    <p class="text-xs text-slate-500">
+                        @DashboardLocalizer["AddTaskModal_TaskWillBeAddedTo"]
+                        <span class="font-semibold text-slate-700">@_selectedTaskList?.Name</span>
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <TaskListsSelect
+                        Label="@DashboardLocalizer["TasksListBlock_Title"].Value"
+                        ProjectId="@ProjectId"
+                        Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
+                        Disabled="@_isLoading"
+                        Class="w-full"
+                        FullWidth="true"
+                        SelectedItemChanged="@OnTaskListSelected"/>
+                </div>
+            }
+            
+            <div>
+                <InputTextField
+                    FullWidth="true"
+                    Label="@DashboardLocalizer["TaskName"].Value"
+                    Placeholder="@DashboardLocalizer["AddTaskModal_TaskTitlePlaceholder"].Value"
+                    @bind-Value="model.Title"/>
+            </div>
+
+            <div>
+                <button
+                    type="button"
+                    class="flex items-center gap-1.5 text-sm font-medium text-slate-500 transition hover:text-slate-800"
+                    @onclick="ToggleMoreOptions">
+                    <i class="@($"fa-solid fa-chevron-right text-xs transition-transform duration-200 {(_isShowMoreOptions ? "rotate-90 text-blue-600" : "text-slate-400")}")"></i>
+                    <span>@(_isShowMoreOptions ? DashboardLocalizer["TaskModal_FewerOptions"] : DashboardLocalizer["TaskModal_MoreOptions"])</span>
+                </button>
+            </div>
+
+            @if (_isShowMoreOptions)
+            {
+                <div class="flex flex-col gap-6 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 transition-all duration-300">
                     <div>
                         <InputTextField
                             FullWidth="true"
-                            Label="@DashboardLocalizer["TaskName"].Value"
-                            Placeholder="@DashboardLocalizer["AddTaskModal_TaskTitlePlaceholder"].Value"
-                            Variant="InputVariant.Outlined"
-                            @bind-Value="model.Title"/>
+                            Label="@DashboardLocalizer["ExternalTaskId"].Value"
+                            Placeholder="@DashboardLocalizer["AddTaskModal_ExternalTaskIdPlaceholder"].Value"
+                            @bind-Value="model.ExternalTaskId"/>
+                        <p class="mt-1.5 text-xs text-slate-500">@DashboardLocalizer["AddTaskModal_ExternalTaskHelp"]</p>
                     </div>
 
                     <div>
-                        <button
-                            type="button"
-                            class="flex items-center gap-1.5 text-sm font-medium text-slate-500 transition hover:text-slate-800"
-                            @onclick="ToggleMoreOptions">
-                            <i class="@($"fa-solid fa-chevron-right text-xs transition-transform duration-200 {(_isShowMoreOptions ? "rotate-90 text-blue-600" : "text-slate-400")}")"></i>
-                            <span>@(_isShowMoreOptions ? DashboardLocalizer["TaskModal_FewerOptions"] : DashboardLocalizer["TaskModal_MoreOptions"])</span>
-                        </button>
+                        <InputTextField
+                            FullWidth="true"
+                            Label="@DashboardLocalizer["Description"].Value"
+                            Placeholder="@DashboardLocalizer["TaskDescription"].Value"
+                            @bind-Value="model.Description"/>
                     </div>
 
-                    @if (_isShowMoreOptions)
-                    {
-                        <div class="flex flex-col gap-6 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 transition-all duration-300">
-                            <div>
-                                <InputTextField
-                                    FullWidth="true"
-                                    Label="@DashboardLocalizer["ExternalTaskId"].Value"
-                                    Placeholder="@DashboardLocalizer["AddTaskModal_ExternalTaskIdPlaceholder"].Value"
-                                    Variant="InputVariant.Outlined"
-                                    @bind-Value="model.ExternalTaskId"/>
-                                <p class="mt-1.5 text-xs text-slate-500">@DashboardLocalizer["AddTaskModal_ExternalTaskHelp"]</p>
-                            </div>
-
-                            <div>
-                                <InputTextField
-                                    FullWidth="true"
-                                    Label="@DashboardLocalizer["Description"].Value"
-                                    Placeholder="@DashboardLocalizer["TaskDescription"].Value"
-                                    Variant="InputVariant.Outlined"
-                                    @bind-Value="model.Description"/>
-                            </div>
-
-                            <div class="max-w-xs">
-                                <DurationInput
-                                    Label="@DashboardLocalizer["OriginalEstimate"].Value"
-                                    Placeholder="1h 30m"
-                                    FullWidth="true"
-                                    Size="Size.Medium"
-                                    @bind-Value="model.OriginalEstimate"/>
-                            </div>
-                        </div>
-                    }
-
-                    <div class="mb-2 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
-                        <div class="font-semibold">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequired"]</div>
-                        <p class="mt-1 text-blue-800">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequiredDescription"]</p>
+                    <div class="max-w-xs">
+                        <DurationInput
+                            Label="@DashboardLocalizer["OriginalEstimate"].Value"
+                            Placeholder="1h 30m"
+                            FullWidth="true"
+                            @bind-Value="model.OriginalEstimate"/>
                     </div>
                 </div>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <CustomButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                Disabled="_isLoading"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
-                @DashboardLocalizer["Add"]
-            </CustomButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+            }
+
+            <div class="mb-2 rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+                <div class="font-semibold">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequired"]</div>
+                <p class="mt-1 text-blue-800">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequiredDescription"]</p>
+            </div>
+        </div>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        Disabled="_isLoading"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        @DashboardLocalizer["Add"]
+    </AppButton>
+</AppModalFooter>

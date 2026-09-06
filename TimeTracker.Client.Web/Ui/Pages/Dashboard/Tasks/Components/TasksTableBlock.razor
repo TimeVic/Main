@@ -3,7 +3,8 @@
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Client.Core.Constants.Ui
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 
@@ -27,45 +28,44 @@
         </div>
     </div>
 
-    <UpdateTaskModal @bind-IsOpened="_isTaskEditorOpened" Task="_taskToUpdate" OnClose="@(() => _taskToUpdate = null)" />
-
     <div class="@TableContentClass">
         @if (Tasks.Any())
         {
             <div class="flex items-center justify-between border-t border-slate-200/60 bg-slate-50/70 px-3 py-1.5">
                 <div class="flex items-center gap-2">
-                    <LumexCheckbox
+                    <AppCheckbox
                         Class="text-xs"
+                        Size="ComponentSize.Small"
                         Value="_selectedTaskIds.Count == Tasks.Count"
                         ValueChanged="SelectAllTasks">
                         <span class="text-xs font-medium text-slate-600">
                             @string.Format(DashboardLocalizer["TasksTableBlock_SelectedOfTasks"].Value, _selectedTaskIds.Count, Tasks.Count)
                         </span>
-                    </LumexCheckbox>
+                    </AppCheckbox>
                 </div>
                 @if (_selectedTaskIds.Any())
                 {
                     <div class="flex items-center gap-1.5">
-                        <CustomButton
-                            Color="ThemeColor.Warning"
-                            Variant="Variant.Light"
-                            Size="Size.Small"
+                        <AppButton
+                            Color="ComponentColor.Warning"
+                            Variant="ButtonVariant.Light"
+                            Size="ComponentSize.Small"
                             OnClick="@(() => OnSetArchivedSelectedTasks(true))">
                             <StartContent>
                                 <i class="fa-solid fa-box-archive text-xs"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Archive"]</ChildContent>
-                        </CustomButton>
-                        <CustomButton
-                            Color="ThemeColor.Success"
-                            Variant="Variant.Light"
-                            Size="Size.Small"
+                        </AppButton>
+                        <AppButton
+                            Color="ComponentColor.Success"
+                            Variant="ButtonVariant.Light"
+                            Size="ComponentSize.Small"
                             OnClick="@(() => OnSetArchivedSelectedTasks(false))">
                             <StartContent>
                                 <i class="fa-solid fa-rotate-left text-xs"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Restore"]</ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 }
             </div>
@@ -80,7 +80,7 @@
             <col class="hidden lg:table-column lg:w-28" />
             <col class="hidden lg:table-column lg:w-24" />
             <col class="hidden lg:table-column lg:w-36" />
-            <col class="w-20" />
+            <col class="w-24" />
         </colgroup>
         <thead class="bg-slate-50/80 sticky top-0 z-10">
             <tr class="text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
@@ -117,7 +117,8 @@
                         @ondragend="@OnDragEnd">
                         <td class="@GetCellBorderClass(task) px-3 py-2 align-top">
                             <div class="flex flex-col items-center">
-                                <LumexCheckbox
+                                <AppCheckbox
+                                    Size="ComponentSize.Small"
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
@@ -156,29 +157,30 @@
                                     <div class="flex flex-wrap items-center gap-1.5 lg:hidden" @onclick:stopPropagation="true">
                                         @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                                         {
-                                            <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@task.ExtendedStatus.GetThemeColor()">
+                                            <AppBadge
+                                                Size="ComponentSize.Small"
+                                                Variant="BadgeVariant.Flat"
+                                                Color="@task.ExtendedStatus.GetComponentColor()">
                                                 @DashboardLocalizer["TaskStatus_InProgress"]
-                                            </LumexChip>
+                                            </AppBadge>
                                         }
                                         else
                                         {
-                                            <EnumDropDown
+                                            <EnumSelect
                                                 TItem="TaskStatus"
                                                 Class="shrink-0"
-                                                DropDownColor="@task.Status.GetThemeColor()"
-                                                DropDownVariant="Variant.Light"
+                                                DropDownColor="@task.Status.GetSelectColor()"
                                                 SelectType="DropDownType.DropDown"
-                                                Size="Size.Small"
+                                                Size="ComponentSize.Small"
                                                 Value="@task.Status"
                                                 ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                                         }
-                                        <EnumDropDown
+                                        <EnumSelect
                                             TItem="TaskPriority"
                                             Class="shrink-0"
-                                            DropDownColor="@task.Priority.GetThemeColor()"
-                                            DropDownVariant="Variant.Light"
+                                            DropDownColor="@task.Priority.GetSelectColor()"
                                             SelectType="DropDownType.DropDown"
-                                            Size="Size.Small"
+                                            Size="ComponentSize.Small"
                                             Value="@task.Priority"
                                             ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                                         <UserAvatarBlock
@@ -192,31 +194,32 @@
                         <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
                             @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                             {
-                                <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@task.ExtendedStatus.GetThemeColor()">
+                                <AppBadge
+                                    Size="ComponentSize.Small"
+                                    Variant="BadgeVariant.Flat"
+                                    Color="@task.ExtendedStatus.GetComponentColor()">
                                     @DashboardLocalizer["TaskStatus_InProgress"]
-                                </LumexChip>
+                                </AppBadge>
                             }
                             else
                             {
-                                <EnumDropDown
+                                <EnumSelect
                                     TItem="TaskStatus"
                                     Class="whitespace-nowrap"
-                                    DropDownColor="@task.Status.GetThemeColor()"
-                                    DropDownVariant="Variant.Light"
+                                    DropDownColor="@task.Status.GetSelectColor()"
                                     SelectType="DropDownType.DropDown"
-                                    Size="Size.Small"
+                                    Size="ComponentSize.Small"
                                     Value="@task.Status"
                                     ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                             }
                         </td>
                         <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
-                            <EnumDropDown
+                            <EnumSelect
                                 TItem="TaskPriority"
                                 Class="whitespace-nowrap"
-                                DropDownColor="@task.Priority.GetThemeColor()"
-                                DropDownVariant="Variant.Light"
+                                DropDownColor="@task.Priority.GetSelectColor()"
                                 SelectType="DropDownType.DropDown"
-                                Size="Size.Small"
+                                Size="ComponentSize.Small"
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
@@ -231,26 +234,26 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right">
-                            <div class="flex items-center justify-end gap-1">
+                        <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-1 shrink-0">
                                 <TaskTimeTrackerButton Task="@task" />
-                                <LumexDropdown>
-                                    <LumexDropdownTrigger>
-                                        <LumexButton
+                                <AppDropdown Alignment="DropdownAlignment.Right">
+                                    <Trigger>
+                                        <AppButton
                                             IconOnly="true"
-                                            Size="Size.Small"
-                                            Variant="@Variant.Outlined">
+                                            Size="ComponentSize.Small"
+                                            Variant="ButtonVariant.Outlined">
                                             <i class="fa-solid fa-ellipsis-h"></i>
-                                        </LumexButton>
-                                    </LumexDropdownTrigger>
-                                    <LumexDropdownMenu>
-                                        <LumexDropdownItem
-                                            Color="@ThemeColor.Warning"
+                                        </AppButton>
+                                    </Trigger>
+                                    <Menu>
+                                        <AppDropdownItem
+                                            Color="@ComponentColor.Warning"
                                             OnClick="@(() => OnArchiveTask(task))">
                                             @DashboardLocalizer["TasksTableBlock_ArchiveThisTask"]
-                                        </LumexDropdownItem>
-                                    </LumexDropdownMenu>
-                                </LumexDropdown>
+                                        </AppDropdownItem>
+                                    </Menu>
+                                </AppDropdown>
                             </div>
                         </td>
                     </tr>

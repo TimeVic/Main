@@ -1,4 +1,3 @@
-﻿@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
@@ -6,31 +5,6 @@
 @inherits BaseReactiveComponent
 
 <div class="w-time-form @(IsShort ? "w-time-form--short" : "") @Class">
-    @if (_isEditModalOpened)
-    {
-        <EditTimeEntryModal 
-            Entry="_activeEntry"
-            OnClose="@(() => _isEditModalOpened = false)"/>
-    }
-
-    @if (_isAddTaskModalOpened && _activeEntry?.Project != null)
-    {
-        <AddTaskModal
-            ProjectId="_activeEntry.Project.Id"
-            TimeEntryId="_activeEntry.Id"
-            IsOpened="_isAddTaskModalOpened"
-            IsOpenedChanged="@((isOpened) => _isAddTaskModalOpened = isOpened)"
-            OnAdded="@OnTaskAdded"/>
-    }
-
-    @if (_activeEntry?.Task != null)
-    {
-        <UpdateTaskModal
-            Task="_activeEntry.Task"
-            @bind-IsOpened="_isUpdateTaskModalOpened"
-            OnClose="@(() => _isUpdateTaskModalOpened = false)"/>
-    }
-
     @{
         var shellClass = IsShort
             ? "w-time-form__shell w-full"
@@ -78,7 +52,7 @@
                 {
                     <button
                         type="button"
-                        @onclick="@(() => _isUpdateTaskModalOpened = true)"
+                        @onclick="@OpenTaskDetailsModal"
                         class="w-time-form__task-chip inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-800 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">
                         <i class="fa-regular fa-square-check text-blue-600"></i>
                         <span>@_activeEntry.Task.FormattedId</span>
@@ -89,7 +63,7 @@
                     <div class="w-time-form__project-control flex items-center gap-2">
                         <div class="@projectSelectClass @(!_hasActiveEntry ? "cursor-pointer" : "")" @onclick="@OnProjectAreaClick">
                             <div class="@(!_hasActiveEntry ? "pointer-events-none" : "")">
-                                <ProjectsDropDown
+                                <ProjectsSelect
                                     Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
                                     Disabled="@(!_hasActiveEntry)"
                                     Clearable="true"
@@ -106,12 +80,12 @@
                         @if (_activeEntry?.Task == null && _activeEntry?.Project != null)
                         {
                             <div class="w-time-form__add-task-control">
-                                <CustomButton
+                                <AppButton
                                     OnClick="@OpenAddTaskModal"
                                     Class="w-time-form__wide-button"
-                                    Variant="Variant.Outlined"
-                                    Size="Size.Medium"
-                                    Color="ThemeColor.Info"
+                                    Variant="ButtonVariant.Outlined"
+                                    Size="ComponentSize.Medium"
+                                    Color="ComponentColor.Info"
                                     Disabled="@(!_hasActiveEntry)">
                                     <StartContent>
                                         <i class="fa-solid fa-plus"></i>
@@ -119,7 +93,7 @@
                                     <ChildContent>
                                         <span class="w-time-form__responsive-label hidden sm:inline">@DashboardLocalizer["Task"]</span>
                                     </ChildContent>
-                                </CustomButton>
+                                </AppButton>
                             </div>
                         }
 
@@ -141,11 +115,11 @@
                     </div>
 
                     <div class="w-time-form__control w-time-form__timer-button">
-                        <CustomButton
+                        <AppButton
                             OnClick="@(() => ToggleTimeEntry())"
                             Class="w-time-form__wide-button"
-                            Variant="Variant.Solid"
-                            Color="@(_hasActiveEntry ? ThemeColor.Default : ThemeColor.Primary)"
+                            Variant="ButtonVariant.Solid"
+                            Color="@(_hasActiveEntry ? ComponentColor.Default : ComponentColor.Primary)"
                             Disabled="@_state.Value.IsTimeEntryProcessing">
                             <StartContent>
                                 <i class="fa-solid @(_hasActiveEntry ? "fa-stop" : "fa-play")"></i>
@@ -153,24 +127,24 @@
                             <ChildContent>
                                 <span class="w-time-form__responsive-label hidden sm:inline">@(_hasActiveEntry ? DashboardLocalizer["Stop"] : DashboardLocalizer["Start"])</span>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
 
                     @if (_activeEntry != null)
                     {
                         <div class="w-time-form__control w-time-form__timer-button">
-                            <CustomButton
-                                OnClick="@(() => _isEditModalOpened = true)"
+                            <AppButton
+                                OnClick="@OpenEditModal"
                                 Class="w-time-form__wide-button"
-                                Variant="Variant.Outlined"
-                                Size="Size.Medium"
-                                Radius="Radius.Full"
+                                Variant="ButtonVariant.Outlined"
+                                Size="ComponentSize.Medium"
+                                Radius="ButtonRadius.Full"
                                 IconOnly="true"
-                                Color="ThemeColor.Default">
+                                Color="ComponentColor.Default">
                                 <StartContent>
                                     <i class="fa-solid fa-pencil"></i>
                                 </StartContent>
-                            </CustomButton>
+                            </AppButton>
                         </div>
                     }
                 </div>

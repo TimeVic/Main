@@ -1,5 +1,4 @@
 @page "/error/403"
-@using LumexUI.Common
 
 <main class="min-h-screen bg-slate-50">
     <section class="flex min-h-screen items-center justify-center px-4 py-10">
@@ -16,9 +15,9 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <CustomButton
-                        Color="ThemeColor.Primary"
-                        Variant="Variant.Solid"
+                    <AppButton
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Solid"
                         OnClick="@GoToDashboard">
                         <StartContent>
                             <i class="fa-regular fa-clock"></i>
@@ -26,7 +25,7 @@
                         <ChildContent>
                             Open dashboard
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </div>
         </div>

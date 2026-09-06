@@ -1,91 +1,111 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts
 
 @inherits BaseReactiveComponent
 
-<AddMemberModal
-    IsOpened="_isAddMemberModalOpened"
-    IsOpenedChanged="isOpened => _isAddMemberModalOpened = isOpened"/>
-
-@if (_memberToUpdate != null)
-{
-    <UpdateMemberModal
-        Member="_memberToUpdate"
-        IsOpened="_memberToUpdate != null"
-        IsOpenedChanged="isOpened => { _memberToUpdate = isOpened ? _memberToUpdate : null; }"/>
-}
-
-<section class="space-y-6">
-    <LumexCard>
-        <LumexCardBody>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+<section
+    class="space-y-6">
+    <AppCard>
+        <AppCardBody>
+            <div
+                class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Members"]</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["MembersBlock_WorkspaceMembersTitle"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["MembersBlock_Description"]</p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">
+                        @DashboardLocalizer["Members"]
+                    </p>
+                    <h2
+                        class="mt-2 text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["MembersBlock_WorkspaceMembersTitle"]
+                    </h2>
+                    <p
+                        class="mt-1 text-sm text-slate-600">
+                        @DashboardLocalizer["MembersBlock_Description"]
+                    </p>
                 </div>
-                <CustomButton
-                    Size="Size.Small"
+                <AppButton
+                    Size="ComponentSize.Small"
                     OnClick="@OnAdd"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i
+                            class="fa-solid fa-user-plus">
+                        </i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["MembersBlock_InviteMember"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 
-    <LumexDataGrid
-        Data="@_state.Value.List.AsQueryable()"
-        Radius="@Radius.Medium"
+    <AppTable
+        TGridItem="WorkspaceMemberDto"
+        Items="@_state.Value.List.AsQueryable()"
         Class="mt-3">
-        <LumexUI.PropertyColumn
+        Items="@_state.Value.List.AsQueryable()">
+        <AppPropertyColumn
+            TGridItem="WorkspaceMemberDto"
+            TProp="string"
             Title="@DashboardLocalizer["Name"].Value"
-            Property="@(p => p.User.Name)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.User.Name)"
+            Sortable="true" />
+        <AppPropertyColumn
+            TGridItem="WorkspaceMemberDto"
+            TProp="string"
             Title="@DashboardLocalizer["Login"].Value"
-            Property="@(p => p.User.FormattedLogin)"/>
-        <LumexUI.PropertyColumn
-            Title="@DashboardLocalizer["MembersBlock_Access"].Value"
-            Property="@(p => p.Access.ToString())"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.User.FormattedLogin)"
+            Sortable="true" />
+        <AppTableColumn
+            TGridItem="WorkspaceMemberDto"
+            Title="@DashboardLocalizer["MembersBlock_Access"].Value">
+            <AppBadge
+                Size="ComponentSize.Small"
+                Variant="BadgeVariant.Flat"
+                Color="@GetAccessBadgeColor(context.Access)">
+                @context.Access.ToString()
+            </AppBadge>
+        </AppTableColumn>
+        <AppTableColumn
+            TGridItem="WorkspaceMemberDto"
             Title="@DashboardLocalizer["Actions"].Value"
-            Property="@(p => p.Id)">
-            <Content>
-                @if (context.Access != MembershipAccessType.Owner)
-                {
-                    <div class="flex gap-1">
-                        <CustomButton
-                            Class="inline-flex rounded-full"
-                            OnClick="@(() => OnEdit(context))"
-                            Size="Size.Small"
-                            Color="ThemeColor.Primary"
-                            Variant="Variant.Light"
-                            IconOnly="true">
-                            <ChildContent>
-                                <i class="fa-regular fa-pen-to-square"></i>
-                            </ChildContent>
-                        </CustomButton>
-                        <CustomButton
-                            Class="inline-flex rounded-full"
-                            OnClick="@(() => OnDelete(context))"
-                            Size="Size.Small"
-                            Color="ThemeColor.Danger"
-                            Variant="Variant.Light"
-                            IconOnly="true">
-                            <ChildContent>
-                                <i class="fa-regular fa-trash-can"></i>
-                            </ChildContent>
-                        </CustomButton>
-                    </div>
-                }
-            </Content>
-        </LumexUI.PropertyColumn>
-    </LumexDataGrid>
+            Align="Align.End">
+            @if (context.Access != MembershipAccessType.Owner)
+            {
+                <div
+                    class="flex items-center justify-end gap-1">
+                    <AppButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnEdit(context))"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i
+                                class="fa-regular fa-pen-to-square">
+                            </i>
+                        </ChildContent>
+                    </AppButton>
+                    <AppButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnDelete(context))"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Danger"
+                        Variant="ButtonVariant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i
+                                class="fa-regular fa-trash-can">
+                            </i>
+                        </ChildContent>
+                    </AppButton>
+                </div>
+            }
+        </AppTableColumn>
+    </AppTable>
 </section>

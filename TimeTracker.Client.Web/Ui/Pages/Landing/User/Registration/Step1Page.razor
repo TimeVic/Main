@@ -2,8 +2,6 @@
 @page "/uk/signup"
 @page "/registration/step1"
 @page "/uk/registration/step1"
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Landing.User.Registration.Shared
 @using TimeTracker.Client.Web.Ui.Pages.Landing.User.Shared
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form
@@ -55,13 +53,13 @@
             @*     @statusMessage *@
             @* </div> *@
             
-            <CustomButton
-                Color="@ThemeColor.Warning"
+            <AppButton
+                Color="@ComponentColor.Warning"
                 Class="w-full gap-2 rounded-2xl bg-emerald-600 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
                 IsLoading="_isLoading"
                 OnClick="@Submit">
                 @Localizer["Content_SendVerificationEmail"]
-            </CustomButton>
+            </AppButton>
         </EditForm>
 
         <SocialLoginButtonsBlock Class="mt-6" />

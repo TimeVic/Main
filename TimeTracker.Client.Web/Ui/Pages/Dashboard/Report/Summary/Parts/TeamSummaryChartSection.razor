@@ -2,8 +2,8 @@
 @using TimeTracker.Api.Shared.Dto.Model.Report.TeamSummary
 @using TimeTracker.Client.Web.Ui.Shared.Components
 
-<LumexCard Class="mt-10">
-    <LumexCardHeader>
+<AppCard Class="mt-10">
+    <AppCardHeader>
         <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SummarySectionHeader
                 Title="@string.Format(DashboardLocalizer["SummaryBy"].Value, PeriodLabel)"/>
@@ -12,8 +12,8 @@
                 <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700"><span class="h-2.5 w-2.5 rounded-full bg-slate-500"></span>@DashboardLocalizer["TeamLaborCost"]</span>
             </div>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         @if (Items.Any())
         {
             <div class="mt-2 overflow-x-auto pb-2">
@@ -40,5 +40,5 @@
         {
             <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">@DashboardLocalizer["NoTeamActivitySelectedPeriod"]</div>
         }
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

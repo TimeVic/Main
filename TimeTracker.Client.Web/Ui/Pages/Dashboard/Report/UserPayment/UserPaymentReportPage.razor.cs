@@ -1,16 +1,18 @@
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Api.Shared.Dto.Model.Report.UserPaymentReport;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Report;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.UserPayment;
 
 public partial class UserPaymentReportPage
 {
+    [Inject] private IModalDialogProviderService _modalDialogService { get; set; } = default!;
+
     private readonly HashSet<Guid> _expandedClientIds = [];
-    private Guid _sharingClientId;
-    private string _sharingClientName = string.Empty;
-    private bool _isShareModalOpened;
 
     private UserPaymentReportResponse? _report => ReportsState.Value.UserPaymentReportData;
 
@@ -49,15 +51,7 @@ public partial class UserPaymentReportPage
 
     private void OpenShareModal(UserPaymentReportClientDto client)
     {
-        _sharingClientId = client.Id;
-        _sharingClientName = client.Name;
-        _isShareModalOpened = true;
-    }
-
-    private Task OnShareModalOpenedChanged(bool isOpened)
-    {
-        _isShareModalOpened = isOpened;
-        return Task.CompletedTask;
+        _modalDialogService.ShowClientShareReportModal(client.Id, client.Name);
     }
 
     private string GetClientPaymentsUrl(Guid clientId)
@@ -118,16 +112,24 @@ public partial class UserPaymentReportPage
         return DashboardLocalizer["UserPaymentReport_FullySettled"].Value;
     }
 
-    private static string GetStatusBadgeClass(decimal outstanding)
+    private static ComponentColor GetStatusColor(decimal outstanding)
     {
-        return outstanding > 0
-            ? "bg-red-50 text-red-700 border border-red-200/80"
-            : "bg-emerald-50 text-emerald-700 border border-emerald-200/80";
+        return outstanding > 0 ? ComponentColor.Danger : ComponentColor.Success;
     }
 
-    private static string GetStatusDotClass(decimal outstanding)
+    private static ComponentColor GetOutstandingBadgeColor(decimal outstanding)
     {
-        return outstanding > 0 ? "bg-red-500" : "bg-emerald-500";
+        if (outstanding > 0)
+        {
+            return ComponentColor.Danger;
+        }
+
+        if (outstanding < 0)
+        {
+            return ComponentColor.Warning;
+        }
+
+        return ComponentColor.Success;
     }
 
     private static string GetOutstandingTextClass(decimal outstanding)

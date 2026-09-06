@@ -48,6 +48,8 @@ public partial class NotesTreeNodeBlock
 
     private bool IsExpanded => ExpandedNodeIds.Contains(TreeNode.Node.Id);
 
+    private bool IsSelected => SelectedNoteId == TreeNode.Node.Id;
+
     private string IconClass => IsFolder
         ? "fa-regular fa-folder text-amber-500"
         : "fa-regular fa-note-sticky text-slate-500";

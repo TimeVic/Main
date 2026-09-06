@@ -1,34 +1,30 @@
-using LumexUI;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class AddProjectModal
 {
-    [Parameter]
-    public required bool IsOpened { get; set; }
-
-    [Parameter]
-    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
     
     [Parameter]
     public Guid? InitialClientId { get; set; }
 
     [Inject]
-    public IState<ProjectState> _state { get; set; }
+    public IState<ProjectState> _state { get; set; } = default!;
 
     private AddRequest model = new();
-    private EditForm _form;
-    private LumexModal modal;
+    private EditForm _form = default!;
     
     protected override void OnParametersSet()
     {
-        if (IsOpened && InitialClientId.HasValue && model.ClientId == Guid.Empty)
+        if (InitialClientId.HasValue && model.ClientId == Guid.Empty)
         {
             model.ClientId = InitialClientId.Value;
         }
@@ -49,15 +45,12 @@ public partial class AddProjectModal
         }
 
         Dispatcher.Dispatch(new AddAction(model));
-        await OnCloseModal();
-        StateHasChanged();
-    }
-
-    private async Task OnCloseModal()
-    {
         model = new AddRequest();
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+        }
+        StateHasChanged();
     }
 
     private void OnClientChanged(ClientDto? client)

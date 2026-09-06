@@ -1,14 +1,14 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Approval;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Approvals.Components;
 
 public partial class RejectReasonModal
 {
-    [Parameter]
-    public bool IsOpened { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     [Parameter]
     public EventCallback<string> OnConfirm { get; set; }
@@ -16,22 +16,16 @@ public partial class RejectReasonModal
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
-    private LumexModal? _modal;
     private EditForm? _editForm;
     private RejectRequest _model = new();
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        if (IsOpened)
-        {
-            _model = new RejectRequest();
-        }
-    }
 
     private async Task OnCancelClicked()
     {
         await OnCancel.InvokeAsync();
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Cancel());
+        }
     }
 
     private Task Submit()
@@ -51,6 +45,11 @@ public partial class RejectReasonModal
             return;
         }
 
-        await OnConfirm.InvokeAsync(_model.Reason.Trim());
+        var reason = _model.Reason.Trim();
+        await OnConfirm.InvokeAsync(reason);
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok(reason));
+        }
     }
 }

@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using Microsoft.AspNetCore.Components.Forms
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.TimeEntry
 @using TimeTracker.Business.Common.Constants.Import
@@ -38,8 +36,8 @@
 
     @if (_importResult != null)
     {
-        <LumexCard>
-            <LumexCardBody Class="p-6">
+        <AppCard>
+            <AppCardBody Class="p-6">
                 <div class="flex flex-col items-center justify-center text-center">
                     <div class="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                         <i class="fa-solid fa-check text-2xl" aria-hidden="true"></i>
@@ -55,28 +53,27 @@
                         )
                     </p>
                     <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-                        <LumexLink
-                            Href="@UrlService.GetDashboardUrl("time-entry")"
-                            Class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
-                            Underline="@Underline.None">
+                        <a
+                            href="@UrlService.GetDashboardUrl("time-entry")"
+                            class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors">
                             <i class="fa-regular fa-clock" aria-hidden="true"></i>
                             <span>@DashboardLocalizer["WorkspaceSettings_Import_ViewEntries"]</span>
-                        </LumexLink>
-                        <CustomButton
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Outlined"
+                        </a>
+                        <AppButton
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Outlined"
                             OnClick="@OnResetImport">
                             @DashboardLocalizer["WorkspaceSettings_Import_SelectAnotherFile"]
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 </div>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
     else
     {
-        <LumexCard>
-            <LumexCardHeader Class="p-6 pb-0">
+        <AppCard>
+            <AppCardHeader Class="p-6 pb-0">
                 <div>
                     <h3 class="text-base font-semibold text-slate-900">
                         @DashboardLocalizer["WorkspaceSettings_Import_Title"]
@@ -85,37 +82,19 @@
                         @DashboardLocalizer["WorkspaceSettings_Import_Description"]
                     </p>
                 </div>
-            </LumexCardHeader>
-            <LumexCardBody Class="space-y-6 p-6">
+            </AppCardHeader>
+            <AppCardBody Class="space-y-6 p-6">
                 <div class="grid gap-6 md:grid-cols-2">
                     <div>
-                        <LumexSelect
-                            TValue="TimeEntryImportSourceType"
+                        <EnumSelect
+                            TItem="TimeEntryImportSourceType"
                             Label="@DashboardLocalizer["WorkspaceSettings_Import_Source"].Value"
-                            LabelPlacement="@LabelPlacement.Outside"
-                            Variant="InputVariant.Outlined"
-                            @bind-Value="_selectedSource">
-                            <LumexSelectItem
-                                Value="@TimeEntryImportSourceType.Clockify"
-                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"].Value">
-                                <span class="inline-flex items-center gap-2">
-                                    <i class="fa-solid fa-clock text-blue-500" aria-hidden="true"></i>
-                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"]</span>
-                                </span>
-                            </LumexSelectItem>
-                            <LumexSelectItem
-                                Value="@TimeEntryImportSourceType.Toggl"
-                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"].Value">
-                                <span class="inline-flex items-center gap-2">
-                                    <i class="fa-solid fa-hourglass-half text-rose-500" aria-hidden="true"></i>
-                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"]</span>
-                                </span>
-                            </LumexSelectItem>
-                        </LumexSelect>
+                            ItemIcon="@GetSourceIcon"
+                            @bind-Value="_selectedSource" />
                     </div>
 
                     <div>
-                        <LumexTextbox
+                        <InputTextField
                             @bind-Value="_hourlyRateString"
                             Label="@DashboardLocalizer["WorkspaceSettings_Import_HourlyRate"].Value"
                             Placeholder="0.00"
@@ -128,7 +107,7 @@
 
                 <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
                     <div class="flex items-start gap-3">
-                        <LumexCheckbox
+                        <AppCheckbox
                             @bind-Value="_isBillable" />
                         <div class="pt-0.5">
                             <p class="text-sm font-medium text-slate-800">
@@ -152,9 +131,9 @@
                 </div>
 
                 <div class="flex justify-end border-t border-slate-100 pt-5">
-                    <CustomButton
-                        Color="ThemeColor.Primary"
-                        Variant="Variant.Solid"
+                    <AppButton
+                        Color="ComponentColor.Primary"
+                        Variant="ButtonVariant.Solid"
                         IsLoading="@_isImporting"
                         Disabled="@(_selectedFile == null || _isImporting)"
                         OnClick="@OnImportClick">
@@ -164,9 +143,9 @@
                         <ChildContent>
                             @DashboardLocalizer["WorkspaceSettings_Import_Button"]
                         </ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
 </div>

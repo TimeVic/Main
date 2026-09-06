@@ -32,6 +32,9 @@ public partial class NotesPage
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
 
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService ModalDialogService { get; set; } = null!;
+
     [Parameter]
     [SupplyParameterFromQuery(Name = "noteId")]
     public Guid? InitialNoteId { get; set; }
@@ -64,12 +67,6 @@ public partial class NotesPage
         || State.ActiveMode == NoteVisibility.Private
         || AuthState.Value.Workspace?.Mode == WorkspaceMode.Team
         || SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
-
-    private NoteVisibility ActiveModalVisibility => IsSoloWorkspace
-        ? NoteVisibility.Private
-        : (State.ActiveParentId.HasValue
-            ? State.FlatNodes.FirstOrDefault(item => item.Id == State.ActiveParentId.Value)?.Visibility ?? State.ActiveMode
-            : State.ActiveMode);
 
     private Task SetMode(NoteVisibility mode)
     {
@@ -191,16 +188,34 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
-    private Task OpenCreateFolderModal(Guid? parentId)
+    private async Task OpenCreateFolderModal(Guid? parentId)
     {
-        Dispatcher.Dispatch(new OpenCreateNoteFolderModalAction(parentId));
-        return Task.CompletedTask;
+        var visibility = IsSoloWorkspace
+            ? NoteVisibility.Private
+            : (parentId.HasValue
+                ? State.FlatNodes.FirstOrDefault(item => item.Id == parentId.Value)?.Visibility ?? State.ActiveMode
+                : State.ActiveMode);
+
+        await ModalDialogService.ShowCreateFolderModal(
+            parentId: parentId,
+            visibility: visibility,
+            onSubmit: EventCallback.Factory.Create<CreateNoteFolderRequest>(this, CreateFolder)
+        );
     }
 
-    private Task OpenCreateNoteModal(Guid? parentId)
+    private async Task OpenCreateNoteModal(Guid? parentId)
     {
-        Dispatcher.Dispatch(new OpenCreateNoteDocumentModalAction(parentId));
-        return Task.CompletedTask;
+        var visibility = IsSoloWorkspace
+            ? NoteVisibility.Private
+            : (parentId.HasValue
+                ? State.FlatNodes.FirstOrDefault(item => item.Id == parentId.Value)?.Visibility ?? State.ActiveMode
+                : State.ActiveMode);
+
+        await ModalDialogService.ShowCreateNoteModal(
+            parentId: parentId,
+            visibility: visibility,
+            onSubmit: EventCallback.Factory.Create<CreateNoteDocumentRequest>(this, CreateDocument)
+        );
     }
 
     private Task CreateFolder(CreateNoteFolderRequest request)
@@ -215,10 +230,12 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
-    private Task OpenRenameModal(NoteTreeNodeDto node)
+    private async Task OpenRenameModal(NoteTreeNodeDto node)
     {
-        Dispatcher.Dispatch(new OpenRenameNoteNodeModalAction(node));
-        return Task.CompletedTask;
+        await ModalDialogService.ShowRenameNoteNodeModal(
+            node: node,
+            onSubmit: EventCallback.Factory.Create<RenameNoteNodeRequest>(this, RenameNode)
+        );
     }
 
     private Task RenameNode(RenameNoteNodeRequest request)
@@ -227,10 +244,13 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
-    private Task OpenMoveModal(NoteTreeNodeDto node)
+    private async Task OpenMoveModal(NoteTreeNodeDto node)
     {
-        Dispatcher.Dispatch(new OpenMoveNoteNodeModalAction(node));
-        return Task.CompletedTask;
+        await ModalDialogService.ShowMoveNoteNodeModal(
+            node: node,
+            nodes: State.FlatNodes,
+            onSubmit: EventCallback.Factory.Create<MoveNoteNodeRequest>(this, MoveNode)
+        );
     }
 
     private Task MoveNode(MoveNoteNodeRequest request)
@@ -239,44 +259,17 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
-    private Task OpenArchiveConfirmation(NoteTreeNodeDto node)
+    private async Task OpenArchiveConfirmation(NoteTreeNodeDto node)
     {
-        Dispatcher.Dispatch(new OpenArchiveNoteNodeConfirmationAction(node));
-        return Task.CompletedTask;
-    }
-
-    private Task ArchiveNode()
-    {
-        Dispatcher.Dispatch(new ArchiveNoteNodeAction());
-        return Task.CompletedTask;
-    }
-
-    private Task OnCreateFolderModalChanged(bool isOpened)
-    {
-        Dispatcher.Dispatch(new SetCreateNoteFolderModalOpenedAction(isOpened));
-        return Task.CompletedTask;
-    }
-
-    private Task OnCreateNoteModalChanged(bool isOpened)
-    {
-        Dispatcher.Dispatch(new SetCreateNoteDocumentModalOpenedAction(isOpened));
-        return Task.CompletedTask;
-    }
-
-    private Task OnRenameModalChanged(bool isOpened)
-    {
-        Dispatcher.Dispatch(new SetRenameNoteNodeModalOpenedAction(isOpened));
-        return Task.CompletedTask;
-    }
-
-    private Task OnMoveModalChanged(bool isOpened)
-    {
-        Dispatcher.Dispatch(new SetMoveNoteNodeModalOpenedAction(isOpened));
-        return Task.CompletedTask;
-    }
-
-    private void CloseArchiveConfirmation()
-    {
-        Dispatcher.Dispatch(new SetArchiveNoteNodeConfirmationOpenedAction(false));
+        var confirmed = await ModalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["Notes_ArchiveConfirmSubtitle"].Value,
+            DashboardLocalizer["Notes_ArchiveConfirmTitle"].Value,
+            confirmText: DashboardLocalizer["Archive"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new OpenArchiveNoteNodeConfirmationAction(node));
+            Dispatcher.Dispatch(new ArchiveNoteNodeAction());
+        }
     }
 }

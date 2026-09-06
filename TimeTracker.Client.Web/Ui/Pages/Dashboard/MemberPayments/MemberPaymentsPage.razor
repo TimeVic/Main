@@ -13,10 +13,6 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<AddMemberPaymentModal 
-    IsOpened="_isShowAddMemberPaymentModal" 
-    IsOpenedChanged="isOpened => _isShowAddMemberPaymentModal = isOpened"/>
-
 <div class="space-y-6">
     <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
@@ -27,17 +23,17 @@
         </div>
     </section>
 
-    <LumexCard>
-        <LumexCardBody Class="p-4">
+    <AppCard>
+        <AppCardBody Class="p-5">
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Payments"]</p>
             <p class="mt-2 text-2xl font-bold text-slate-900">@_state.Value.TotalCount</p>
             <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["SavedCurrentWorkspace"]</p>
-        </LumexCardBody>
-    </LumexCard>
-</div>
+        </AppCardBody>
+    </AppCard>
 
-<LumexCard Class="mt-6 overflow-x-auto pb-2">
-    <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <AppCard>
+    <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-slate-100">
         <div>
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Payments"]</p>
             <p class="text-sm text-slate-500">@DashboardLocalizer["MemberPaymentsDescription"]</p>
@@ -45,7 +41,7 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
             @if (CanManageOtherMemberPayments)
             {
-                <MembersDropDown
+                <MembersSelect
                     Class="min-w-56"
                     Label="@DashboardLocalizer["Member"].Value"
                     Type="DropDownType.Select"
@@ -55,18 +51,19 @@
             }
             @if (CanCreatePayments)
             {
-                <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
+                <AppButton OnClick="@OpenAddPaymentModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>    
                 </StartContent>
                 <ChildContent>
                     @DashboardLocalizer["AddPayment"]
                 </ChildContent>
-                </CustomButton>
+                </AppButton>
             }
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
+    <AppCardBody Class="p-5">
         @if (_state.Value.TotalCount == 0)
         {
             <div class="px-4 py-8 text-center text-sm text-slate-500">
@@ -85,5 +82,6 @@
                 TotalItems="@_state.Value.TotalCount"
                 IsLoading="@_state.Value.IsListLoading"/>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>
+</div>

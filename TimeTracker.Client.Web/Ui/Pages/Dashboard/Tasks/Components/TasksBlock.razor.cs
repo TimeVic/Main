@@ -26,12 +26,13 @@ public partial class TasksBlock: IDisposable
     
     [Inject]
     public IState<TasksState> TasksState { get; set; }
+
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
     
     private TaskListDto? _taskList => _tasksListState.Value.SelectedTaskList;
     private CancellationTokenSource? _searchDebounceCancellationTokenSource;
     private string? _searchString;
-    private bool _isShowAddTaskModal;
-    private bool _isShowAddTaskListModal;
     private bool _isShowArchived;
 
     private string? SearchString
@@ -89,6 +90,22 @@ public partial class TasksBlock: IDisposable
         }
 
         return Task.CompletedTask;
+    }
+
+    private async Task OpenAddTaskModal()
+    {
+        if (_taskList != null)
+        {
+            await _modalDialogService.ShowAddTaskModal(taskList: _taskList);
+        }
+    }
+
+    private async Task OpenAddTaskListModal()
+    {
+        if (ContextProject != null)
+        {
+            await _modalDialogService.ShowAddTasksListModal(ContextProject, tl => _ = OnTaskListAdded(tl));
+        }
     }
 
     private void ScheduleSearchFilter()

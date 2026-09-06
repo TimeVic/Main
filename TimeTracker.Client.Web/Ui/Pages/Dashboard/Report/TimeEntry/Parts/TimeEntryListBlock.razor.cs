@@ -18,25 +18,28 @@ public partial class TimeEntryListBlock
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
 
-    private TimeEntryDto? _timeEntryToEdit;
-    private TimeEntryDto? _timeEntryToDelete;
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
 
-    private void OnCloseEditModal()
+    private async Task OnEdit(TimeEntryDto entry)
     {
-        _timeEntryToEdit = null;
-        Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
+        await _modalDialogService.ShowEditTimeEntryModal(entry, onClose: _ =>
+        {
+            Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
+        });
     }
 
-    private void OnConfirmDelete()
+    private async Task OnDelete(TimeEntryDto entry)
     {
-        if (_timeEntryToDelete == null)
-            return;
-
-        var entryId = _timeEntryToDelete.Id;
-        _timeEntryToDelete = null;
-
-        Dispatcher.Dispatch(new DeleteTimeEntryAction(entryId));
-        Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["DeleteTimeEntry"].Value,
+            DashboardLocalizer["AreYouSure"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new DeleteTimeEntryAction(entry.Id));
+            Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
+        }
     }
 
     private void OnPageChanged(int page)

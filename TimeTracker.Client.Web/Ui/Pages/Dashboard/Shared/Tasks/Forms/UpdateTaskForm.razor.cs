@@ -53,6 +53,9 @@ public partial class UpdateTaskForm: IDisposable
 
     [Inject]
     private IState<TimeEntryState> _timeEntryState { get; set; } = null!;
+
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
     
     private ICollection<Guid> _allowedUserIds
     {
@@ -74,7 +77,6 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
-    private TimeEntryDto? _timeEntryToEdit;
     private bool _isTaskTimeEntriesLoading;
     private bool _isTaskTimeEntriesHasMore;
     private int _taskTimeEntriesPage = 1;
@@ -105,6 +107,11 @@ public partial class UpdateTaskForm: IDisposable
     private string GetTabClass(TaskDetailTab tab) => tab == _activeTab
         ? "border-blue-600 text-blue-700"
         : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700";
+    private async Task HandleTaskTabChanged(string? key)
+    {
+        var tab = TaskDetailTab.All.FirstOrDefault(t => t.ResourceKey == key) ?? TaskDetailTab.Overview;
+        await OnTabSelected(tab);
+    }
 
     private async Task OnTabSelected(TaskDetailTab tab)
     {
@@ -146,6 +153,12 @@ public partial class UpdateTaskForm: IDisposable
         {
             _isTaskTimeEntriesLoading = false;
         }
+    }
+
+    private async Task OpenEditTimeEntryModal(TimeEntryDto entry)
+    {
+        await _modalDialogService.ShowEditTimeEntryModal(entry);
+        await LoadTaskTimeEntries(true);
     }
 
     public void SetTitle(string title)

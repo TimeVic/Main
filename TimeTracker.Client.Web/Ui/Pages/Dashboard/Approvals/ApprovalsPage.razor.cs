@@ -7,8 +7,8 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Approvals;
 
 public partial class ApprovalsPage
 {
-    private bool _isRejectModalOpened;
-    private ICollection<Guid> _pendingRejectEntryIds = [];
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,20 +43,14 @@ public partial class ApprovalsPage
         Dispatcher.Dispatch(new ApproveEntriesAction(entryIds));
     }
 
-    private void OnOpenRejectModal(ICollection<Guid> entryIds)
+    private async Task OnOpenRejectModal(ICollection<Guid> entryIds)
     {
-        _pendingRejectEntryIds = entryIds;
-        _isRejectModalOpened = true;
-    }
-
-    private void OnConfirmReject(string reason)
-    {
-        _isRejectModalOpened = false;
-        if (_pendingRejectEntryIds.Any())
-        {
-            Dispatcher.Dispatch(new RejectEntriesAction(_pendingRejectEntryIds, reason));
-            _pendingRejectEntryIds = [];
-        }
+        await _modalDialogService.ShowRejectReasonModal(
+            EventCallback.Factory.Create<string>(this, reason =>
+            {
+                Dispatcher.Dispatch(new RejectEntriesAction(entryIds, reason));
+            })
+        );
     }
 
     private void OnUnapproveEntries(ICollection<Guid> entryIds)

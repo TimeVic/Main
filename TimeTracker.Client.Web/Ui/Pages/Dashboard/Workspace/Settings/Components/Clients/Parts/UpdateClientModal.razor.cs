@@ -1,29 +1,25 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Client;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients.Parts;
 
 public partial class UpdateClientModal
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
     public required ClientDto Client { get; set; }
 
-    [Parameter]
-    public required bool IsOpened { get; set; } = false;
-
-    [Parameter]
-    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
-
     [Inject]
-    public virtual IState<ClientState> _state { get; set; }
+    public virtual IState<ClientState> _state { get; set; } = default!;
 
     private ClientDto model = new();
     private EditForm _form = default!;
-    private LumexModal modal = default!;
 
     protected override Task OnParametersSetAsync()
     {
@@ -47,13 +43,10 @@ public partial class UpdateClientModal
         }
 
         Dispatcher.Dispatch(new UpdateAction(model));
-        await OnCloseModal();
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+        }
         StateHasChanged();
-    }
-
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
     }
 }

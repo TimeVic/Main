@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Model.TimeEntry.Approval
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
@@ -26,7 +24,7 @@
         @if (IsLoading && !Submitters.Any())
         {
             <div class="flex justify-center py-8">
-                <LumexSpinner Size="Size.Small" />
+                <AppSpinner Size="ComponentSize.Small" />
             </div>
         }
         else if (!FilteredSubmitters.Any())

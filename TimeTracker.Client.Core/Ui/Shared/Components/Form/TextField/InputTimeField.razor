@@ -1,0 +1,392 @@
+@inherits BaseInputField<DateTime?>
+@using System.Globalization
+@inject IJSRuntime JSRuntime
+
+<div class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+            @Label
+            @if (IsRequired)
+            {
+                <span class="text-rose-500 ms-0.5">*</span>
+            }
+        </label>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Description))
+    {
+        <p class="mb-1.5 text-xs text-slate-500 dark:text-slate-400">@Description</p>
+    }
+
+    <div class="@ContainerClasses @InputSizeClasses @Class flex items-center justify-between gap-1.5">
+        <div class="flex items-center pl-3 pr-1 text-slate-400 shrink-0">
+            @if (StartContent != null)
+            {
+                @StartContent
+            }
+            else
+            {
+                <i class="fa-regular fa-clock text-xs"></i>
+            }
+        </div>
+
+        <input
+            @ref="_inputRef"
+            type="text"
+            inputmode="numeric"
+            value="@_textValue"
+            @onfocus="HandleFocus"
+            @oninput="HandleInput"
+            @onkeydown="HandleKeyDown"
+            @onkeydown:preventDefault="IsArrowKey(lastKeyDownKey)"
+            @onblur="HandleBlur"
+            placeholder="@(string.IsNullOrEmpty(Placeholder) ? "HH:mm" : Placeholder)"
+            disabled="@IsDisabled"
+            readonly="@IsReadOnly"
+            maxlength="8"
+            class="w-full h-full bg-transparent border-0 px-1.5 py-1.5 font-mono text-inherit placeholder:text-slate-400 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed cursor-text"
+            @attributes="AdditionalAttributes" />
+
+        <div class="flex items-center gap-1 pr-2.5 shrink-0">
+            @if (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(_textValue))
+            {
+                <button
+                    type="button"
+                    tabindex="-1"
+                    class="p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                    @onclick="ClearTimeAsync"
+                    aria-label="@CommonLocalizer["Clear"]">
+                    <i class="fa-solid fa-circle-xmark text-xs"></i>
+                </button>
+            }
+
+            @if (!IsDisabled && !IsReadOnly)
+            {
+                <div class="flex flex-col -space-y-1 select-none">
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="px-1 py-0.5 text-[9px] text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        @onclick="() => StepMinutes(1)"
+                        aria-label="Increase time">
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </button>
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="px-1 py-0.5 text-[9px] text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        @onclick="() => StepMinutes(-1)"
+                        aria-label="Decrease time">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+            }
+
+            @if (EndContent != null)
+            {
+                @EndContent
+            }
+        </div>
+    </div>
+
+    @if (HasError && !string.IsNullOrWhiteSpace(FirstError))
+    {
+        <p class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i class="fa-solid fa-circle-exclamation text-[11px]"></i>
+            <span>@FirstError</span>
+        </p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public TimeSpan? TimeValue { get; set; }
+
+    [Parameter]
+    public EventCallback<TimeSpan?> TimeValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime?> Changed { get; set; }
+
+    private ElementReference _inputRef;
+    private string _textValue = string.Empty;
+    private DateTime? _baseDate;
+    private string lastKeyDownKey = string.Empty;
+    private bool _isFocused;
+
+    private bool IsArrowKey(string key) => key is "ArrowUp" or "ArrowDown";
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (!_isFocused)
+        {
+            if (Value.HasValue && Value.Value != default)
+            {
+                _baseDate = Value.Value.Date;
+                _textValue = Value.Value.ToString("HH:mm");
+            }
+            else if (TimeValue.HasValue)
+            {
+                _textValue = $"{(int)TimeValue.Value.TotalHours:00}:{TimeValue.Value.Minutes:00}";
+            }
+            else
+            {
+                _textValue = string.Empty;
+            }
+        }
+        else if (Value.HasValue && Value.Value != default)
+        {
+            _baseDate = Value.Value.Date;
+        }
+    }
+
+    private void HandleFocus()
+    {
+        _isFocused = true;
+    }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        var raw = e.Value?.ToString() ?? string.Empty;
+        _textValue = raw;
+
+        // If 4 digits entered without colon (e.g. "1530"), auto-insert colon
+        var digits = new string(raw.Where(char.IsDigit).ToArray());
+        if (!raw.Contains(':') && digits.Length == 4)
+        {
+            if (TryParseTime(digits, out var h, out var m))
+            {
+                _textValue = $"{h:00}:{m:00}";
+                await CommitAsync(h, m);
+                return;
+            }
+        }
+
+        // If valid HH:mm with 2-digit minute is entered, commit immediately
+        if (raw.Contains(':'))
+        {
+            var parts = raw.Split(':');
+            if (parts.Length == 2 && parts[1].Length == 2)
+            {
+                if (TryParseTime(raw, out var h, out var m))
+                {
+                    await CommitAsync(h, m);
+                }
+            }
+        }
+    }
+
+    private async Task HandleBlur()
+    {
+        _isFocused = false;
+
+        if (string.IsNullOrWhiteSpace(_textValue))
+        {
+            if (Value.HasValue || TimeValue.HasValue)
+            {
+                await ClearTimeAsync();
+            }
+            return;
+        }
+
+        if (TryParseTime(_textValue, out var hours, out var minutes))
+        {
+            _textValue = $"{hours:00}:{minutes:00}";
+            await CommitAsync(hours, minutes);
+        }
+        else if (Value.HasValue && Value.Value != default)
+        {
+            _textValue = Value.Value.ToString("HH:mm");
+        }
+        else if (TimeValue.HasValue)
+        {
+            _textValue = $"{(int)TimeValue.Value.TotalHours:00}:{TimeValue.Value.Minutes:00}";
+        }
+        else
+        {
+            _textValue = string.Empty;
+            if (Value.HasValue || TimeValue.HasValue)
+            {
+                await ClearTimeAsync();
+            }
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        lastKeyDownKey = e.Key;
+
+        if (e.Key is "ArrowUp" or "ArrowDown")
+        {
+            var isUp = e.Key == "ArrowUp";
+            var caretPos = 0;
+
+            try
+            {
+                caretPos = await JSRuntime.InvokeAsync<int>("getTimeCaret", _inputRef);
+            }
+            catch
+            {
+                caretPos = 4;
+            }
+
+            int h = 0, m = 0;
+            if (!TryParseTime(_textValue, out h, out m))
+            {
+                h = DateTime.Now.Hour;
+                m = DateTime.Now.Minute;
+            }
+
+            if (caretPos <= 2)
+            {
+                h = isUp ? (h + 1) % 24 : (h + 23) % 24;
+            }
+            else
+            {
+                var step = e.ShiftKey ? 15 : 1;
+                m = isUp ? (m + step) % 60 : (m + 60 - (step % 60)) % 60;
+            }
+
+            _textValue = $"{h:00}:{m:00}";
+            await CommitAsync(h, m);
+            StateHasChanged();
+
+            try
+            {
+                await JSRuntime.InvokeVoidAsync("setTimeCaret", _inputRef, caretPos);
+            }
+            catch {}
+        }
+        else if (e.Key == "Enter")
+        {
+            await HandleBlur();
+        }
+    }
+
+    private async Task StepMinutes(int step)
+    {
+        if (IsDisabled || IsReadOnly) return;
+
+        int h = 0, m = 0;
+        if (!TryParseTime(_textValue, out h, out m))
+        {
+            h = DateTime.Now.Hour;
+            m = DateTime.Now.Minute;
+        }
+
+        var totalMinutes = (h * 60 + m + step) % 1440;
+        if (totalMinutes < 0) totalMinutes += 1440;
+
+        h = totalMinutes / 60;
+        m = totalMinutes % 60;
+
+        _textValue = $"{h:00}:{m:00}";
+        await CommitAsync(h, m);
+    }
+
+    private async Task CommitAsync(int hours, int minutes)
+    {
+        hours = Math.Clamp(hours, 0, 23);
+        minutes = Math.Clamp(minutes, 0, 59);
+
+        var ts = new TimeSpan(hours, minutes, 0);
+        var baseDate = _baseDate ?? DateTime.Today;
+        var dt = baseDate.Date.Add(ts);
+
+        // Do not commit or trigger events if the time value has not changed
+        if (Value.HasValue && Value.Value != default)
+        {
+            if (Value.Value.Date == dt.Date && Value.Value.Hour == hours && Value.Value.Minute == minutes)
+            {
+                return;
+            }
+        }
+        else if (TimeValue.HasValue)
+        {
+            if ((int)TimeValue.Value.TotalHours == hours && TimeValue.Value.Minutes == minutes)
+            {
+                return;
+            }
+        }
+
+        await SetValueAsync(dt);
+        await TimeValueChanged.InvokeAsync(ts);
+        await Changed.InvokeAsync(dt);
+    }
+
+    public async Task ClearTimeAsync()
+    {
+        _textValue = string.Empty;
+        if (!Value.HasValue && !TimeValue.HasValue)
+        {
+            return;
+        }
+
+        await SetValueAsync(null);
+        await TimeValueChanged.InvokeAsync(null);
+        await Changed.InvokeAsync(null);
+    }
+
+    private static bool TryParseTime(string input, out int hours, out int minutes)
+    {
+        hours = 0;
+        minutes = 0;
+        if (string.IsNullOrWhiteSpace(input)) return false;
+
+        var trimmed = input.Trim();
+        var parts = trimmed.Split(':');
+
+        if (parts.Length == 2)
+        {
+            var hPart = new string(parts[0].Where(char.IsDigit).ToArray());
+            var mPart = new string(parts[1].Where(char.IsDigit).ToArray());
+
+            if (int.TryParse(hPart, out hours) && int.TryParse(mPart, out minutes))
+            {
+                if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            var digits = new string(trimmed.Where(char.IsDigit).ToArray());
+            if (digits.Length == 4)
+            {
+                if (int.TryParse(digits.Substring(0, 2), out hours) && int.TryParse(digits.Substring(2, 2), out minutes))
+                {
+                    if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (digits.Length == 3)
+            {
+                if (int.TryParse(digits.Substring(0, 1), out hours) && int.TryParse(digits.Substring(1, 2), out minutes))
+                {
+                    if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (digits.Length is 1 or 2)
+            {
+                if (int.TryParse(digits, out hours))
+                {
+                    if (hours >= 0 && hours <= 23)
+                    {
+                        minutes = 0;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}

@@ -10,44 +10,30 @@ public partial class TagsBlock
     [Inject]
     private IState<TagState> _state { get; set; }
 
-    private bool _isAddTagModalOpened { get; set; }
-    private TagDto? _tagToUpdate { get; set; }
-    
-    private TagDto? _tagToDelete { get; set; }
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
 
-    private Task OnAdd()
+    private async Task OnAdd()
     {
-        _isAddTagModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddTagModal();
     }
 
-    private Task OnEdit(TagDto context)
+    private async Task OnEdit(TagDto context)
     {
-        _tagToUpdate = context;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateTagModal(context);
     }
 
-    private Task OnDeleteClicked(TagDto context)
+    private async Task OnDeleteClicked(TagDto context)
     {
-        _tagToDelete = context;
-        return Task.CompletedTask;
-    }
-    
-    private Task OnConfirmDelete()
-    {
-        if (_tagToDelete != null)
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            string.Format(DashboardLocalizer["TagsBlock_DeleteTagSubtitle"].Value, context.Name),
+            DashboardLocalizer["TagsBlock_DeleteTagTitle"].Value,
+            confirmText: DashboardLocalizer["Delete"].Value
+        );
+        if (confirmed)
         {
-            Dispatcher.Dispatch(new DeleteItemAction(_tagToDelete));
-            _tagToDelete = null;
+            Dispatcher.Dispatch(new DeleteItemAction(context));
         }
-
-        return Task.CompletedTask;
-    }
-    
-    private Task OnCloseDeleteConfirmation()
-    {
-        _tagToDelete = null;
-        return Task.CompletedTask;
     }
 
     private static string GetColorStyle(string color)

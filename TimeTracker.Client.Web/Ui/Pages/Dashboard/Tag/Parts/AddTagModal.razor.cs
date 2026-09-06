@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Client.Core.Store.Tag;
@@ -40,14 +40,14 @@ public partial class AddTagModal
             var responseDto = await ApiService.TagAddAsync(model);
             if (responseDto != null)
             {
-                Microsoft.AspNetCore.Components.Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await Microsoft.FluentUI.AspNetCore.Components.ToastService.ShowInfo(DashboardLocalizer["TagAdded"].Value);
+                Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                ToastService.ShowInfo(DashboardLocalizer["TagAdded"].Value);
                 OnCloseModal();
             }
         }
         catch (Exception e)
         {
-            await Microsoft.FluentUI.AspNetCore.Components.ToastService.ShowError(e.Message);
+            ToastService.ShowError(e.Message);
         }
         finally
         {

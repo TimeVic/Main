@@ -1,6 +1,6 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Notes
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Models
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
 
 @inherits BaseReactiveComponent
 
@@ -13,30 +13,30 @@
             </div>
             @if (IsEditingAllowed)
             {
-                <LumexDropdown>
-                <LumexDropdownTrigger>
-                    <LumexButton
-                        IconOnly="true"
-                        Size="Size.Small"
-                        Variant="@Variant.Outlined">
-                        <i class="fa-solid fa-ellipsis-h"></i>
-                    </LumexButton>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu>
-                    <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-folder w-4 text-xs"></i>
-                            @DashboardLocalizer["NewFolder"]
-                        </span>
-                    </LumexDropdownItem>
-                    <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
-                            @DashboardLocalizer["NewNote"]
-                        </span>
-                    </LumexDropdownItem>
-                </LumexDropdownMenu>
-                </LumexDropdown>
+                <AppDropdown Alignment="DropdownAlignment.Right">
+                    <Trigger>
+                        <AppButton
+                            IconOnly="true"
+                            Size="ComponentSize.Small"
+                            Variant="ButtonVariant.Outlined">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </AppButton>
+                    </Trigger>
+                    <Menu>
+                        <AppDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-folder w-4 text-xs"></i>
+                                @DashboardLocalizer["NewFolder"]
+                            </span>
+                        </AppDropdownItem>
+                        <AppDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
+                                @DashboardLocalizer["NewNote"]
+                            </span>
+                        </AppDropdownItem>
+                    </Menu>
+                </AppDropdown>
             }
         </div>
     </div>
@@ -45,12 +45,12 @@
         @if (IsLoading)
         {
             <div class="space-y-3">
-                <LumexSkeleton Class="h-9 w-full rounded-xl"/>
-                <LumexSkeleton Class="h-9 w-10/12 rounded-xl"/>
-                <LumexSkeleton Class="h-9 w-11/12 rounded-xl"/>
-                <LumexSkeleton Class="h-9 w-9/12 rounded-xl"/>
-                <LumexSkeleton Class="h-9 w-full rounded-xl"/>
-                <LumexSkeleton Class="h-9 w-8/12 rounded-xl"/>
+                <AppSkeleton Class="h-9 w-full rounded-xl"/>
+                <AppSkeleton Class="h-9 w-10/12 rounded-xl"/>
+                <AppSkeleton Class="h-9 w-11/12 rounded-xl"/>
+                <AppSkeleton Class="h-9 w-9/12 rounded-xl"/>
+                <AppSkeleton Class="h-9 w-full rounded-xl"/>
+                <AppSkeleton Class="h-9 w-8/12 rounded-xl"/>
             </div>
         }
         else if (!TreeNodes.Any())
@@ -59,16 +59,16 @@
                 <p>@(ActiveMode == NoteVisibility.Workspace ? DashboardLocalizer["Notes_EmptyWorkspaceDescription"] : DashboardLocalizer["Notes_EmptyPrivateDescription"])</p>
                 @if (IsEditingAllowed)
                 {
-                    <CustomButton
+                    <AppButton
                     Class="mt-3"
-                    Size="Size.Small"
-                    Color="@ThemeColor.Primary"
+                    Size="ComponentSize.Small"
+                    Color="@ComponentColor.Primary"
                     OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>@DashboardLocalizer["CreateNote"]</ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 }
             </div>
         }

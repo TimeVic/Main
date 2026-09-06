@@ -1,6 +1,4 @@
 @page "/board/{WorkspaceId:guid}/task/{TaskId:guid}"
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
@@ -12,7 +10,7 @@
 @if (_isLoading)
 {
     <div class="flex justify-center py-16">
-        <LumexSpinner Size="@Size.Large" />
+        <AppSpinner Size="ComponentSize.Large" />
     </div>
 }
 else if (_task != null)

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Server;
 using Fluxor;
-using LumexUI.Extensions;
 using TimeTracker.Client.Core;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Web.Services;
@@ -23,7 +22,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
 builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 builder.Services.AddScoped<UrlService>();
-builder.Services.AddLumexServices();
 builder.Services.AddFluxor(options =>
 {
     options.ScanTypes(ClientCoreAssemblyMarker.ServerFluxorStateType);

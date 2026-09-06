@@ -35,7 +35,6 @@ const assets = [
     { url: "vendor/github-markdown/github-markdown.min.css", label: "vendor/github-markdown/github-markdown.min.css" },
     { url: "vendor/github-markdown/timevic-markdown-theme.css", label: "vendor/github-markdown/timevic-markdown-theme.css" },
     { url: "TimeTracker.Client.Web.styles.css", label: "TimeTracker.Client.Web.styles.css" },
-    { url: "_content/LumexUI/js/LumexUI.js", label: "_content/LumexUI/js/LumexUI.js" },
 ];
 
 let updatedHtml = html;

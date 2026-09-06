@@ -1,21 +1,19 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared;
 
 public partial class ClientShareReportModal
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
     public Guid ClientId { get; set; }
 
     [Parameter]
     public string ClientName { get; set; } = string.Empty;
-
-    [Parameter]
-    public bool IsOpened { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
 
     private Guid _loadedClientId;
     private bool _isLoading;
@@ -25,7 +23,7 @@ public partial class ClientShareReportModal
 
     protected override async Task OnParametersSetAsync()
     {
-        if (!IsOpened || ClientId == Guid.Empty || _loadedClientId == ClientId)
+        if (ClientId == Guid.Empty || _loadedClientId == ClientId)
         {
             return;
         }
@@ -97,11 +95,5 @@ public partial class ClientShareReportModal
         _isActive = settings.IsActive;
         _isShowTasks = settings.IsShowTasks;
         _shareUrl = settings.ShareUrl;
-    }
-
-    private async Task OnCloseModal()
-    {
-        _loadedClientId = Guid.Empty;
-        await IsOpenedChanged.InvokeAsync(false);
     }
 }

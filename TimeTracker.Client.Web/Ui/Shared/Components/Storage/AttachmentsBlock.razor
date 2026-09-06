@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants.Storage
 
@@ -24,7 +22,7 @@
                         @if (IsAttachmentDeleting(attachment))
                         {
                             <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/75">
-                                <LumexSpinner Size="@Size.Medium" />
+                                <AppSpinner Size="ComponentSize.Medium" />
                             </div>
                         }
                         @if (IsImageAttachment(attachment))
@@ -55,7 +53,7 @@
                                     @onclick="@(() => OnCopyImage(attachment))">
                                     @if (IsAttachmentCopying(attachment))
                                     {
-                                        <LumexSpinner Size="@Size.Small" />
+                                        <AppSpinner Size="ComponentSize.Small" />
                                     }
                                     else
                                     {
@@ -74,7 +72,7 @@
                                     @onclick="@(() => OnDeleteAttachment(attachment))">
                                     @if (IsAttachmentDeleting(attachment))
                                     {
-                                        <LumexSpinner Size="@Size.Small" />
+                                        <AppSpinner Size="ComponentSize.Small" />
                                     }
                                     else
                                     {
@@ -95,7 +93,7 @@
                         </div>
                     </div>
                     <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/75">
-                        <LumexSpinner Size="@Size.Medium" />
+                        <AppSpinner Size="ComponentSize.Medium" />
                     </div>
                 </div>
             }

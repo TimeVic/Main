@@ -1,5 +1,3 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
 @inherits BaseReactiveComponent
@@ -19,16 +17,16 @@
         </div>
 
         <div class="shrink-0 flex items-center gap-2">
-            <CustomButton
-                Color="@(IsOwner ? ThemeColor.Success : ThemeColor.Primary)"
-                Variant="Variant.Solid"
-                Size="Size.Small"
-                Radius="@Radius.Medium"
+            <AppButton
+                Color="@(IsOwner ? ComponentColor.Success : ComponentColor.Primary)"
+                Variant="ButtonVariant.Solid"
+                Size="ComponentSize.Small"
+                Radius="@ButtonRadius.Medium"
                 Disabled="@_isSubmitting"
                 OnClick="@OnSubmitForApproval">
                 @if (_isSubmitting)
                 {
-                    <LumexSpinner Size="Size.Small" Color="ThemeColor.Default" Class="mr-1.5" />
+                    <AppSpinner Size="ComponentSize.Small" Color="ComponentColor.Default" Class="mr-1.5" />
                 }
                 else if (IsOwner)
                 {
@@ -41,7 +39,7 @@
                 <span>
                     @(IsOwner ? DashboardLocalizer["Approvals_Banner_ApproveButton"] : DashboardLocalizer["Approvals_Banner_SubmitButton"])
                 </span>
-            </CustomButton>
+            </AppButton>
         </div>
     </div>
 }

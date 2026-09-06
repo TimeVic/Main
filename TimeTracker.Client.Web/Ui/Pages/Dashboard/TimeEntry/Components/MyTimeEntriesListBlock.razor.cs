@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.TimeEntry.Components;
 
@@ -27,13 +28,12 @@ public partial class MyTimeEntriesListBlock
     
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
     
     private bool _isLoading => _state.Value.IsListLoading;
     private string NoClientLabel => DashboardLocalizer["NoClient"].Value;
-    private TimeEntryDto? _timeEntryToEdit { get; set; }
-    private TimeEntryDto? _timeEntryToDelete { get; set; }
-    private TaskDto? _taskToEdit { get; set; }
-    private bool _isTaskEditorOpened = false;
 
 
 
@@ -87,14 +87,9 @@ public partial class MyTimeEntriesListBlock
         Dispatcher.Dispatch(new LoadListAction());
     }
 
-    private void OnEditTimeEntry(TimeEntryDto entry)
+    private async Task OnEditTimeEntry(TimeEntryDto entry)
     {
-        _timeEntryToEdit = entry;
-    }
-
-    private void OnCloseEditTimeEntryModal()
-    {
-        _timeEntryToEdit = null;
+        await _modalDialogService.ShowEditTimeEntryModal(entry);
     }
 
     private void OnCloneTimeEntry(TimeEntryDto timeEntry)
@@ -110,14 +105,16 @@ public partial class MyTimeEntriesListBlock
         );
     }
 
-    private Task OnConfirmDeleteTimeEntry()
+    private async Task OnDeleteTimeEntry(TimeEntryDto entry)
     {
-        if (_timeEntryToDelete != null)
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["DeleteTimeEntry"].Value,
+            DashboardLocalizer["AreYouSure"].Value
+        );
+        if (confirmed)
         {
-            Dispatcher.Dispatch(new DeleteTimeEntryAction(_timeEntryToDelete.Id));
-            _timeEntryToDelete = null;
+            Dispatcher.Dispatch(new DeleteTimeEntryAction(entry.Id));
         }
-        return Task.CompletedTask;
     }
 
     private void OnPageChanged(int selectedPage)
@@ -138,6 +135,14 @@ public partial class MyTimeEntriesListBlock
             {
                 await _approvalBanner.RefreshStatusAsync();
             }
+        }
+    }
+
+    private async Task OnOpenTask(TimeEntryDto entry)
+    {
+        if (entry.Task != null)
+        {
+            await _modalDialogService.ShowEditTaskModal(entry.Task);
         }
     }
 }

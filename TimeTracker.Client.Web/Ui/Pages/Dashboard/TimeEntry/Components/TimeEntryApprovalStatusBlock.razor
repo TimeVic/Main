@@ -1,48 +1,48 @@
-@using LumexUI
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Client.Core.Ui.Shared.Components.Popover
 
 @if (IsApprovalsEnabled && Entry != null)
 {
     @if (Entry.Status == TimeEntryStatus.Approved)
     {
-        <LumexPopover>
-            <LumexPopoverTrigger>
+        <AppPopover>
+            <Trigger>
                 <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs text-emerald-600 hover:bg-emerald-50">
                     <i class="fa-solid fa-circle-check"></i>
                 </span>
-            </LumexPopoverTrigger>
-            <LumexPopoverContent>
+            </Trigger>
+            <Content>
                 <span class="text-xs font-semibold text-emerald-700">
                     @DashboardLocalizer["Approvals_Status_Approved"]
                 </span>
-            </LumexPopoverContent>
-        </LumexPopover>
+            </Content>
+        </AppPopover>
     }
     else if (Entry.Status == TimeEntryStatus.Pending)
     {
-        <LumexPopover>
-            <LumexPopoverTrigger>
+        <AppPopover>
+            <Trigger>
                 <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs text-amber-600 hover:bg-amber-50">
                     <i class="fa-solid fa-clock"></i>
                 </span>
-            </LumexPopoverTrigger>
-            <LumexPopoverContent>
+            </Trigger>
+            <Content>
                 <span class="text-xs font-semibold text-amber-700">
                     @DashboardLocalizer["Approvals_Status_Pending"]
                 </span>
-            </LumexPopoverContent>
-        </LumexPopover>
+            </Content>
+        </AppPopover>
     }
     else if (Entry.Status == TimeEntryStatus.Rejected)
     {
-        <LumexPopover>
-            <LumexPopoverTrigger>
+        <AppPopover>
+            <Trigger>
                 <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs text-red-600 hover:bg-red-50">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </span>
-            </LumexPopoverTrigger>
-            <LumexPopoverContent>
+            </Trigger>
+            <Content>
                 <div class="max-w-[220px] p-1 space-y-1">
                     <p class="text-xs font-semibold text-red-700">
                         @DashboardLocalizer["Approvals_Status_Rejected"]
@@ -54,7 +54,7 @@
                         </p>
                     }
                 </div>
-            </LumexPopoverContent>
-        </LumexPopover>
+            </Content>
+        </AppPopover>
     }
 }

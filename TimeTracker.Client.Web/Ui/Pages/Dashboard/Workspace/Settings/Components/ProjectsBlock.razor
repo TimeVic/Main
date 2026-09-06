@@ -1,78 +1,94 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients.Parts
 
 @inherits BaseReactiveComponent
 
-<AddProjectModal
-    IsOpened="_isAddProjectModalOpened"
-    IsOpenedChanged="isOpened => _isAddProjectModalOpened = isOpened"/>
-
-@if (_projectToUpdate != null)
-{
-    <UpdateProjectModal 
-        Project="_projectToUpdate"
-        IsOpened="_projectToUpdate != null" 
-        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
-}
-
-<section class="space-y-6">
-    <LumexCard>
-        <LumexCardBody>
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+<section
+    class="space-y-6">
+    <AppCard>
+        <AppCardBody>
+            <div
+                class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Projects"]</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["ProjectsBlock_WorkspaceProjectsTitle"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["ProjectsBlock_Description"]</p>
+                    <p
+                        class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">
+                        @DashboardLocalizer["Projects"]
+                    </p>
+                    <h2
+                        class="mt-2 text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["ProjectsBlock_WorkspaceProjectsTitle"]
+                    </h2>
+                    <p
+                        class="mt-1 text-sm text-slate-600">
+                        @DashboardLocalizer["ProjectsBlock_Description"]
+                    </p>
                 </div>
-                <CustomButton
-                    Size="Size.Small"
+                <AppButton
+                    Size="ComponentSize.Small"
                     OnClick="@OnAdd"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
-                        <i class="fa-solid fa-plus"></i>
+                        <i
+                            class="fa-solid fa-plus">
+                        </i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["AddProject"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
     
-    <LumexDataGrid
-        Data="@_state.Value.List.AsQueryable()"
-        Radius="@Radius.Medium"
+    <AppTable
+        TGridItem="ProjectDto"
+        Items="@_state.Value.List.AsQueryable()"
         Class="mt-3">
-        <LumexUI.EditColumn
+        Items="@_state.Value.List.AsQueryable()">
+        <AppPropertyColumn
+            TGridItem="ProjectDto"
+            TProp="string"
             Title="@DashboardLocalizer["Name"].Value"
-            Property="@(p => p.Name)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.Name)"
+            Sortable="true" />
+        <AppPropertyColumn
+            TGridItem="ProjectDto"
+            TProp="bool"
             Title="@DashboardLocalizer["BillableByDefault"].Value"
-            Property="@(p => p.IsBillableByDefault)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.IsBillableByDefault)" />
+        <AppPropertyColumn
+            TGridItem="ProjectDto"
+            TProp="decimal?"
             Title="@DashboardLocalizer["DefaultHourlyRate"].Value"
-            Property="@(p => p.DefaultHourlyRate)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.DefaultHourlyRate)" />
+        <AppPropertyColumn
+            TGridItem="ProjectDto"
+            TProp="string"
             Title="@DashboardLocalizer["Client"].Value"
             Sortable="true"
-            Property="@(p => p.Client != null ? p.Client.Name : string.Empty)"/>
-        <LumexUI.PropertyColumn
+            Property="@(p => p.Client != null ? p.Client.Name : string.Empty)" />
+        <AppTableColumn
+            TGridItem="ProjectDto"
             Title="@DashboardLocalizer["Actions"].Value"
-            Property="@(p => p.Id)">
-            <Content>
-                <CustomButton
+            Align="Align.End">
+            <div
+                class="flex items-center justify-end">
+                <AppButton
                     Class="inline-flex rounded-full"
                     OnClick="@(() => OnEdit(context))"
-                    Size="Size.Small"
-                    Color="ThemeColor.Primary"
-                    Variant="Variant.Light"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Primary"
+                    Variant="ButtonVariant.Light"
                     IconOnly="true">
                     <ChildContent>
-                        <i class="fa-regular fa-pen-to-square"></i>
+                        <i
+                            class="fa-regular fa-pen-to-square">
+                        </i>
                     </ChildContent>
-                </CustomButton>
-            </Content>
-        </LumexUI.PropertyColumn>
-    </LumexDataGrid>
+                </AppButton>
+            </div>
+        </AppTableColumn>
+    </AppTable>
 </section>

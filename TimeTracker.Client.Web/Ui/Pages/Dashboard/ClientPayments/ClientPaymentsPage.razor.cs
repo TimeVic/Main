@@ -25,10 +25,17 @@ public partial class ClientPaymentsPage
     [Inject]
     public IDispatcher _dispatcher { get; set; }
 
-    private bool _isShowAddClientPaymentModal;
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private string? _search;
     private Guid SelectedClientId { get; set; }
     private Guid SelectedProjectId { get; set; }
+
+    private async Task OpenAddPaymentModal()
+    {
+        await _modalDialogService.ShowAddClientPaymentModal();
+    }
 
     private bool CanCreatePayments => SecurityManager.HasPermission(WorkspacePermission.CreateClientPayment);
 

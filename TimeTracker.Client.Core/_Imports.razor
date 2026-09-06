@@ -1,17 +1,39 @@
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 @using Microsoft.Extensions.Localization
 @using TimeTracker.Client.Core.Core.Components
 @using TimeTracker.Client.Core.Core.Routing
 @using TimeTracker.Client.Core.Localization
 @using TimeTracker.Client.Core.Ui.Shared.Components
+@using TimeTracker.Client.Core.Ui.Shared.Components.Calendar
 @using TimeTracker.Client.Core.Ui.Shared.Components.List
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Models
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Core
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Models
+@using InputType = TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Models.InputType
+@using TimeTracker.Client.Core.Core.Extensions.Enums
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
+@using ButtonType = TimeTracker.Client.Core.Ui.Shared.Components.Enums.ButtonType
+@using ButtonVariant = TimeTracker.Client.Core.Ui.Shared.Components.Enums.ButtonVariant
+@using ButtonRadius = TimeTracker.Client.Core.Ui.Shared.Components.Enums.ButtonRadius
+@using BadgeVariant = TimeTracker.Client.Core.Ui.Shared.Components.Enums.BadgeVariant
+@using BadgeRadius = TimeTracker.Client.Core.Ui.Shared.Components.Enums.BadgeRadius
+@using SpinnerVariant = TimeTracker.Client.Core.Ui.Shared.Components.Enums.SpinnerVariant
+@using ComponentColor = TimeTracker.Client.Core.Ui.Shared.Components.Enums.ComponentColor
+@using ComponentSize = TimeTracker.Client.Core.Ui.Shared.Components.Enums.ComponentSize
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
-@using LumexUI
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Modal
+@using TimeTracker.Client.Core.Ui.Shared.Components.Tabs
+@using TimeTracker.Client.Core.Services.UI.Modal
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Popover
 
 @inject IStringLocalizer<DashboardResource> DashboardLocalizer
+@inject IStringLocalizer<CommonComponentsResource> CommonLocalizer

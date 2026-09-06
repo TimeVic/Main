@@ -90,53 +90,6 @@ window.popupPortal = {
     }
 };
 
-// Lumex modals close on clicks outside the dialog rect. Popovers can visually extend outside that rect,
-// so suppress only the modal close call while keeping the click event available for Blazor item selection.
-window.lumexModalPopoverGuard = (() => {
-    const suppressedDialogs = new WeakSet();
-    const originalClose = HTMLDialogElement.prototype.close;
-
-    HTMLDialogElement.prototype.close = function (...args) {
-        if (suppressedDialogs.has(this)) {
-            return;
-        }
-
-        return originalClose.apply(this, args);
-    };
-
-    const suppressModalClose = (event) => {
-        const popover = event.target.closest("dialog [data-popover]");
-
-        if (!popover) {
-            return;
-        }
-
-        const dialog = popover.closest("dialog");
-
-        if (!dialog) {
-            return;
-        }
-
-        const rect = dialog.getBoundingClientRect();
-        const isOutsideDialog =
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom ||
-            event.clientX < rect.left ||
-            event.clientX > rect.right;
-
-        if (isOutsideDialog) {
-            suppressedDialogs.add(dialog);
-
-            setTimeout(() => {
-                suppressedDialogs.delete(dialog);
-            });
-        }
-    };
-
-    document.addEventListener("click", suppressModalClose, true);
-})();
-
-
 window.openInNewTab = function (url) {
     window.open(url, "_blank");
 }
@@ -350,3 +303,14 @@ window.attachmentInput = (() => {
     };
 })();
 
+window.getTimeCaret = function(el) {
+    if (!el) return 0;
+    return el.selectionStart || 0;
+};
+
+window.setTimeCaret = function(el, pos) {
+    if (!el) return;
+    try {
+        el.setSelectionRange(pos, pos);
+    } catch (e) {}
+};

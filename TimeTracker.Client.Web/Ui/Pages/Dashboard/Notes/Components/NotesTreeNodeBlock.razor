@@ -1,5 +1,6 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Notes
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 
 @inherits BaseReactiveComponent
 
@@ -9,14 +10,16 @@
         role="treeitem"
         tabindex="0"
         aria-level="@(Level + 1)"
-        aria-expanded="@(IsFolder ? IsExpanded : null)"
+        aria-expanded="@(IsFolder ? IsExpanded.ToString().ToLowerInvariant() : null)"
+        aria-selected="@(IsSelected.ToString().ToLowerInvariant())"
+        style="padding-left: @(Level * 14 + 8)px;"
         @onclick="@OnSelect"
         @onkeydown="@OnRowKeyDown">
         @if (IsFolder)
         {
             <button
                 type="button"
-                class="flex h-4 w-4 shrink-0 items-center justify-center rounded text-slate-400 hover:bg-slate-100"
+                class="notes-tree-node-expander flex h-5 w-5 items-center justify-center rounded text-xs text-slate-400 hover:text-slate-600"
                 @onclick="@OnToggleExpanded"
                 @onclick:stopPropagation="true"
                 @onkeydown:stopPropagation="true">
@@ -25,7 +28,7 @@
         }
         else
         {
-            <span class="h-4 w-4 shrink-0"></span>
+            <span class="inline-block w-5"></span>
         }
         <div class="flex min-w-0 flex-1 items-center gap-1.5 text-left">
             <i class="@IconClass"></i>
@@ -34,53 +37,53 @@
         @if (IsEditingAllowed)
         {
             <div @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
-            <LumexDropdown>
-                <LumexDropdownTrigger>
-                    <button
-                        type="button"
-                        class="flex h-6 w-6 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-slate-100">
-                        <i class="fa-solid fa-ellipsis-h"></i>
-                    </button>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu>
-                    @if (IsFolder)
-                    {
-                        <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(TreeNode.Node.Id))">
+                <AppDropdown Alignment="DropdownAlignment.Right">
+                    <Trigger>
+                        <button
+                            type="button"
+                            class="flex h-6 w-6 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-slate-100">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </Trigger>
+                    <Menu>
+                        @if (IsFolder)
+                        {
+                            <AppDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(TreeNode.Node.Id))">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-regular fa-folder w-4 text-xs"></i>
+                                    @DashboardLocalizer["NewFolder"]
+                                </span>
+                            </AppDropdownItem>
+                            <AppDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(TreeNode.Node.Id))">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
+                                    @DashboardLocalizer["NewNote"]
+                                </span>
+                            </AppDropdownItem>
+                        }
+                        <AppDropdownItem OnClick="@(() => RenameRequested.InvokeAsync(TreeNode.Node))">
                             <span class="flex items-center gap-2">
-                                <i class="fa-regular fa-folder w-4 text-xs"></i>
-                                @DashboardLocalizer["NewFolder"]
+                                <i class="fa-solid fa-pen w-4 text-xs"></i>
+                                @DashboardLocalizer["Rename"]
                             </span>
-                        </LumexDropdownItem>
-                        <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(TreeNode.Node.Id))">
+                        </AppDropdownItem>
+                        @if (!IsFolder)
+                        {
+                            <AppDropdownItem OnClick="@(() => MoveRequested.InvokeAsync(TreeNode.Node))">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-folder-tree w-4 text-xs"></i>
+                                    @DashboardLocalizer["Notes_Move"]
+                                </span>
+                            </AppDropdownItem>
+                        }
+                        <AppDropdownItem Color="@ComponentColor.Danger" OnClick="@(() => ArchiveRequested.InvokeAsync(TreeNode.Node))">
                             <span class="flex items-center gap-2">
-                                <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
-                                @DashboardLocalizer["NewNote"]
+                                <i class="fa-solid fa-box-archive w-4 text-xs"></i>
+                                @DashboardLocalizer["Archive"]
                             </span>
-                        </LumexDropdownItem>
-                    }
-                    <LumexDropdownItem OnClick="@(() => RenameRequested.InvokeAsync(TreeNode.Node))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-pen w-4 text-xs"></i>
-                            @DashboardLocalizer["Rename"]
-                        </span>
-                    </LumexDropdownItem>
-                    @if (!IsFolder)
-                    {
-                        <LumexDropdownItem OnClick="@(() => MoveRequested.InvokeAsync(TreeNode.Node))">
-                            <span class="flex items-center gap-2">
-                                <i class="fa-solid fa-folder-tree w-4 text-xs"></i>
-                                @DashboardLocalizer["Notes_Move"]
-                            </span>
-                        </LumexDropdownItem>
-                    }
-                    <LumexDropdownItem Color="@ThemeColor.Danger" OnClick="@(() => ArchiveRequested.InvokeAsync(TreeNode.Node))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-box-archive w-4 text-xs"></i>
-                            @DashboardLocalizer["Archive"]
-                        </span>
-                    </LumexDropdownItem>
-                </LumexDropdownMenu>
-            </LumexDropdown>
+                        </AppDropdownItem>
+                    </Menu>
+                </AppDropdown>
             </div>
         }
     </div>

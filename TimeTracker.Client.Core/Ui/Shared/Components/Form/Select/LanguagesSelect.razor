@@ -1,0 +1,58 @@
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+@inherits AppBaseSelect
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="LanguageItem"
+        Value="@_selectedItem"
+        ValueChanged="@OnLanguageSelected"
+        Items="@_languages"
+        ItemText="@(item => item.Name)"
+        Label="@Label"
+        Placeholder="@LocalizedPlaceholder"
+        IsDisabled="@Disabled"
+        IsClearable="@Clearable"
+        IsFullWidth="@FullWidth"
+        Variant="@ResolvedVariant"
+        Color="@DropDownColor"
+        Size="@Size">
+        <ItemTemplate Context="lang">
+            <span
+                class="inline-flex items-center gap-2">
+                <span
+                    aria-hidden="true">
+                    @lang.Flag
+                </span>
+                <span>
+                    @lang.Name
+                </span>
+            </span>
+        </ItemTemplate>
+        <TriggerContent>
+            @if (_selectedItem != null)
+            {
+                <span
+                    class="inline-flex items-center gap-2">
+                    <span
+                        aria-hidden="true">
+                        @_selectedItem.Flag
+                    </span>
+                    <span
+                        class="truncate">
+                        @_selectedItem.Name
+                    </span>
+                </span>
+            }
+            else
+            {
+                <span
+                    class="text-slate-400">
+                    @LocalizedPlaceholder
+                </span>
+            }
+        </TriggerContent>
+    </AppSelect>
+</div>

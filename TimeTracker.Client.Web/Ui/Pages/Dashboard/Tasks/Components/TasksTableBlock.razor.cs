@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Client.Core.Core.Extensions.Enums;
 using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Web.Services.UI;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components;
@@ -31,10 +32,6 @@ public partial class TasksTableBlock
     public bool IsLoading { get; set; }
 
     private readonly HashSet<Guid> _selectedTaskIds = [];
-    private TaskDto? _taskToUpdate = null;
-    private bool _isTaskEditorOpened = false;
-
-
     private Guid? _selectedTaskId;
 
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
@@ -50,6 +47,9 @@ public partial class TasksTableBlock
 
     [Inject]
     public IState<TasksState> TasksState { get; set; }
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
 
     private bool IsExpanded => TasksState.Value.ExpandedStatuses.Contains(Status);
 
@@ -181,11 +181,12 @@ public partial class TasksTableBlock
             ? "!border-t-2 !border-blue-500"
             : "border-t border-slate-200";
 
-    private void OpenTaskEditor(TaskDto task)
+    private async Task OpenTaskEditor(TaskDto task)
     {
         _selectedTaskId = task.Id;
-        _taskToUpdate = task;
-        _isTaskEditorOpened = true;
+        await _modalDialogService.ShowEditTaskModal(task);
+        _selectedTaskId = null;
+        StateHasChanged();
     }
 
     private string GetTaskUrl(TaskDto task) => UrlService.GetDashboardUrl($"task/{task.Id}", task.TaskList.WorkspaceId);

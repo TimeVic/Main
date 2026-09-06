@@ -1,18 +1,6 @@
-@using LumexUI.Common
-@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
-@if (_isShowDeletionModal)
-{
-    <ConfirmationModal
-        Title="@DashboardLocalizer["UserSettings_RequestDeletionConfirmTitle"].Value"
-        Message="@DashboardLocalizer["UserSettings_RequestDeletionConfirmMessage"].Value"
-        ConfirmText="@DashboardLocalizer["UserSettings_RequestDeletion"].Value"
-        OnCancel="@(() => _isShowDeletionModal = false)"
-        OnClose="@(() => _isShowDeletionModal = false)"
-        OnConfirm="@OnRequestDeletionConfirmed" />
-}
 
 <div class="rounded-2xl border border-red-200 bg-red-50/30 p-6">
     <div class="mb-5">
@@ -23,15 +11,15 @@
     <div class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-red-200 bg-white p-4">
         <p class="text-sm text-slate-600">@DashboardLocalizer["UserSettings_RequestDeletionDescription"]</p>
         @* TODO: Wire to account deletion request API *@
-        <CustomButton
-            Color="ThemeColor.Danger"
-            Variant="Variant.Outlined"
-            OnClick="@(() => _isShowDeletionModal = true)">
+        <AppButton
+            Color="ComponentColor.Danger"
+            Variant="ButtonVariant.Outlined"
+            OnClick="RequestDeletionAsync">
             <StartContent>
                 <i class="fa-regular fa-trash-can"></i>
             </StartContent>
             <ChildContent>@DashboardLocalizer["UserSettings_RequestDeletion"]</ChildContent>
-        </CustomButton>
+        </AppButton>
     </div>
 </div>
 

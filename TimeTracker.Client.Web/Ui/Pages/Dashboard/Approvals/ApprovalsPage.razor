@@ -1,6 +1,5 @@
 @page "/board/{WorkspaceId:guid}/approvals"
 @using Fluxor
-@using LumexUI
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Client.Core.Store.TimeEntry.Approvals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Approvals.Components
@@ -12,10 +11,6 @@
 @layout Layout
 
 <div class="space-y-6">
-    <RejectReasonModal
-        IsOpened="@_isRejectModalOpened"
-        OnConfirm="@OnConfirmReject"
-        OnCancel="@(() => _isRejectModalOpened = false)" />
 
     <section class="flex flex-col gap-2">
         <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["Approvals_Title"]</h1>
@@ -31,8 +26,8 @@
         </div>
     }
 
-    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
-        <LumexCardBody Class="p-0">
+    <AppCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <AppCardBody Class="p-0">
             <ResizableSplitBlock
                 Class="min-h-[720px]"
                 DefaultStartPaneWidth="320"
@@ -56,6 +51,6 @@
                         UnapproveRequested="@OnUnapproveEntries" />
                 </EndContent>
             </ResizableSplitBlock>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 </div>

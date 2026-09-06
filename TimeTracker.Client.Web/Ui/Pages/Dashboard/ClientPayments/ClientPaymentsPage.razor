@@ -2,7 +2,6 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadClientPayment)]
 @attribute [RequireWorkspaceRole(MembershipAccessType.Owner, MembershipAccessType.Manager)]
 
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Constants.Ui
@@ -16,10 +15,6 @@
 @layout TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 @implements IDisposable
 
-<AddClientPaymentModal
-    IsOpened="_isShowAddClientPaymentModal"
-    IsOpenedChanged="isOpened => _isShowAddClientPaymentModal = isOpened"/>
-
 <div class="space-y-6">
     <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
@@ -30,61 +25,63 @@
         </div>
         @if (CanCreatePayments)
         {
-            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+            <AppButton OnClick="@OpenAddPaymentModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
                 <ChildContent>
                     @DashboardLocalizer["AddClientPayment"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         }
     </section>
 
     <section class="grid gap-4 md:grid-cols-3">
-        <LumexCard>
-            <LumexCardBody Class="p-4">
+        <AppCard>
+            <AppCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Received"]</p>
                 <p class="mt-2 text-2xl font-bold text-emerald-700">
                     <AmountDisplay Amount="@FilteredTotal"></AmountDisplay>
                 </p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["PaymentsMatchingCurrentFilters"]</p>
-            </LumexCardBody>
-        </LumexCard>
-        <LumexCard>
-            <LumexCardBody Class="p-4">
+            </AppCardBody>
+        </AppCard>
+        <AppCard>
+            <AppCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["ClientsPaid"]</p>
                 <p class="mt-2 text-2xl font-bold text-slate-900">@PaidClientsCount</p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UniqueClientsFilteredList"]</p>
-            </LumexCardBody>
-        </LumexCard>
-        <LumexCard>
-            <LumexCardBody Class="p-4">
+            </AppCardBody>
+        </AppCard>
+        <AppCard>
+            <AppCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["OutstandingBalance"]</p>
                 <p class="mt-2 text-2xl font-bold text-slate-900">@DashboardLocalizer["NotTracked"]</p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ClientPaymentsRecordedSeparately"]</p>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     </section>
 
-    <LumexCard>
-        <LumexCardHeader>
+    <AppCard>
+        <AppCardHeader>
+        <AppCardHeader Class="p-5 pb-0">
             <div>
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Filters"]</p>
                 <p class="text-sm text-slate-500">@DashboardLocalizer["PaymentsFiltersHelper"]</p>
             </div>
-        </LumexCardHeader>
-        <LumexCardBody>
+        </AppCardHeader>
+        <AppCardBody>
+        <AppCardBody Class="p-5">
             <div class="grid gap-4 md:grid-cols-3">
                 <div>
-                    <ClientsDropDown
+                    <ClientsSelect
                         Label="@DashboardLocalizer["Client"].Value"
                         Clearable="true"
                         Value="@SelectedClientId"
                         SelectedItemChanged="OnClientFilterChanged"/>
                 </div>
                 <div>
-                    <ProjectsDropDown
+                    <ProjectsSelect
                         Label="@DashboardLocalizer["Project"].Value"
                         Clearable="true"
                         ClientId="@SelectedClientId"
@@ -92,26 +89,27 @@
                         SelectedItemChanged="OnProjectFilterChanged"/>
                 </div>
                 <div>
-                    <LumexTextbox
+                    <InputTextField
                         Label="@DashboardLocalizer["Search"].Value"
-                        LabelPlacement="LabelPlacement.Outside"
                         Placeholder="@DashboardLocalizer["ClientProjectNoteReference"].Value"
                         Value="@_search"
                         ValueChanged="OnSearchValueChanged"
                         Clearable="true"/>
                 </div>
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 
-    <LumexCard Class="overflow-x-auto pb-2">
-        <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <AppCard>
+        <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-slate-100">
             <div>
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["ReceivedClientPayments"]</p>
                 <p class="text-sm text-slate-500">@DashboardLocalizer["ReceivedClientPaymentsHelper"]</p>
             </div>
-        </LumexCardHeader>
-        <LumexCardBody>
+        </AppCardHeader>
+        <AppCardBody>
+        <AppCardBody Class="p-5">
             @if (!_state.Value.IsListLoading && !FilteredPayments.Any())
             {
                 <div class="px-4 py-12 text-center">
@@ -122,14 +120,14 @@
                     @if (CanCreatePayments)
                     {
                         <div class="mt-5">
-                            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+                            <AppButton OnClick="@OpenAddPaymentModal">
                                 <StartContent>
                                     <i class="fa-solid fa-plus"></i>
                                 </StartContent>
                                 <ChildContent>
                                     @DashboardLocalizer["AddClientPayment"]
                                 </ChildContent>
-                            </CustomButton>
+                            </AppButton>
                         </div>
                     }
                 </div>
@@ -146,6 +144,6 @@
                     TotalItems="@_state.Value.TotalCount"
                     IsLoading="@_state.Value.IsListLoading"/>
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 </div>

@@ -38,18 +38,14 @@ public partial class TasksListBlock : IDisposable
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
 
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private readonly HashSet<Guid> _expandedClientIds = [];
     private readonly HashSet<Guid> _expandedProjectIds = [];
     private string? _taskListSearch;
-    private bool _isAddClientModalOpened;
-    private bool _isAddProjectModalOpened;
-    private bool _isAddTaskListModalOpened;
-    private bool _isShowUpdateTaskListModal;
-    private bool _isShowDeleteTaskListConfirmation;
     private ClientDto? _selectedClient;
-    private ClientDto? _clientForNewProject;
     private ProjectDto? _selectedProject;
-    private TaskListDto? _taskListToManage;
 
     private TaskListDto? _selectedTaskList => _tasksListState.Value.SelectedTaskList;
 
@@ -145,49 +141,35 @@ public partial class TasksListBlock : IDisposable
         NavigationManager.NavigateTo(UrlService.GetDashboardUrl($"tasks/{taskList.Id}"));
     }
 
-    private Task OpenAddTaskListModal(ProjectDto project)
+    private async Task OpenAddTaskListModal(ProjectDto project)
     {
         _selectedClient = project.Client;
         _selectedProject = project;
         _expandedClientIds.Add(project.Client!.Id);
         _expandedProjectIds.Add(project.Id);
         Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(project));
-        _isAddTaskListModalOpened = true;
-        return NotifyContextChanged();
+        await NotifyContextChanged();
+        await _modalDialogService.ShowAddTasksListModal(project, OnTasksListAdded);
     }
 
-    private Task OpenAddClientModal()
+    private async Task OpenAddClientModal()
     {
         if (!IsCanCreateClient)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _isAddClientModalOpened = true;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddClientModal();
     }
 
-    private Task OpenAddProjectModal(ClientDto client)
+    private async Task OpenAddProjectModal(ClientDto client)
     {
         if (!IsCanCreateProject)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _clientForNewProject = client;
-        _isAddProjectModalOpened = true;
-        return Task.CompletedTask;
-    }
-
-    private Task OnAddProjectModalOpenedChanged(bool isOpened)
-    {
-        _isAddProjectModalOpened = isOpened;
-        if (!isOpened)
-        {
-            _clientForNewProject = null;
-        }
-
-        return Task.CompletedTask;
+        await _modalDialogService.ShowAddProjectModal(client.Id);
     }
 
     private string GetClientClass(ClientDto client) => _selectedClient?.Id == client.Id && _selectedProject == null
@@ -231,34 +213,29 @@ public partial class TasksListBlock : IDisposable
             || taskList.Project.Client?.Name.Contains(search, StringComparison.OrdinalIgnoreCase) == true;
     }
 
-    private Task OnTasksListAdded(TaskListDto? taskList) => taskList == null
-        ? Task.CompletedTask
-        : OnTasksListSelected(taskList);
-
-    private Task OpenEditTaskList(TaskListDto taskList)
+    private void OnTasksListAdded(TaskListDto? taskList)
     {
-        _taskListToManage = taskList;
-        _isShowUpdateTaskListModal = true;
-        return Task.CompletedTask;
-    }
-
-    private Task OpenDeleteTaskListConfirmation(TaskListDto taskList)
-    {
-        _taskListToManage = taskList;
-        _isShowDeleteTaskListConfirmation = true;
-        return Task.CompletedTask;
-    }
-
-    private Task OnDeleteTaskList()
-    {
-        if (_taskListToManage != null)
+        if (taskList != null)
         {
-            Dispatcher.Dispatch(new ArchiveTaskListAction(_taskListToManage));
+            _ = OnTasksListSelected(taskList);
         }
+    }
 
-        _isShowDeleteTaskListConfirmation = false;
-        _taskListToManage = null;
-        return Task.CompletedTask;
+    private async Task OpenEditTaskList(TaskListDto taskList)
+    {
+        await _modalDialogService.ShowUpdateTaskListModal(taskList);
+    }
+
+    private async Task OpenDeleteTaskListConfirmation(TaskListDto taskList)
+    {
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["TasksBlock_DeleteTaskListTitle"].Value,
+            DashboardLocalizer["TasksBlock_DeleteTaskListSubtitle"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new ArchiveTaskListAction(taskList));
+        }
     }
 
     private void OnTasksListStateChanged(object? sender, EventArgs args)

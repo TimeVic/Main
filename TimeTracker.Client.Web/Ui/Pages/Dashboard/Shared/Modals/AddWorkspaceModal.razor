@@ -1,0 +1,49 @@
+@inherits BaseReactiveComponent
+
+<AppModalHeader
+    Title="@DashboardLocalizer["AddWorkspaceModal_Title"]"
+    Description="@DashboardLocalizer["AddWorkspaceModal_Description"]">
+    <ChildContent>
+        <p
+            class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600 mb-1">
+            @DashboardLocalizer["AddWorkspaceModal_Kicker"]
+        </p>
+    </ChildContent>
+</AppModalHeader>
+<AppModalBody
+    Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        OnValidSubmit="@Submit"
+        novalidate>
+        <DataAnnotationsValidator/>
+        <button
+            type="submit"
+            class="sr-only"
+            tabindex="-1"
+            aria-hidden="true">
+            @DashboardLocalizer["Submit"]
+        </button>
+        
+        <div
+            class="pt-1">
+            <InputTextField
+                FullWidth="true"
+                Label="@DashboardLocalizer["UpdateWorkspaceForm_WorkspaceName"]"
+                IsShowEmojiButton="true"
+                @bind-Value="model.Name"/>
+        </div>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        IsLoading="_isLoading"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        @DashboardLocalizer["Add"]
+    </AppButton>
+</AppModalFooter>

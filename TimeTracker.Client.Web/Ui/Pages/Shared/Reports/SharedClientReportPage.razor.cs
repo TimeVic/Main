@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 using TimeTracker.Client.Web.Services;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Shared.Reports;
@@ -19,6 +20,7 @@ public partial class SharedClientReportPage
         string BadgeText,
         string CardClass,
         string BadgeClass,
+        ComponentColor BadgeColor,
         string BadgeIcon,
         string CardIcon
     );
@@ -165,6 +167,7 @@ public partial class SharedClientReportPage
                 DashboardLocalizer["SharedClientReport_PaymentPending"].Value,
                 "border-red-200 bg-red-50/40 text-red-700",
                 "bg-red-100 text-red-700",
+                ComponentColor.Danger,
                 "fa-clock",
                 "fa-circle-exclamation"
             );
@@ -177,6 +180,7 @@ public partial class SharedClientReportPage
                 string.Format(DashboardLocalizer["SharedClientReport_AdvanceBalance"].Value, FormatAmount(Math.Abs(outstanding))),
                 "border-emerald-200 bg-emerald-50/40 text-emerald-700",
                 "bg-emerald-100 text-emerald-700",
+                ComponentColor.Success,
                 "fa-shield-halved",
                 "fa-shield-heart"
             );
@@ -187,6 +191,7 @@ public partial class SharedClientReportPage
             DashboardLocalizer["SharedClientReport_PaidInFull"].Value,
             "border-slate-200 bg-slate-50 text-slate-700",
             "bg-slate-200 text-slate-700",
+            ComponentColor.Secondary,
             "fa-circle-check",
             "fa-circle-check"
         );

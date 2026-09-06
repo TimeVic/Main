@@ -1,5 +1,4 @@
-@using LumexUI
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
 @inherits BaseReactiveComponent
 
 @{
@@ -18,34 +17,30 @@
 {
     @foreach (var item in primaryItems)
     {
-        <LumexNavbarMenuItem>
-            <LumexLink
-                Href="@item.Url"
-                Class="@GetMobileMenuLinkClass(item)"
-                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                Underline="@Underline.None">
+        <div>
+            <a
+                href="@item.Url"
+                class="@GetMobileMenuLinkClass(item)">
                 <i class="@item.Icon"></i>
                 <span>@item.Name</span>
-            </LumexLink>
-        </LumexNavbarMenuItem>
+            </a>
+        </div>
     }
 
     @foreach (var group in groupedItems)
     {
-        <LumexNavbarMenuItem>
+        <div>
             <div class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
                 @(string.IsNullOrEmpty(group.Key) ? DashboardLocalizer["Payments"] : group.Key)
             </div>
-        </LumexNavbarMenuItem>
+        </div>
 
         foreach (var item in group)
         {
-            <LumexNavbarMenuItem>
-                <LumexLink
-                    Href="@item.Url"
-                    Class="@GetMobileMenuLinkClass(item)"
-                    Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                    Underline="@Underline.None">
+            <div>
+                <a
+                    href="@item.Url"
+                    class="@GetMobileMenuLinkClass(item)">
                     <i class="@item.Icon"></i>
                     <span>@item.Name</span>
                     @if (item.BadgeCount > 0)
@@ -54,127 +49,120 @@
                             @item.BadgeCount
                         </span>
                     }
-                </LumexLink>
-            </LumexNavbarMenuItem>
+                </a>
+            </div>
         }
     }
 
     @if (settingsItem != null)
     {
-        <LumexNavbarMenuItem>
-            <LumexLink
-                Href="@settingsItem.Url"
-                Class="@GetMobileMenuLinkClass(settingsItem)"
-                Color="@(IsMenuItemSelected(settingsItem) ? ThemeColor.Primary : ThemeColor.Default)"
-                Underline="@Underline.None">
+        <div>
+            <a
+                href="@settingsItem.Url"
+                class="@GetMobileMenuLinkClass(settingsItem)">
                 <i class="@settingsItem.Icon"></i>
                 <span>@DashboardLocalizer["Settings"]</span>
-            </LumexLink>
-        </LumexNavbarMenuItem>
+            </a>
+        </div>
     }
 }
 else
 {
-    @foreach (var item in primaryItems)
-    {
-        <LumexNavbarItem>
-            <LumexLink
-                Href="@item.Url"
-                Class="@GetMenuLinkClass(item)"
-                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                Underline="@Underline.None">
+    <div class="flex items-center gap-1">
+        @foreach (var item in primaryItems)
+        {
+            <a
+                href="@item.Url"
+                class="@GetMenuLinkClass(item)">
                 <i class="@item.Icon"></i>
                 <span class="hidden sm:inline">@item.Name</span>
-            </LumexLink>
-        </LumexNavbarItem>
-    }
+            </a>
+        }
 
-    @if (groupedItems.Any())
-    {
-        var hasGroupBadge = groupedItems.SelectMany(g => g).Any(i => i.BadgeCount > 0);
-        var totalGroupBadgeCount = groupedItems.SelectMany(g => g).Sum(i => i.BadgeCount);
+        @if (groupedItems.Any())
+        {
+            var hasGroupBadge = groupedItems.SelectMany(g => g).Any(i => i.BadgeCount > 0);
+            var totalGroupBadgeCount = groupedItems.SelectMany(g => g).Sum(i => i.BadgeCount);
 
-        <LumexNavbarItem>
-            <LumexDropdown ShowArrow="@true"
-                           Radius="@Radius.Small">
-                <LumexDropdownTrigger>
-                    <span class="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
-                          role="button"
-                          tabindex="0">
-                        <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
-                        <span class="hidden sm:inline">@DashboardLocalizer["Payments"]</span>
-                        @if (hasGroupBadge)
+            <div class="relative">
+                <AppDropdown Alignment="DropdownAlignment.Left" MenuClass="w-64 p-2">
+                    <Trigger>
+                        <span
+                            class="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
+                            role="button"
+                            tabindex="0">
+                            <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
+                            <span class="hidden sm:inline">@DashboardLocalizer["Payments"]</span>
+                            @if (hasGroupBadge)
+                            {
+                                <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold leading-none text-white">
+                                    @totalGroupBadgeCount
+                                </span>
+                            }
+                            <i class="fa-solid fa-chevron-down text-xs text-slate-400" aria-hidden="true"></i>
+                        </span>
+                    </Trigger>
+                    <Menu>
+                        @foreach (var group in groupedItems.Where(g => string.IsNullOrEmpty(g.Key)))
                         {
-                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold leading-none text-white">
-                                @totalGroupBadgeCount
-                            </span>
+                            foreach (var item in group)
+                            {
+                                <AppDropdownItem
+                                    IsActive="@IsMenuItemSelected(item)"
+                                    OnClick="@(() => OnMenuItemSelected(item.Url))">
+                                    <StartContent>
+                                        <span class="flex items-center gap-2">
+                                            <i class="@item.Icon"></i>
+                                        </span>
+                                    </StartContent>
+                                    <ChildContent>
+                                        <div class="flex items-center justify-between w-full gap-2">
+                                            <span>@item.Name</span>
+                                            @if (item.BadgeCount > 0)
+                                            {
+                                                <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
+                                                    @item.BadgeCount
+                                                </span>
+                                            }
+                                        </div>
+                                    </ChildContent>
+                                </AppDropdownItem>
+                            }
                         }
-                        <i class="fa-solid fa-chevron-down text-xs text-slate-400" aria-hidden="true"></i>
-                    </span>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu Class="p-3">
-                    @foreach (var group in groupedItems.Where(g => string.IsNullOrEmpty(g.Key)))
-                    {
-                        foreach (var item in group)
-                        {
-                            <LumexDropdownItem
-                                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                                Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                                OnClick="@(() => OnMenuItemSelected(item.Url))">
-                                <StartContent>
-                                    <span class="flex items-center gap-2">
-                                        <i class="@item.Icon"></i>
-                                    </span>
-                                </StartContent>
-                                <ChildContent>
-                                    <div class="flex items-center justify-between w-full gap-2">
-                                        <span>@item.Name</span>
-                                        @if (item.BadgeCount > 0)
-                                        {
-                                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
-                                                @item.BadgeCount
-                                            </span>
-                                        }
-                                    </div>
-                                </ChildContent>
-                            </LumexDropdownItem>
-                        }
-                    }
-                    @foreach (var group in groupedItems.Where(g => !string.IsNullOrEmpty(g.Key)))
-                    {
-                        <LumexDropdownItem
-                            ShowDivider="true"
-                            Disabled="true">
-                            @group.Key
-                        </LumexDropdownItem>
-                        foreach (var item in group)
-                        {
-                            <LumexDropdownItem
-                                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                                Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                                OnClick="@(() => OnMenuItemSelected(item.Url))">
-                                <StartContent>
-                                    <span class="flex items-center gap-2">
-                                        <i class="@item.Icon"></i>
-                                    </span>
-                                </StartContent>
-                                <ChildContent>
-                                    <div class="flex items-center justify-between w-full gap-2">
-                                        <span>@item.Name</span>
-                                        @if (item.BadgeCount > 0)
-                                        {
-                                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
-                                                @item.BadgeCount
-                                            </span>
-                                        }
-                                    </div>
-                                </ChildContent>
-                            </LumexDropdownItem>
-                        }
-                    }
-                </LumexDropdownMenu>
-            </LumexDropdown>
-        </LumexNavbarItem>
-    }
 
+                        @foreach (var group in groupedItems.Where(g => !string.IsNullOrEmpty(g.Key)))
+                        {
+                            <div class="my-1 border-t border-slate-100 dark:border-slate-700/60"></div>
+                            <div class="px-3 py-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                @group.Key
+                            </div>
+                            foreach (var item in group)
+                            {
+                                <AppDropdownItem
+                                    IsActive="@IsMenuItemSelected(item)"
+                                    OnClick="@(() => OnMenuItemSelected(item.Url))">
+                                    <StartContent>
+                                        <span class="flex items-center gap-2">
+                                            <i class="@item.Icon"></i>
+                                        </span>
+                                    </StartContent>
+                                    <ChildContent>
+                                        <div class="flex items-center justify-between w-full gap-2">
+                                            <span>@item.Name</span>
+                                            @if (item.BadgeCount > 0)
+                                            {
+                                                <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
+                                                    @item.BadgeCount
+                                                </span>
+                                            }
+                                        </div>
+                                    </ChildContent>
+                                </AppDropdownItem>
+                            }
+                        }
+                    </Menu>
+                </AppDropdown>
+            </div>
+        }
+    </div>
 }

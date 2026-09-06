@@ -1,41 +1,11 @@
-@using LumexUI
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
 
 <aside class="@ContainerClass">
-    <AddClientModal
-        IsOpened="_isAddClientModalOpened"
-        IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened" />
-
-    <AddProjectModal
-        IsOpened="_isAddProjectModalOpened"
-        InitialClientId="_clientForNewProject?.Id"
-        IsOpenedChanged="OnAddProjectModalOpenedChanged" />
-
-    <AddTasksListModalForm
-        Project="_selectedProject"
-        OnAdded="OnTasksListAdded"
-        @bind-IsOpened="_isAddTaskListModalOpened" />
-
-    @if (_taskListToManage != null)
-    {
-        <UpdateTaskListModal
-            @bind-IsOpened="_isShowUpdateTaskListModal"
-            TaskList="_taskListToManage" />
-    }
-
-    @if (_isShowDeleteTaskListConfirmation)
-    {
-        <ConfirmationModal
-            Title="@DashboardLocalizer["TasksBlock_DeleteTaskListTitle"].Value"
-            Subtitle="@DashboardLocalizer["TasksBlock_DeleteTaskListSubtitle"].Value"
-            OnClose="@(() => _isShowDeleteTaskListConfirmation = false)"
-            OnConfirm="OnDeleteTaskList" />
-    }
-
     <div class="flex min-h-0 flex-1 flex-col">
         <div class="border-b border-slate-200 p-4">
             <div class="min-w-0">
@@ -49,10 +19,8 @@
                 @bind-Value="_taskListSearch"
                 Placeholder="@DashboardLocalizer["TasksListBlock_SearchPlaceholder"].Value"
                 FullWidth="true"
-                Size="Size.Small"
-                Clearable="true"
-                Variant="InputVariant.Underlined"
-                Color="ThemeColor.Default">
+                Size="ComponentSize.Small"
+                Clearable="true">
                 <StartContent>
                     <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
                 </StartContent>
@@ -130,25 +98,25 @@
                                             <span class="min-w-0 flex-1 truncate text-sm font-medium">@project.Name</span>
                                             <span class="shrink-0 text-[10px] font-medium text-slate-400">@GetProjectTaskListsCountText(project)</span>
                                         </button>
-                                        <LumexDropdown>
-                                            <LumexDropdownTrigger>
-                                                <LumexButton
+                                        <AppDropdown Alignment="DropdownAlignment.Right">
+                                            <Trigger>
+                                                <AppButton
                                                     IconOnly="true"
-                                                    Size="Size.Small"
-                                                    Variant="@Variant.Light"
+                                                    Size="ComponentSize.Small"
+                                                    Variant="ButtonVariant.Light"
                                                     Class="text-slate-500">
                                                     <i class="fa-solid fa-ellipsis-h text-xs"></i>
-                                                </LumexButton>
-                                            </LumexDropdownTrigger>
-                                            <LumexDropdownMenu>
-                                                <LumexDropdownItem OnClick="@(() => OpenAddTaskListModal(project))">
+                                                </AppButton>
+                                            </Trigger>
+                                            <Menu>
+                                                <AppDropdownItem OnClick="@(() => OpenAddTaskListModal(project))">
                                                     <span class="flex items-center gap-2">
                                                         <i class="fa-solid fa-plus w-4 text-xs"></i>
                                                         @DashboardLocalizer["AddTasksListModalForm_Title"]
                                                     </span>
-                                                </LumexDropdownItem>
-                                            </LumexDropdownMenu>
-                                        </LumexDropdown>
+                                                </AppDropdownItem>
+                                            </Menu>
+                                        </AppDropdown>
                                     </div>
 
                                     @if (isProjectExpanded)
@@ -170,34 +138,33 @@
                                                                 @GetTasksCountText(taskList)
                                                             </span>
                                                         </button>
-                                                        <LumexDropdown>
-                                                            <LumexDropdownTrigger>
-                                                                <LumexButton
+                                                        <AppDropdown Alignment="DropdownAlignment.Right">
+                                                            <Trigger>
+                                                                <AppButton
                                                                     IconOnly="true"
-                                                                    Size="Size.Small"
-                                                                    Variant="@Variant.Light"
+                                                                    Size="ComponentSize.Small"
+                                                                    Variant="ButtonVariant.Light"
                                                                     Class="text-slate-500">
                                                                     <i class="fa-solid fa-ellipsis-h text-xs"></i>
-                                                                </LumexButton>
-                                                            </LumexDropdownTrigger>
-                                                            <LumexDropdownMenu>
-                                                                <LumexDropdownItem OnClick="@(() => OpenEditTaskList(taskList))">
+                                                                </AppButton>
+                                                            </Trigger>
+                                                            <Menu>
+                                                                <AppDropdownItem OnClick="@(() => OpenEditTaskList(taskList))">
                                                                     <span class="flex items-center gap-2">
                                                                         <i class="fa-solid fa-pen w-4 text-xs"></i>
                                                                         @DashboardLocalizer["TasksBlock_EditTaskList"]
                                                                     </span>
-                                                                </LumexDropdownItem>
-                                                                <LumexDropdownItem
-                                                                    Color="@ThemeColor.Danger"
-                                                                    Class="text-danger"
+                                                                </AppDropdownItem>
+                                                                <AppDropdownItem
+                                                                    Color="@ComponentColor.Danger"
                                                                     OnClick="@(() => OpenDeleteTaskListConfirmation(taskList))">
                                                                     <span class="flex items-center gap-2">
                                                                         <i class="fa-solid fa-trash w-4 text-xs"></i>
                                                                         @DashboardLocalizer["TasksBlock_DeleteTaskListTitle"]
                                                                     </span>
-                                                                </LumexDropdownItem>
-                                                            </LumexDropdownMenu>
-                                                        </LumexDropdown>
+                                                                </AppDropdownItem>
+                                                            </Menu>
+                                                        </AppDropdown>
                                                     </div>
                                                 }
                                             </div>

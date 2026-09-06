@@ -1,46 +1,52 @@
-﻿@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Business.Common.Constants
 @inherits BaseComponent
 
-<MudCard
-    Class="pa-3 cursor-pointer"
-    @onclick="@OnClickToNotification">
-    <MudStack
-        Spacing="1"
-        Row="true">
-        @if (!Notification.IsRead)
-        {
-            <MudBadge
-                Icon="@Icons.Material.Filled.Markunread"
-                Color="Color.Error"
-                Overlap="true"
-                Bordered="true">
-                <MudChip
-                    Icon="@Icons.Material.Filled.AccessTime"
-                    Size="Size.Small"
-                    Color="Color.Primary">
-                    @DashboardLocalizer["Reminder"]
-                </MudChip>
-            </MudBadge>
-        }
-        else
-        {
-            <MudChip
-                Icon="@Icons.Material.Filled.AccessTime"
-                Size="Size.Small"
-                Color="Color.Surface">
-                @DashboardLocalizer["Reminder"]
-            </MudChip>
-        }
+<AppCard
+    IsHoverable="true"
+    Class="cursor-pointer"
+    OnClick="@OnClickToNotification">
+    <AppCardBody Class="p-3">
+        <MudStack
+            Spacing="1"
+            Row="true">
+            @if (!Notification.IsRead)
+            {
+                <MudBadge
+                    Icon="@Icons.Material.Filled.Markunread"
+                    Color="Color.Error"
+                    Overlap="true"
+                    Bordered="true">
+                    <AppBadge
+                        Icon="fa-regular fa-clock"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Primary"
+                        Variant="BadgeVariant.Flat"
+                        Text="@DashboardLocalizer["Reminder"]">
+                    </AppBadge>
+                </MudBadge>
+            }
+            else
+            {
+                <AppBadge
+                    Icon="fa-regular fa-clock"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Default"
+                    Variant="BadgeVariant.Flat"
+                    Text="@DashboardLocalizer["Reminder"]">
+                </AppBadge>
+            }
+            <MudText
+                Class="mt-1 ml-2"
+                Typo="Typo.body1">
+                <b>@DashboardLocalizer["ReminderCard_DueTime"]:</b> @Notification.Task.ReminderTime?.ToString("MM/dd/yyyy h:mm:ss")
+            </MudText>
+        </MudStack>
         <MudText
-            Class="mt-1 ml-2"
+            Class="ml-1"
+            Style="line-break: anywhere;"
             Typo="Typo.body1">
-            <b>@DashboardLocalizer["ReminderCard_DueTime"]:</b> @Notification.Task.ReminderTime?.ToString("MM/dd/yyyy h:mm:ss")
+            @Notification.Task.Title
         </MudText>
-    </MudStack>
-    <MudText
-        Class="ml-1"
-        Style="line-break: anywhere;"
-        Typo="Typo.body1">
-        @Notification.Task.Title
-    </MudText>
-</MudCard>
+    </AppCardBody>
+</AppCard>
+

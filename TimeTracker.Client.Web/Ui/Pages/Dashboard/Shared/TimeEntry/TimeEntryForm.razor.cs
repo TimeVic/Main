@@ -1,8 +1,9 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry;
 
@@ -22,10 +23,9 @@ public partial class TimeEntryForm : IDisposable
 
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
-    
-    private bool _isEditModalOpened = false;
-    private bool _isAddTaskModalOpened = false;
-    private bool _isUpdateTaskModalOpened = false;
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
     
     private TimeEntryDto? _activeEntry
     {
@@ -108,14 +108,32 @@ public partial class TimeEntryForm : IDisposable
         await UpdateTimeEntry(_activeEntry);
     }
 
-    private void OpenAddTaskModal()
+    private async Task OpenAddTaskModal()
     {
         if (!_hasActiveEntry || _activeEntry?.Project == null || _activeEntry.Task != null)
         {
             return;
         }
 
-        _isAddTaskModalOpened = true;
+        await _modalDialogService.ShowAddTaskModal(
+            projectId: _activeEntry.Project.Id,
+            timeEntryId: _activeEntry.Id,
+            onClose: result =>
+            {
+                if (result.Data is TaskFullDto task)
+                {
+                    _ = OnTaskAdded(task);
+                }
+            }
+        );
+    }
+
+    private async Task OpenEditModal()
+    {
+        if (_activeEntry != null)
+        {
+            await _modalDialogService.ShowEditTimeEntryModal(_activeEntry);
+        }
     }
 
     private Task OnTaskAdded(TaskFullDto? task)
@@ -136,6 +154,14 @@ public partial class TimeEntryForm : IDisposable
     {
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry, isSetProjectDefaults));
         await Task.CompletedTask;
+    }
+
+    private async Task OpenTaskDetailsModal()
+    {
+        if (_activeEntry?.Task != null)
+        {
+            await _modalDialogService.ShowEditTaskModal(_activeEntry.Task);
+        }
     }
 
     private void OnTimeEntryStateChanged(object? sender, EventArgs e)

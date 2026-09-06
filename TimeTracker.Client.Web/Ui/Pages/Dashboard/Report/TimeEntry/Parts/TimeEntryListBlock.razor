@@ -1,4 +1,4 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
@@ -7,118 +7,134 @@
 
 @inherits BaseReactiveComponent
 
-@if (_timeEntryToEdit != null)
-{
-    <EditTimeEntryModal
-        Entry="_timeEntryToEdit"
-        OnClose="OnCloseEditModal"/>
-}
-
-@if (_timeEntryToDelete != null)
-{
-    <ConfirmationModal
-        DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
-        OnConfirm="OnConfirmDelete"
-        OnCancel="@(() => _timeEntryToDelete = null)"/>
-}
-
-<div class="mt-6">
-    <LumexDataGrid
-        TItem="TimeEntryDto"
-        Data="@_state.Value.FilteredList.AsQueryable()"
-        Loading="@_state.Value.IsListLoading"
-        Hoverable="true">
-
-        <LoadingContent>
-            <div class="flex justify-center py-6">
-                <LumexSpinner Variant="SpinnerVariant.DotsFade"/>
-            </div>
-        </LoadingContent>
-
+<div
+    class="mt-6">
+<div>
+    <AppTable
+        TGridItem="TimeEntryDto"
+        Items="@_state.Value.FilteredList.AsQueryable()"
+        IsLoading="@_state.Value.IsListLoading">
         <EmptyContent>
-            <div class="py-6 text-center text-sm text-slate-500">
+            <div
+                class="py-6 text-center text-sm text-slate-500">
                 @DashboardLocalizer["NoTimeEntriesFilterMessage"]
             </div>
         </EmptyContent>
 
         <ChildContent>
-            <TemplateColumn Title="@DashboardLocalizer["Date"].Value" TItem="TimeEntryDto">
-                <span class="whitespace-nowrap text-slate-600">
+            <AppTableColumn
+                Title="@DashboardLocalizer["Date"].Value">
+                <span
+                    class="whitespace-nowrap text-slate-600">
                     @context.StartTime.ToDateTimeOffset(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id).ToString("MMM d, yyyy")
                 </span>
-            </TemplateColumn>
+            </AppTableColumn>
 
-            <TemplateColumn Title="@DashboardLocalizer["User"].Value" TItem="TimeEntryDto">
-                <span class="font-medium text-slate-700">@context.User.Name</span>
-            </TemplateColumn>
+            <AppTableColumn
+                Title="@DashboardLocalizer["User"].Value">
+                <span
+                    class="font-medium text-slate-700">
+                    @context.User.Name
+                </span>
+            </AppTableColumn>
 
-            <TemplateColumn Title="@DashboardLocalizer["Description"].Value" TItem="TimeEntryDto">
-                <span class="@(string.IsNullOrWhiteSpace(context.Description) && context.Task == null ? "italic text-slate-400" : "text-slate-700")">
+            <AppTableColumn
+                Title="@DashboardLocalizer["Description"].Value">
+                <span
+                    class="@(string.IsNullOrWhiteSpace(context.Description) && context.Task == null ? "italic text-slate-400" : "text-slate-700")">
                     @GetDescriptionOrTask(context)
                 </span>
-            </TemplateColumn>
+            </AppTableColumn>
 
-            <TemplateColumn Title="@DashboardLocalizer["Project"].Value" TItem="TimeEntryDto">
-                <span class="text-slate-500">@(context.Project?.Name ?? "—")</span>
-            </TemplateColumn>
+            <AppTableColumn
+                Title="@DashboardLocalizer["Project"].Value">
+                <span
+                    class="text-slate-500">
+                    @(context.Project?.Name ?? "—")
+                </span>
+            </AppTableColumn>
 
-            <TemplateColumn Title="@DashboardLocalizer["Billable"].Value" TItem="TimeEntryDto" Align="Align.Center">
+            <AppTableColumn
+                Title="@DashboardLocalizer["Billable"].Value"
+                Align="Align.Center">
                 @if (context.IsBillable)
                 {
-                    <span class="inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold text-emerald-600">
-                        <i class="fa-solid fa-dollar-sign"></i>
+                    <span
+                        class="inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold text-emerald-600">
+                        <i
+                            class="fa-solid fa-dollar-sign">
+                        </i>
                     </span>
                 }
                 else
                 {
-                    <span class="text-slate-300">—</span>
+                    <span
+                        class="text-slate-300">
+                        —
+                    </span>
                 }
-            </TemplateColumn>
+            </AppTableColumn>
 
-            <TemplateColumn Title="@DashboardLocalizer["Duration"].Value" TItem="TimeEntryDto" Align="Align.End">
-                <span class="whitespace-nowrap font-mono font-semibold text-slate-700">
+            <AppTableColumn
+                Title="@DashboardLocalizer["Duration"].Value"
+                Align="Align.End">
+                <span
+                    class="whitespace-nowrap font-mono font-semibold text-slate-700">
                     @if (context.IsAutostopped)
                     {
-                        <span class="mr-1 text-amber-600" title="@DashboardLocalizer["TimeEntry_Autostopped"]">⚠️</span>
+                        <span
+                            class="mr-1 text-amber-600"
+                            title="@DashboardLocalizer["TimeEntry_Autostopped"]">
+                            ⚠️
+                        </span>
                     }
                     @_timeParsingService.TimeSpanToTimeString(context.Duration, true)
                 </span>
-            </TemplateColumn>
+            </AppTableColumn>
 
-            <TemplateColumn Title="" TItem="TimeEntryDto" Align="Align.End">
-                <div class="flex items-center justify-end gap-1">
+            <AppTableColumn
+                TGridItem="TimeEntryDto"
+                Title=""
+                Align="Align.End">
+                <div
+                    class="flex items-center justify-end gap-1">
                     @if (SecurityManager.CanEditTimeEntry(context))
                     {
-                        <CustomButton
-                            Size="Size.Small"
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Light"
+                        <AppButton
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true"
-                            OnClick="@(() => _timeEntryToEdit = context)">
+                            OnClick="@(() => OnEdit(context))">
                             <ChildContent>
-                                <i class="fa-regular fa-pen-to-square text-slate-400"></i>
+                                <i
+                                    class="fa-regular fa-pen-to-square text-slate-400">
+                                </i>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     }
                     @if (SecurityManager.CanDeleteTimeEntry(context))
                     {
-                        <CustomButton
-                            Size="Size.Small"
-                            Color="ThemeColor.Danger"
-                            Variant="Variant.Light"
+                        <AppButton
+                            Size="ComponentSize.Small"
+                            Color="ComponentColor.Danger"
+                            Variant="ButtonVariant.Light"
                             IconOnly="true"
-                            OnClick="@(() => _timeEntryToDelete = context)">
+                            OnClick="@(() => OnDelete(context))">
                             <ChildContent>
-                                <i class="fa-regular fa-trash-can text-slate-400"></i>
+                                <i
+                                    class="fa-regular fa-trash-can text-slate-400">
+                                </i>
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     }
                 </div>
-            </TemplateColumn>
+            </AppTableColumn>
         </ChildContent>
-    </LumexDataGrid>
+    </AppTable>
 
-    <div class="mt-4">
+    <div
+        class="mt-4">
         <TPaginator
             CurrentPage="@_state.Value.FilteredSelectedPage"
             CurrentPageChanged="OnPageChanged"

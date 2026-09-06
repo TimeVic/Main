@@ -1,6 +1,6 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
@@ -10,20 +10,8 @@
 @inherits BaseReactiveComponent
 
 <section class="@ContainerClass">
-    @if (ContextProject != null)
-    {
-        <AddTasksListModalForm
-            Project="ContextProject"
-            OnAdded="OnTaskListAdded"
-            @bind-IsOpened="_isShowAddTaskListModal" />
-    }
-
     @if (_taskList != null)
     {
-        <AddTaskModal
-            @bind-IsOpened="_isShowAddTaskModal"
-            TaskList="_taskList" />
-
         <div class="@HeaderClass">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="min-w-0">
@@ -39,45 +27,43 @@
                             @bind-Value="SearchString"
                             Placeholder="@DashboardLocalizer["TasksBlock_SearchTasksPlaceholder"].Value"
                             FullWidth="true"
-                            Size="Size.Small"
-                            Clearable="true"
-                            Variant="InputVariant.Underlined"
-                            Color="ThemeColor.Default">
+                            Size="ComponentSize.Small"
+                            Clearable="true">
                             <StartContent>
                                 <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
                             </StartContent>
                         </InputTextField>
                     </div>
-                    <LumexDropdown>
-                        <LumexDropdownTrigger>
-                            <LumexButton
+                    <AppDropdown Alignment="DropdownAlignment.Right">
+                        <Trigger>
+                            <AppButton
                                 IconOnly="true"
-                                Size="Size.Small"
-                                Variant="Variant.Outlined"
+                                Size="ComponentSize.Small"
+                                Variant="ButtonVariant.Outlined"
                                 Class="text-slate-600"
                                 title="@DashboardLocalizer["TasksBlock_Filters"].Value">
                                 <i class="fa-solid fa-filter text-xs"></i>
                                 <span class="sr-only">@DashboardLocalizer["TasksBlock_Filters"]</span>
-                            </LumexButton>
-                        </LumexDropdownTrigger>
-                        <LumexDropdownMenu>
-                            <LumexDropdownItem OnClick="OnToggleShowArchived">
+                            </AppButton>
+                        </Trigger>
+                        <Menu>
+                            <AppDropdownItem OnClick="OnToggleShowArchived">
                                 <span class="flex items-center gap-2">
                                     <i class="fa-solid @(_isShowArchived ? "fa-square-check" : "fa-square") w-4 text-xs"></i>
                                     <span>@DashboardLocalizer["TasksBlock_ShowArchived"]</span>
                                 </span>
-                            </LumexDropdownItem>
-                        </LumexDropdownMenu>
-                    </LumexDropdown>
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Info"
-                        OnClick="@(() => _isShowAddTaskModal = true)">
+                            </AppDropdownItem>
+                        </Menu>
+                    </AppDropdown>
+                    <AppButton
+                        Variant="ButtonVariant.Outlined"
+                        Color="ComponentColor.Info"
+                        OnClick="@OpenAddTaskModal">
                         <StartContent>
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
                         <ChildContent>@DashboardLocalizer["AddTask"]</ChildContent>
-                    </CustomButton>
+                    </AppButton>
                 </div>
             </div>
         </div>
@@ -91,16 +77,16 @@
         <div class="@EmptyStateClass">
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBlock_ProjectEmptyTitle"]</p>
             <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TasksBlock_ProjectEmptyDescription"]</p>
-            <CustomButton
+            <AppButton
                 Class="mt-4"
-                Variant="Variant.Outlined"
-                Color="ThemeColor.Info"
-                OnClick="@(() => _isShowAddTaskListModal = true)">
+                Variant="ButtonVariant.Outlined"
+                Color="ComponentColor.Info"
+                OnClick="@OpenAddTaskListModal">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["AddTasksListModalForm_Title"]</ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
     }
     else if (ContextClient != null)

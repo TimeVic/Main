@@ -1,5 +1,4 @@
 @page "/board/{WorkspaceId:guid}/notes"
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Notes
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components.Modals
@@ -12,51 +11,6 @@
 <SeoHead
     Title="@($"TimeVic - {DashboardLocalizer["Notes"]}")"
     Robots="@SiteMetadata.NoIndexRobots" />
-
-@if (CanManageTree)
-{
-<CreateFolderModal
-    IsOpened="State.IsCreateFolderModalOpened"
-    IsSaving="State.IsCreatingNode"
-    ParentId="State.ActiveParentId"
-    Visibility="@ActiveModalVisibility"
-    IsOpenedChanged="@OnCreateFolderModalChanged"
-    OnSubmit="@CreateFolder"/>
-
-<CreateNoteModal
-    IsOpened="State.IsCreateNoteModalOpened"
-    IsSaving="State.IsCreatingNode"
-    ParentId="State.ActiveParentId"
-    Visibility="@ActiveModalVisibility"
-    IsOpenedChanged="@OnCreateNoteModalChanged"
-    OnSubmit="@CreateDocument"/>
-
-<RenameNoteNodeModal
-    IsOpened="@(State.NodeToRename != null)"
-    IsSaving="State.IsRenamingNode"
-    Node="State.NodeToRename"
-    IsOpenedChanged="@OnRenameModalChanged"
-    OnSubmit="@RenameNode"/>
-
-<MoveNoteNodeModal
-    IsOpened="@(State.NodeToMove != null)"
-    IsSaving="State.IsMovingNode"
-    Node="State.NodeToMove"
-    Nodes="State.FlatNodes"
-    IsOpenedChanged="@OnMoveModalChanged"
-    OnSubmit="@MoveNode"/>
-}
-
-@if (CanManageTree && State.NodeToArchive != null)
-{
-    <ConfirmationModal
-        Title="@DashboardLocalizer["Notes_ArchiveConfirmTitle"].Value"
-        Subtitle="@DashboardLocalizer["Notes_ArchiveConfirmSubtitle"].Value"
-        ConfirmText="@DashboardLocalizer["Archive"].Value"
-        OnClose="@CloseArchiveConfirmation"
-        OnCancel="@CloseArchiveConfirmation"
-        OnConfirm="@ArchiveNode"/>
-}
 
 <section class="space-y-5">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -96,8 +50,8 @@
         </div>
     }
 
-    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
-        <LumexCardBody Class="p-0">
+    <AppCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <AppCardBody Class="p-0">
             <ResizableSplitBlock
                 Class="min-h-[720px]"
                 DefaultStartPaneWidth="@DefaultTreeWidth"
@@ -143,6 +97,6 @@
                         OnSave="@SaveDocument"/>
                 </EndContent>
             </ResizableSplitBlock>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
 </section>

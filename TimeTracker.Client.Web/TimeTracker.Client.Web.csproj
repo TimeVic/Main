@@ -30,8 +30,8 @@
         <PackageReference Include="Blazor-ApexCharts" Version="7.0.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.11.0" />
-        <PackageReference Include="LumexUI" Version="2.4.0" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.10" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.10" />
@@ -113,10 +113,6 @@
       <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
       <Compile Remove="Shared\Components\Form\TimeInput.razor.cs" />
       <Compile Remove="Shared\Components\Form\YesNoDropDown.razor.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.GoalsTracker.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.NotificationsCenter.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.Tags.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMember.cs" />
       <Compile Remove="Pages\Dashboard\Dashboard\**" />
       <Compile Remove="Pages\Dashboard\GoalsTracker\**" />
       <Compile Remove="Pages\Dashboard\Integrations\**" />
@@ -255,8 +251,6 @@
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\ProjectsDropDown.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TagsDropDown.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TaskListsDropDown.razor" />
-      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\DateTimeEditField.razor" />
-      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\TimeEditField.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Storage\FileViewModal.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\TagsBadgesList.razor" />
       <_ContentIncludedByDefault Remove="Shared\InitializationContainer.razor" />
@@ -370,7 +364,7 @@
             StandardErrorImportance="high" />
     </Target>
     
-    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish" Condition="Exists('bin/lumexui')">
+    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
 

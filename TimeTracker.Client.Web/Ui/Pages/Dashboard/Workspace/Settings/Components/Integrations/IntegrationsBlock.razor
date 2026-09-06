@@ -1,48 +1,8 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-@if (_helpInfo != null)
-{
-    <LumexModal
-        Open="true"
-        OnClose="@CloseHelpModal"
-        Size="ModalSize.Large">
-        <LumexModalContent>
-            <LumexModalHeader Class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
-                    <i class="fa-solid fa-circle-info"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["IntegrationsBlock_ConnectionTitle"], _helpInfo.Name)</h2>
-                    <p class="mt-1 text-sm text-slate-600">@_helpInfo.Summary</p>
-                </div>
-            </LumexModalHeader>
-            <LumexModalBody Class="pt-3">
-                <div class="space-y-4 text-sm text-slate-700">
-                    <p>@_helpInfo.TokenInstruction</p>
-                    <p>@_helpInfo.FieldsInstruction</p>
-                    <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
-                        <div class="flex items-start gap-3">
-                            <i class="fa-solid fa-key mt-1"></i>
-                            <p>@DashboardLocalizer["IntegrationsBlock_ConnectionCheckNotice"]</p>
-                        </div>
-                    </div>
-                </div>
-            </LumexModalBody>
-            <LumexModalFooter>
-                <CustomButton
-                    Color="ThemeColor.Primary"
-                    Variant="Variant.Solid"
-                    OnClick="@CloseHelpModal">
-                    @DashboardLocalizer["Close"]
-                </CustomButton>
-            </LumexModalFooter>
-        </LumexModalContent>
-    </LumexModal>
-}
 
 <section class="space-y-6">
     <div class="rounded-3xl border border-cyan-200 bg-cyan-50 p-5 text-cyan-950">
@@ -64,33 +24,33 @@
 
     @if (_isLoading)
     {
-        <LumexCard>
-            <LumexCardBody>
+        <AppCard>
+            <AppCardBody>
                 <div class="flex items-center justify-center gap-3 py-12 text-sm font-medium text-slate-500">
                     <i class="fa-solid fa-circle-notch animate-spin text-cyan-600"></i>
                     <span>@DashboardLocalizer["IntegrationsBlock_Loading"]</span>
                 </div>
-            </LumexCardBody>
-        </LumexCard>
+            </AppCardBody>
+        </AppCard>
     }
     else
     {
-        <LumexTabs
-            Size="Size.Large"
-            Variant="TabVariant.Outlined"
-            Color="ThemeColor.Primary"
-            FullWidth="true">
-            <LumexTab Title="ClickUp">
+        <AppTabs
+            Size="ComponentSize.Medium">
+            <AppTab
+                Key="clickup"
+                Title="ClickUp"
+                Icon="fa-solid fa-list-check">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="ClickUp"
                                 IconClass="fa-solid fa-list-check"
                                 IsActive="@IsActive(_settings.IntegrationClickUp)"
                                 OnHelpClick="@(() => ShowHelp(ClickUpHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="clickUpFormContext"
                                 @ref="_clickUpForm"
@@ -130,7 +90,7 @@
                                                 <p class="mt-1 text-xs leading-5 text-slate-500">@DashboardLocalizer["IntegrationsBlock_UseCustomTaskIdsDescription"]</p>
                                             </div>
                                             <label class="inline-flex cursor-pointer items-center rounded-2xl px-2 py-1">
-                                                <LumexSwitch @bind-Value="_clickUpModel.IsCustomTaskIds"/>
+                                                <AppSwitch @bind-Value="_clickUpModel.IsCustomTaskIds"/>
                                             </label>
                                         </div>
                                         <div class="flex items-start justify-between gap-4">
@@ -139,20 +99,20 @@
                                                 <p class="mt-1 text-xs leading-5 text-slate-500">@DashboardLocalizer["IntegrationsBlock_FillEntriesFromTaskDetailsDescription"]</p>
                                             </div>
                                             <label class="inline-flex cursor-pointer items-center rounded-2xl px-2 py-1">
-                                                <LumexSwitch @bind-Value="_clickUpModel.IsFillTimeEntryWithTaskDetails"/>
+                                                <AppSwitch @bind-Value="_clickUpModel.IsFillTimeEntryWithTaskDetails"/>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.ClickUp)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveClickUpAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -160,23 +120,26 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "ClickUp")
                                 </ChildContent>
-                            </CustomButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                            </AppButton>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
-            </LumexTab>
+            </AppTab>
 
-            <LumexTab Title="Redmine">
+            <AppTab
+                Key="redmine"
+                Title="Redmine"
+                Icon="fa-solid fa-diamond">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="Redmine"
                                 IconClass="fa-solid fa-diamond"
                                 IsActive="@IsActive(_settings.IntegrationRedmine)"
                                 OnHelpClick="@(() => ShowHelp(RedmineHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="redmineFormContext"
                                 @ref="_redmineForm"
@@ -230,14 +193,14 @@
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Redmine)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveRedmineAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -245,23 +208,26 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Redmine")
                                 </ChildContent>
-                            </CustomButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                            </AppButton>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
-            </LumexTab>
+            </AppTab>
 
-            <LumexTab Title="Jira">
+            <AppTab
+                Key="jira"
+                Title="Jira"
+                Icon="fa-solid fa-layer-group">
                 <div class="mt-6 w-full">
-                    <LumexCard>
-                        <LumexCardHeader Class="p-6 pb-2">
+                    <AppCard>
+                        <AppCardHeader Class="p-6 pb-2">
                             <IntegrationServiceHeader
                                 ServiceName="Jira"
                                 IconClass="fa-solid fa-layer-group"
                                 IsActive="@IsActive(_settings.IntegrationJira)"
                                 OnHelpClick="@(() => ShowHelp(JiraHelpInfo))"/>
-                        </LumexCardHeader>
-                        <LumexCardBody Class="p-6">
+                        </AppCardHeader>
+                        <AppCardBody Class="p-6">
                             <EditForm
                                 Context="jiraFormContext"
                                 @ref="_jiraForm"
@@ -306,14 +272,14 @@
                                     </div>
                                 </div>
                             </EditForm>
-                        </LumexCardBody>
-                        <LumexCardFooter Class="flex justify-start p-6 pt-2">
-                            <CustomButton
+                        </AppCardBody>
+                        <AppCardFooter Class="flex justify-start p-6 pt-2">
+                            <AppButton
                                 Class="w-full sm:w-auto sm:min-w-[200px]"
                                 IsLoading="@IsSaving(IntegrationServiceType.Jira)"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Solid"
-                                Radius="Radius.Full"
+                                Color="ComponentColor.Primary"
+                                Variant="ButtonVariant.Solid"
+                                Radius="ButtonRadius.Full"
                                 OnClick="@SaveJiraAsync">
                                 <StartContent>
                                     <i class="fa-regular fa-floppy-disk"></i>
@@ -321,11 +287,11 @@
                                 <ChildContent>
                                     @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Jira")
                                 </ChildContent>
-                            </CustomButton>
-                        </LumexCardFooter>
-                    </LumexCard>
+                            </AppButton>
+                        </AppCardFooter>
+                    </AppCard>
                 </div>
-            </LumexTab>
-        </LumexTabs>
+            </AppTab>
+        </AppTabs>
     }
 </section>

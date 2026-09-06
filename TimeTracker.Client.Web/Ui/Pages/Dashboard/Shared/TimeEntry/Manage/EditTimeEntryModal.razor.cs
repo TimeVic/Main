@@ -1,20 +1,27 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Client.Core.Store.TimeEntry;
 using TimeTracker.Client.Core.Services.DateTimes;
+using TimeTracker.Client.Core.Services.UI.Modal;
+using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage;
 
 public partial class EditTimeEntryModal: IDisposable
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
-    public required TimeEntryDto Entry { get; set; }
+    public TimeEntryDto? Entry { get; set; }
+
+    [Parameter]
+    public TimeEntryDto? TimeEntry { get; set; }
     
     [Parameter]
     public EventCallback OnClose { get; set; }
@@ -27,13 +34,17 @@ public partial class EditTimeEntryModal: IDisposable
     
     [Inject]
     private UserDateTimeProviderService _dateTimeProviderService { get; set; } = default!;
+
+    [Inject]
+    private IModalDialogProviderService _modalDialogService { get; set; } = default!;
     
     private TimeEntryDto _model = new();
     private EditContext _editContext = default!;
     private System.Timers.Timer? _timer;
-    private bool _isAddTaskModalOpened;
 
-    private bool IsActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
+    private TimeEntryDto ResolvedEntry => TimeEntry ?? Entry ?? _model;
+
+    private bool IsActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == ResolvedEntry.Id;
 
     private string TimeZoneId => _dateTimeProviderService.GetTimeZone().Id;
     
@@ -42,7 +53,7 @@ public partial class EditTimeEntryModal: IDisposable
         get
         {
             if (IsActiveTimeEntry)
-                return _dateTimeProviderService.GetCurrentTime() - Entry.StartTimeOffset;
+                return _dateTimeProviderService.GetCurrentTime() - ResolvedEntry.StartTimeOffset;
             return _model.Duration;
         }
     }
@@ -50,7 +61,7 @@ public partial class EditTimeEntryModal: IDisposable
     protected override async Task OnInitializedAsync()
     {
         _editContext = new EditContext(_model);
-        _model.UpdateFrom(Entry);
+        _model.UpdateFrom(ResolvedEntry);
         _model.TimeZone = TimeZoneId;
 
         // Set interprets form values in the current workspace timezone.
@@ -66,6 +77,18 @@ public partial class EditTimeEntryModal: IDisposable
             _timer.Elapsed += (_, _) => InvokeAsync(StateHasChanged);
             _timer.Start();
         }
+    }
+
+    protected override void OnParametersSet()
+    {
+        if ((TimeEntry != null || Entry != null) && _model.Id != ResolvedEntry.Id)
+        {
+            _model.UpdateFrom(ResolvedEntry);
+            _model.TimeZone = TimeZoneId;
+            _model.StartTime = _dateTimeProviderService.ConvertUtcToWallClock(_model.StartTime, TimeZoneId);
+            _model.EndTime = _dateTimeProviderService.ConvertUtcToWallClock(_model.EndTime, TimeZoneId);
+        }
+        base.OnParametersSet();
     }
 
     public void Dispose()
@@ -94,9 +117,13 @@ public partial class EditTimeEntryModal: IDisposable
         await Task.CompletedTask;
     }
 
-    private void OnCloseModal()
+    private async Task OnCloseModal()
     {
-        OnClose.InvokeAsync();
+        await OnClose.InvokeAsync();
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+        }
     }
 
     private async Task OnProjectSelected(ProjectDto? project)
@@ -105,11 +132,21 @@ public partial class EditTimeEntryModal: IDisposable
         await UpdateTimeEntry(true);
     }
 
-    private void OpenAddTaskModal()
+    private async Task OpenAddTaskModal()
     {
         if (_model.Project == null || _model.Task != null)
             return;
-        _isAddTaskModalOpened = true;
+        await _modalDialogService.ShowAddTaskModal(
+            projectId: _model.Project.Id,
+            timeEntryId: _model.Id,
+            onClose: res =>
+            {
+                if (res.Data is TaskFullDto task)
+                {
+                    OnTaskAdded(task);
+                }
+            }
+        );
     }
 
     private Task OnTaskAdded(TaskFullDto? task)
@@ -128,23 +165,38 @@ public partial class EditTimeEntryModal: IDisposable
     {
         if (startTime != null)
         {
-            _model.StartTime = startTime > _model.EndTime ? _model.EndTime.Value : startTime.Value;
-            await UpdateTimeEntry();
+            var newStartTime = startTime > _model.EndTime ? _model.EndTime.Value : startTime.Value;
+            var isChanged = _model.StartTime.Date != newStartTime.Date 
+                            || _model.StartTime.Hour != newStartTime.Hour 
+                            || _model.StartTime.Minute != newStartTime.Minute;
+            if (isChanged)
+            {
+                _model.StartTime = newStartTime;
+                await UpdateTimeEntry();
+            }
         }
     }
 
     private async Task OnChangeEndTime(DateTime? endTime)
     {
-        if (endTime != null)
+        if (endTime.HasValue)
         {
-            _model.EndTime = endTime < _model.StartTime ? _model.StartTime : endTime;
-            await UpdateTimeEntry();
+            var newEndTime = endTime.Value < _model.StartTime ? _model.StartTime : endTime.Value;
+            var isChanged = !_model.EndTime.HasValue 
+                            || _model.EndTime.Value.Date != newEndTime.Date 
+                            || _model.EndTime.Value.Hour != newEndTime.Hour 
+                            || _model.EndTime.Value.Minute != newEndTime.Minute;
+            if (isChanged)
+            {
+                _model.EndTime = newEndTime;
+                await UpdateTimeEntry();
+            }
         }
     }
 
     private async Task OnDateChanged(DateTime? date)
     {
-        if (!date.HasValue)
+        if (!date.HasValue || date.Value.Date == _model.StartTime.Date)
         {
             return;
         }
@@ -162,20 +214,29 @@ public partial class EditTimeEntryModal: IDisposable
 
     private async Task OnDescriptionChanged(string description)
     {
-        _model.Description = description;
-        await UpdateTimeEntry();
+        if (_model.Description != description)
+        {
+            _model.Description = description;
+            await UpdateTimeEntry();
+        }
     }
 
     private async Task OnChangeBillable(bool isBillable)
     {
-        _model.IsBillable = isBillable;
-        await UpdateTimeEntry();
+        if (_model.IsBillable != isBillable)
+        {
+            _model.IsBillable = isBillable;
+            await UpdateTimeEntry();
+        }
     }
 
     private async Task OnChangeBillableAmount(decimal? hourlyRate)
     {
-        _model.HourlyRate = hourlyRate;
-        await UpdateTimeEntry();
+        if (_model.HourlyRate != hourlyRate)
+        {
+            _model.HourlyRate = hourlyRate;
+            await UpdateTimeEntry();
+        }
     }
 
     private string GetTimeZoneLabel()

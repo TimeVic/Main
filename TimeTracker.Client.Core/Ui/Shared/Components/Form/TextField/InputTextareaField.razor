@@ -1,53 +1,44 @@
-@inherits InputBase<string>
-@using LumexUI.Common
-@using TimeTracker.Client.Core.Constants.Ui
+@inherits BaseInputField<string>
 
-<div class="@ComputedWrapperClass">
-    @if (!string.IsNullOrEmpty(Label))
+<div
+    class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
+    @if (!string.IsNullOrWhiteSpace(Label))
     {
-        <label class="@ComputedLabelClass">
+        <label
+            class="block mb-1.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             @Label
-            @if (Required)
+            @if (IsRequired)
             {
-                <span class="text-danger ms-0.5">*</span>
+                <span
+                    class="text-rose-500 ms-0.5">*</span>
             }
         </label>
     }
-    <div class="relative w-full">
-        @if (BindOnInput)
-        {
-            <textarea
-                id="@Id"
-                value="@CurrentValue"
-                @oninput="OnInputChanged"
-                rows="@Rows"
-                placeholder="@Placeholder"
-                disabled="@Disabled"
-                readonly="@ReadOnly"
-                maxlength="@(MaxLength.HasValue ? MaxLength.Value.ToString() : null)"
-                class="@ComputedTextareaClass"
-                @attributes="AdditionalAttributes"></textarea>
-        }
-        else
-        {
-            <textarea
-                id="@Id"
-                value="@CurrentValue"
-                @onchange="OnInputChanged"
-                rows="@Rows"
-                placeholder="@Placeholder"
-                disabled="@Disabled"
-                readonly="@ReadOnly"
-                maxlength="@(MaxLength.HasValue ? MaxLength.Value.ToString() : null)"
-                class="@ComputedTextareaClass"
-                @attributes="AdditionalAttributes"></textarea>
-        }
+
+    <div
+        class="relative w-full">
+        <textarea
+            id="@Id"
+            value="@Value"
+            @oninput="OnInputChanged"
+            rows="@Rows"
+            placeholder="@Placeholder"
+            disabled="@IsDisabled"
+            readonly="@IsReadOnly"
+            maxlength="@(MaxLength.HasValue ? MaxLength.Value.ToString() : null)"
+            class="@ComputedTextareaClass"
+            @attributes="AdditionalAttributes"></textarea>
     </div>
-    @if (HasError && !string.IsNullOrEmpty(FirstError))
+
+    @if (HasError && !string.IsNullOrWhiteSpace(FirstError))
     {
-        <div class="mt-1 text-xs text-danger">
-            @FirstError
-        </div>
+        <p
+            class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i
+                class="fa-solid fa-circle-exclamation text-[11px]">
+            </i>
+            <span>@FirstError</span>
+        </p>
     }
 </div>
 
@@ -56,40 +47,7 @@
     public string? Id { get; set; }
 
     [Parameter]
-    public bool Required { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
-
-    [Parameter]
-    public bool ReadOnly { get; set; }
-
-    [Parameter]
-    public bool BindOnInput { get; set; } = false;
-
-    [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Outlined;
-
-    [Parameter]
-    public ThemeColor Color { get; set; } = ThemeColor.Default;
-
-    [Parameter]
-    public bool FullWidth { get; set; } = true;
-
-    [Parameter]
-    public string Placeholder { get; set; } = string.Empty;
-
-    [Parameter]
-    public string Label { get; set; } = string.Empty;
-
-    [Parameter]
-    public string Class { get; set; } = string.Empty;
-
-    [Parameter]
-    public Size Size { get; set; } = Size.Medium;
-
-    [Parameter]
-    public bool Clearable { get; set; } = false;
+    public bool BindOnInput { get; set; }
 
     [Parameter]
     public int Rows { get; set; } = 4;
@@ -103,53 +61,29 @@
     [Parameter]
     public int MinRows { get; set; } = 3;
 
-    [Parameter]
-    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
-
-    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
-
-    private string FirstError =>
-        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
-
-    private string ComputedWrapperClass =>
-        $"{(FullWidth ? "w-full" : "w-auto")} {Class}".Trim();
-
-    private string ComputedLabelClass =>
-        Size == Size.Small
-            ? "mb-1 block text-xs font-medium text-slate-600"
-            : "mb-1.5 block text-sm font-medium text-slate-700";
-
     private string ComputedTextareaClass
     {
         get
         {
-            var baseClass = "w-full rounded-xl border px-3 py-2 text-sm transition-colors focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
-            
+            var sizeClass = Size == ComponentSize.Small ? "text-xs px-2.5 py-1.5 rounded-lg" : "text-sm px-3.5 py-2.5 rounded-xl";
+            var baseClass = $"w-full border transition-all duration-150 focus:outline-hidden disabled:cursor-not-allowed disabled:bg-slate-50 dark:disabled:bg-slate-900/50 disabled:text-slate-400 {sizeClass} {Class}".Trim();
+
             if (HasError)
             {
-                return $"{baseClass} border-danger text-danger placeholder:text-danger/60 focus:border-danger focus:ring-1 focus:ring-danger bg-danger/5";
+                return $"{baseClass} border-rose-500 ring-3 ring-rose-500/15 text-rose-900 dark:text-rose-300 bg-white dark:bg-slate-800 placeholder:text-rose-400";
             }
 
-            if (Variant == InputVariant.Flat)
+            if (IsFlat)
             {
-                return $"{baseClass} border-transparent bg-slate-100 text-slate-700 placeholder:text-slate-400 hover:bg-slate-200/70 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+                return $"{baseClass} border-transparent bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 hover:bg-slate-200/70 focus:bg-white dark:focus:bg-slate-800 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/15";
             }
 
-            return $"{baseClass} border-slate-200 bg-white text-slate-700 placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+            return $"{baseClass} border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/15 shadow-2xs";
         }
     }
 
-    private Task OnInputChanged(ChangeEventArgs e)
+    private async Task OnInputChanged(ChangeEventArgs e)
     {
-        CurrentValueAsString = e.Value?.ToString();
-        return Task.CompletedTask;
-    }
-
-    protected override bool TryParseValueFromString(
-        string? value, out string result, out string validationErrorMessage)
-    {
-        result = value ?? string.Empty;
-        validationErrorMessage = string.Empty;
-        return true;
+        await SetValueAsync(e.Value?.ToString() ?? string.Empty);
     }
 }

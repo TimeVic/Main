@@ -1,37 +1,10 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients.Parts
 
 @inherits BaseReactiveComponent
 
-<AddClientModal
-    IsOpened="_isAddClientModalOpened"
-    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
-
-@if (_clientToUpdate != null)
-{
-    <UpdateClientModal
-        Client="_clientToUpdate"
-        IsOpened="_clientToUpdate != null"
-        IsOpenedChanged="isOpened => { _clientToUpdate = isOpened ? _clientToUpdate : null; }"/>
-}
-
-<AddProjectModal
-    IsOpened="_isAddProjectModalOpened"
-    InitialClientId="_initialProjectClientId"
-    IsOpenedChanged="OnAddProjectModalOpenedChanged"/>
-
-@if (_projectToUpdate != null)
-{
-    <UpdateProjectModal
-        Project="_projectToUpdate"
-        IsOpened="_projectToUpdate != null"
-        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
-}
-
 <section class="space-y-6">
-    <LumexCard Class="border border-slate-200/80 shadow-xs">
-        <LumexCardBody Class="p-5">
+    <AppCard Class="border border-slate-200/80 shadow-xs">
+        <AppCardBody Class="p-5">
             <div class="space-y-5">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
@@ -41,33 +14,33 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-3">
-                        <CustomButton
-                            Size="Size.Small"
+                        <AppButton
+                            Size="ComponentSize.Small"
                             OnClick="@OnAdd"
-                            Color="@ThemeColor.Primary"
-                            Variant="Variant.Outlined"
-                            Radius="@Radius.Full">
+                            Color="@ComponentColor.Primary"
+                            Variant="ButtonVariant.Outlined"
+                            Radius="@ButtonRadius.Full">
                             <StartContent>
                                 <i class="fa-solid fa-plus"></i>
                             </StartContent>
                             <ChildContent>
                                 @DashboardLocalizer["AddClient"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
 
-                        <CustomButton
-                            Size="Size.Small"
+                        <AppButton
+                            Size="ComponentSize.Small"
                             OnClick="@OnAddProjectTop"
-                            Color="@ThemeColor.Primary"
-                            Variant="Variant.Solid"
-                            Radius="@Radius.Full">
+                            Color="@ComponentColor.Primary"
+                            Variant="ButtonVariant.Solid"
+                            Radius="@ButtonRadius.Full">
                             <StartContent>
                                 <i class="fa-solid fa-folder-plus"></i>
                             </StartContent>
                             <ChildContent>
                                 @DashboardLocalizer["AddProject"]
                             </ChildContent>
-                        </CustomButton>
+                        </AppButton>
                     </div>
                 </div>
 
@@ -77,13 +50,12 @@
                         <InputTextField
                             FullWidth="true"
                             Placeholder="@DashboardLocalizer["SearchClientsAndProjects"]"
-                            Variant="InputVariant.Outlined"
                             @bind-Value="_searchQuery"/>
                     </div>
                 }
             </div>
-        </LumexCardBody>
-    </LumexCard>
+        </AppCardBody>
+    </AppCard>
     
     @if (_clientState.Value.List.Any() || _projectState.Value.List.Any())
     {
@@ -127,18 +99,18 @@
             <i class="fa-regular fa-building mb-3 text-3xl text-slate-400"></i>
             <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["ClientsBlock_Empty"]</p>
             <div class="mt-4 flex items-center gap-3">
-                <CustomButton
+                <AppButton
                     OnClick="@OnAdd"
-                    Size="Size.Small"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full">
+                    Size="ComponentSize.Small"
+                    Color="@ComponentColor.Primary"
+                    Radius="@ButtonRadius.Full">
                     <StartContent>
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
                         @DashboardLocalizer["AddClient"]
                     </ChildContent>
-                </CustomButton>
+                </AppButton>
             </div>
         </div>
     }

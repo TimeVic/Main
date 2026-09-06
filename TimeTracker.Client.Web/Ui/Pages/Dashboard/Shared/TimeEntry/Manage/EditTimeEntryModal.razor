@@ -1,170 +1,152 @@
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 
 @inherits BaseReactiveComponent
 
-@if (_isAddTaskModalOpened && _model.Project != null)
-{
-    <AddTaskModal
-        ProjectId="_model.Project.Id"
-        TimeEntryId="_model.Id"
-        IsOpened="_isAddTaskModalOpened"
-        IsOpenedChanged="@((isOpened) => _isAddTaskModalOpened = isOpened)"
-        OnAdded="@OnTaskAdded"/>
-}
+<AppModalHeader Class="flex items-center gap-3">
+    <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <i class="fa-regular fa-pen-to-square"></i>
+        </div>
+        <div>
+            <h2 class="text-xl font-semibold text-slate-900">
+                @DashboardLocalizer["EditTimeEntryModal_Title"]
+            </h2>
+        </div>
+    </div>
+</AppModalHeader>
+<AppModalBody Class="pt-4">
+    <EditForm
+        Context="form"
+        EditContext="_editContext"
+        novalidate>
+        <DataAnnotationsValidator/>
 
-<LumexModal 
-    Open="true" 
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Large">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold text-slate-900">
-                        @DashboardLocalizer["EditTimeEntryModal_Title"]
-                    </h2>
-                </div>
-            </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-4">
-            <EditForm
-                Context="form"
-                EditContext="_editContext"
-                novalidate>
-                <DataAnnotationsValidator/>
+        <div class="grid gap-4">
 
-                <div class="grid gap-4">
-
-                    <LumexCard>
-                        <LumexCardBody>
-                            @if (_model.Task == null)
+            <AppCard>
+                <AppCardBody Class="p-4">
+                    @if (_model.Task == null)
+                    {
+                        <div class="flex items-center gap-2">
+                    
+                            <ProjectsSelect
+                                Value="_model.Project?.Id ?? Guid.Empty"
+                                Clearable="true"
+                                IsGroupByClient="true"
+                                SelectedItemChanged="@OnProjectSelected"
+                            />
+                            @if (_model.Project != null)
                             {
-                                <div class="flex items-center gap-2">
-                            
-                                    <ProjectsDropDown
-                                        Value="_model.Project?.Id ?? Guid.Empty"
-                                        Clearable="true"
-                                        IsGroupByClient="true"
-                                        SelectedItemChanged="@OnProjectSelected"
-                                    />
-                                    @if (_model.Project != null)
-                                    {
-                                        <CustomButton
-                                            OnClick="@OpenAddTaskModal"
-                                            Variant="Variant.Outlined"
-                                            Size="Size.Medium"
-                                            Color="ThemeColor.Info">
-                                            <StartContent>
-                                                <i class="fa-solid fa-plus"></i>
-                                            </StartContent>
-                                            <ChildContent>
-                                                <span>@DashboardLocalizer["Task"]</span>
-                                            </ChildContent>
-                                        </CustomButton>
-                                    }
-                                </div>
+                                <AppButton
+                                    OnClick="@OpenAddTaskModal"
+                                    Variant="ButtonVariant.Outlined"
+                                    Size="ComponentSize.Medium"
+                                    Color="ComponentColor.Info">
+                                    <StartContent>
+                                        <i class="fa-solid fa-plus"></i>
+                                    </StartContent>
+                                    <ChildContent>
+                                        <span>@DashboardLocalizer["Task"]</span>
+                                    </ChildContent>
+                                </AppButton>
                             }
-                            else
-                            {
-                                <div class="font-medium text-slate-900">@_model.Task.TaskList.Project.Name</div>
-                                <div class="mt-1 text-slate-500">@string.Format(DashboardLocalizer["EditTimeEntryModal_AttachedTask"], _model.Task.FormattedId)</div>
-                                <p class="mt-2 text-xs text-slate-500">@DashboardLocalizer["EditTimeEntryModal_AttachedTaskDescription"]</p>
-                            }
-                        </LumexCardBody>
-                    </LumexCard>
-                    <LumexCard>
-                        <LumexCardBody>
-                            <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
-                                <div>
-                                    <LumexDatebox 
-                                        TValue="DateTime?"
-                                        Size="Size.Small"
-                                        Required="true"
-                                        Value="@_model.StartTime.Date"
-                                        ValueChanged="OnDateChanged"
-                                        Disabled="IsActiveTimeEntry"
-                                        Label="@DashboardLocalizer["Date"]"/>
-                                </div>
-                                <div>
-                                    <TimeEditField
-                                        Label="@DashboardLocalizer["Start"]"
-                                        Value="@_model.StartTime"
-                                        ValueChanged="@OnChangeStartTime"
-                                        Disabled="IsActiveTimeEntry"
-                                        FullWidth="true"
-                                    />
-                                </div>
-                                @if (!IsActiveTimeEntry)
-                                {
-                                    <div>
-                                        <TimeEditField
-                                            Label="@DashboardLocalizer["End"]"
-                                            Value="@_model.EndTime"
-                                            ValueChanged="@OnChangeEndTime"
-                                            FullWidth="true"
-                                        />
-                                    </div>
-                                }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="font-medium text-slate-900">@_model.Task.TaskList.Project.Name</div>
+                        <div class="mt-1 text-slate-500">@string.Format(DashboardLocalizer["EditTimeEntryModal_AttachedTask"], _model.Task.FormattedId)</div>
+                        <p class="mt-2 text-xs text-slate-500">@DashboardLocalizer["EditTimeEntryModal_AttachedTaskDescription"]</p>
+                    }
+                </AppCardBody>
+            </AppCard>
+            <AppCard>
+                <AppCardBody Class="p-4">
+                    <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
+                        <div>
+                            <InputDateField 
+                                TValue="DateTime?"
+                                Required="true"
+                                Value="@_model.StartTime.Date"
+                                ValueChanged="OnDateChanged"
+                                Disabled="IsActiveTimeEntry"
+                                Label="@DashboardLocalizer["Date"]"/>
+                        </div>
+                        <div>
+                            <InputTimeField
+                                Label="@DashboardLocalizer["Start"]"
+                                Value="@_model.StartTime"
+                                ValueChanged="@OnChangeStartTime"
+                                Disabled="IsActiveTimeEntry"
+                                FullWidth="true"
+                            />
+                        </div>
+                        @if (!IsActiveTimeEntry)
+                        {
+                            <div>
+                                <InputTimeField
+                                    Label="@DashboardLocalizer["End"]"
+                                    Value="@_model.EndTime"
+                                    ValueChanged="@OnChangeEndTime"
+                                    FullWidth="true"
+                                />
                             </div>
-                            <p class="mt-2 text-sm text-slate-700">
-                                @DashboardLocalizer["Duration"]:
-                                <span class="font-semibold text-slate-900">
-                                    @_timeParsingService.TimeSpanToTimeString(DisplayDuration, true)
-                                </span>
-                            </p>
-                            <p class="mt-1 text-xs text-slate-500">
-                                Time zone:
-                                <span class="font-semibold text-slate-700">@GetTimeZoneLabel()</span>
-                            </p>
-                        </LumexCardBody>
-                    </LumexCard>
+                        }
+                    </div>
+                    <p class="mt-2 text-sm text-slate-700">
+                        @DashboardLocalizer["Duration"]:
+                        <span class="font-semibold text-slate-900">
+                            @_timeParsingService.TimeSpanToTimeString(DisplayDuration, true)
+                        </span>
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">
+                        Time zone:
+                        <span class="font-semibold text-slate-700">@GetTimeZoneLabel()</span>
+                    </p>
+                </AppCardBody>
+            </AppCard>
 
-                <LumexTabs>
-                    <LumexTab Title="@DashboardLocalizer["Description"]">
-                        <LumexCard>
-                            <LumexCardBody>
-                                <InputTextareaField
-                                    Rows="6"
-                                    MaxLength="500"
-                                    Value="@_model.Description"
-                                    ValueChanged="@(async (string? description) => await OnDescriptionChanged(description ?? string.Empty))"
-                                    ValueExpression="() => _model.Description" />
-                            </LumexCardBody>
-                        </LumexCard>
-                    </LumexTab>
-                    <LumexTab Title="@DashboardLocalizer["EditTimeEntryModal_Pricing"]">
-                        <LumexCard>
-                            <LumexCardBody>
-                                <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
-                                    <label class="inline-flex items-center gap-3 text-sm text-slate-700">
-                                        <LumexSwitch
-                                            Value="@_model.IsBillable"
-                                            ValueChanged="OnChangeBillable">
-                                            @DashboardLocalizer["Billable"]
-                                        </LumexSwitch>
-                                    </label>
-                                    <div>
-                                        <InputNumericNullableField 
-                                            TItem="decimal"
-                                            Label="@DashboardLocalizer["HourlyRate"].Value"
-                                            Size="Size.Small"
-                                            Step="00.01"
-                                            Variant="InputVariant.Underlined"
-                                            Value="@_model.HourlyRate"
-                                            ValueExpression="() => _model.HourlyRate"
-                                            ValueChanged="OnChangeBillableAmount"/>
-                                    </div>
+            <AppTabs
+                Size="ComponentSize.Small">
+                <AppTab
+                    Title="@DashboardLocalizer["Description"]">
+                    <AppCard>
+                        <AppCardBody Class="p-4">
+                            <InputTextareaField
+                                Rows="6"
+                                MaxLength="500"
+                                Value="@_model.Description"
+                                ValueChanged="@(async (string? description) => await OnDescriptionChanged(description ?? string.Empty))"
+                                ValueExpression="() => _model.Description" />
+                        </AppCardBody>
+                    </AppCard>
+                </AppTab>
+                <AppTab
+                    Title="@DashboardLocalizer["EditTimeEntryModal_Pricing"]">
+                    <AppCard>
+                        <AppCardBody Class="p-4">
+                            <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                                <label class="inline-flex items-center gap-3 text-sm text-slate-700">
+                                    <AppSwitch
+                                        Value="@_model.IsBillable"
+                                        ValueChanged="OnChangeBillable">
+                                        @DashboardLocalizer["Billable"]
+                                    </AppSwitch>
+                                </label>
+                                <div>
+                                    <InputNumericNullableField 
+                                        TItem="decimal"
+                                        Label="@DashboardLocalizer["HourlyRate"].Value"
+                                        Step="00.01"
+                                        Value="@_model.HourlyRate"
+                                        ValueExpression="() => _model.HourlyRate"
+                                        ValueChanged="OnChangeBillableAmount"/>
                                 </div>
-                            </LumexCardBody>
-                        </LumexCard>
-                    </LumexTab>
-                </LumexTabs>
-            </div>
-            </EditForm>
-        </LumexModalBody>
-    </LumexModalContent>
-</LumexModal>
+                            </div>
+                        </AppCardBody>
+                    </AppCard>
+                </AppTab>
+            </AppTabs>
+        </div>
+    </EditForm>
+</AppModalBody>

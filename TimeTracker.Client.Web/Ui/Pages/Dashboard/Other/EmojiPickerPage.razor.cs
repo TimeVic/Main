@@ -10,7 +10,8 @@ public partial class EmojiPickerPage
     public UiHelperService _helperService { get; set; }
 
     [Inject]
-    public ToastService _toastService { get; set; }
+    public IToastService _toastService { get; set; }
+
     
     private IEnumerable<string> Categories => new[] { "All" }
         .Concat(EmojiList.List.Select(option => option.Category).Distinct(StringComparer.Ordinal).OrderBy(category => category, StringComparer.Ordinal));

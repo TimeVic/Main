@@ -1,26 +1,25 @@
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Services
 
 @inherits BaseReactiveComponent
 
-<LumexCard>
-    <LumexCardHeader>
+<AppCard>
+    <AppCardHeader>
         <div>
             <h2 class="text-lg font-semibold text-slate-900">@DashboardLocalizer["UserSettings_ProfileSection"]</h2>
             <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserSettings_ProfileSectionDescription"]</p>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         <div class="max-w-xl space-y-5">
             <div>
                 <p class="mb-3 text-sm font-medium text-slate-700">@DashboardLocalizer["UserSettings_Avatar"]</p>
                 <div class="flex flex-wrap items-center gap-4">
                     <div class="avatar-preview">
-                        <LumexAvatar
+                        <UserAvatarBlock
                             @key="_avatarRenderKey"
                             Name="@(AuthState.Value.User?.Initials ?? string.Empty)"
                             Src="@_avatarSrc"
-                            Size="Size.Large" />
+                            SizeClass="h-14 w-14 text-base" />
                         @if (_isUploadingAvatar || _isDeletingAvatar)
                         {
                             <div class="avatar-preview__loader" aria-hidden="true">
@@ -50,9 +49,9 @@
                             class="hidden"
                             accept="image/png,image/jpeg,image/gif,image/webp"
                             OnChange="@OnAvatarFileSelected" />
-                        <CustomButton
-                            Color="ThemeColor.Default"
-                            Variant="Variant.Outlined"
+                        <AppButton
+                            Color="ComponentColor.Default"
+                            Variant="ButtonVariant.Outlined"
                             IsLoading="@_isUploadingAvatar"
                             Disabled="@_isDeletingAvatar"
                             OnClick="@OnClickChangeAvatar">
@@ -60,17 +59,17 @@
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["UserSettings_ChangeAvatar"]</ChildContent>
-                        </CustomButton>
+                        </AppButton>
                         @if (AuthState.Value.User?.Avatar != null)
                         {
-                            <CustomButton
-                                Color="ThemeColor.Danger"
-                                Variant="Variant.Light"
+                            <AppButton
+                                Color="ComponentColor.Danger"
+                                Variant="ButtonVariant.Light"
                                 IsLoading="@_isDeletingAvatar"
                                 Disabled="@_isUploadingAvatar"
                                 OnClick="@OnClickRemoveAvatar">
                                 @DashboardLocalizer["UserSettings_RemoveAvatar"]
-                            </CustomButton>
+                            </AppButton>
                         }
                     </div>
                 </div>
@@ -79,7 +78,7 @@
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <LumexTextbox
+                    <InputTextField
                         @bind-Value="_name"
                         Label="@DashboardLocalizer["UserSettings_Name"].Value"
                         Placeholder="@DashboardLocalizer["UserSettings_Name"].Value"
@@ -87,7 +86,7 @@
                     <p class="mt-1.5 text-xs text-slate-400">@DashboardLocalizer["UserSettings_NameHelper"]</p>
                 </div>
                 <div>
-                    <LumexTextbox
+                    <InputTextField
                         @bind-Value="_email"
                         Label="@DashboardLocalizer["UserSettings_Email"].Value"
                         FullWidth="true"
@@ -103,43 +102,23 @@
             <p class="mb-3 text-sm font-semibold text-slate-700">@DashboardLocalizer["UserSettings_InterfaceLanguageSection"]</p>
             <p class="mb-4 text-sm text-slate-500">@DashboardLocalizer["UserSettings_InterfaceLanguageSectionDescription"]</p>
             <div class="max-w-xs">
-                <LumexSelect
-                    TValue="string"
+                <LanguagesSelect
                     Label="@DashboardLocalizer["Language"].Value"
-                    LabelPlacement="@LabelPlacement.Outside"
-                    Variant="InputVariant.Outlined"
-                    @bind-Value="_selectedLanguage">
-                    <LumexSelectItem
-                        Value="@ILocalizationUrlService.EnglishCultureName"
-                        TextValue="@DashboardLocalizer["English"].Value">
-                        <span class="inline-flex items-center gap-2">
-                            <span aria-hidden="true">🇺🇸</span>
-                            <span>@DashboardLocalizer["English"]</span>
-                        </span>
-                    </LumexSelectItem>
-                    <LumexSelectItem
-                        Value="@ILocalizationUrlService.UkrainianCultureName"
-                        TextValue="@DashboardLocalizer["Ukrainian"].Value">
-                        <span class="inline-flex items-center gap-2">
-                            <span aria-hidden="true">🇺🇦</span>
-                            <span>@DashboardLocalizer["Ukrainian"]</span>
-                        </span>
-                    </LumexSelectItem>
-                </LumexSelect>
+                    @bind-Value="_selectedLanguage" />
             </div>
         </div>
 
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-5">
-            <CustomButton
-                Color="ThemeColor.Primary"
-                Variant="Variant.Solid"
+            <AppButton
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Solid"
                 IsLoading="@_isSaving"
                 OnClick="@OnSave">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>
                 </StartContent>
                 <ChildContent>@DashboardLocalizer["UserSettings_SaveChanges"]</ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

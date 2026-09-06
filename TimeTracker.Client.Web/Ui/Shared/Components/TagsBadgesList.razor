@@ -1,25 +1,29 @@
-﻿
+
 <div class="w-tags-badges">
-    @foreach (var tag in Tags)
-    {
-        if (tag.Color != null)
+    <div
+        class="flex flex-wrap items-center gap-1">
+        @foreach (var tag in Tags)
         {
-            <MudChip
-                Size="Size.Small"
-                class="w-badge"
-                Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")">
-                @tag.Name
-            </MudChip>
+            @if (tag.Color != null)
+            {
+                <AppBadge
+                    Size="ComponentSize.Small"
+                    Variant="BadgeVariant.Solid"
+                    Class="w-badge"
+                    Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")">
+                    @tag.Name
+                </AppBadge>
+            }
+            else
+            {
+                <AppBadge
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Secondary"
+                    Variant="BadgeVariant.Flat"
+                    Class="w-badge">
+                    @tag.Name
+                </AppBadge>
+            }
         }
-        else
-        {
-            <MudChip
-                Size="Size.Small"
-                Color="Color.Secondary"
-                class="w-badge"
-            >
-                @tag.Name
-            </MudChip>
-        }
-    }
+    </div>
 </div>

@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ConfirmAction" xml:space="preserve">
+    <value>Підтвердити дію</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Підтвердити</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>ОК</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Так</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Зберегти</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Увага</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Попередження</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Інформація</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Успішно</value>
+  </data>
+  <data name="Day_Monday_Short" xml:space="preserve">
+    <value>Пн</value>
+  </data>
+  <data name="Day_Tuesday_Short" xml:space="preserve">
+    <value>Вт</value>
+  </data>
+  <data name="Day_Wednesday_Short" xml:space="preserve">
+    <value>Ср</value>
+  </data>
+  <data name="Day_Thursday_Short" xml:space="preserve">
+    <value>Чт</value>
+  </data>
+  <data name="Day_Friday_Short" xml:space="preserve">
+    <value>Пт</value>
+  </data>
+  <data name="Day_Saturday_Short" xml:space="preserve">
+    <value>Сб</value>
+  </data>
+  <data name="Day_Sunday_Short" xml:space="preserve">
+    <value>Нд</value>
+  </data>
+  <data name="Calendar_PreviousMonth" xml:space="preserve">
+    <value>Попередній місяць</value>
+  </data>
+  <data name="Calendar_NextMonth" xml:space="preserve">
+    <value>Наступний місяць</value>
+  </data>
+  <data name="Calendar" xml:space="preserve">
+    <value>Календар</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Очистити</value>
+  </data>
+</root>

@@ -1,54 +1,43 @@
-﻿@using LumexUI
-@using LumexUI.Common
-@using LumexUI.Shared.Icons
-
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    @ref="modal">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
-                <i class="fa-solid fa-plus text-xl"></i>
+<AppModalHeader Class="flex items-center gap-3">
+    <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
+        <i class="fa-solid fa-plus text-xl"></i>
+    </div>
+    @DashboardLocalizer["AddTasksListModalForm_Title"]
+</AppModalHeader>
+<AppModalBody Class="pt-3">
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@model"
+        OnValidSubmit="@Submit"
+        novalidate>
+        <DataAnnotationsValidator/>
+        <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
+
+        <div class="space-y-6">
+            <div class="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
+                <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-600">@DashboardLocalizer["Project"]</p>
+                <p class="mt-1 text-sm font-semibold text-slate-900">@Project?.Name</p>
             </div>
-            @DashboardLocalizer["AddTasksListModalForm_Title"]
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@model"
-                OnValidSubmit="@Submit"
-                novalidate>
-                <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
 
-                <div class="space-y-6">
-                    <div class="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
-                        <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-600">@DashboardLocalizer["Project"]</p>
-                        <p class="mt-1 text-sm font-semibold text-slate-900">@Project?.Name</p>
-                    </div>
-
-                    <div class="pt-1">
-                        <InputTextField
-                            FullWidth="true"
-                            Label="@DashboardLocalizer["Name"].Value"
-                            @bind-Value="model.Name"
-                            Placeholder="@DashboardLocalizer["AddTasksListModalForm_NamePlaceholder"].Value"/>
-                    </div>
-                </div>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <CustomButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
-                @DashboardLocalizer["Add"]
-            </CustomButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+            <div class="pt-1">
+                <InputTextField
+                    FullWidth="true"
+                    Label="@DashboardLocalizer["Name"].Value"
+                    @bind-Value="model.Name"
+                    Placeholder="@DashboardLocalizer["AddTasksListModalForm_NamePlaceholder"].Value"/>
+            </div>
+        </div>
+    </EditForm>
+</AppModalBody>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        @DashboardLocalizer["Add"]
+    </AppButton>
+</AppModalFooter>

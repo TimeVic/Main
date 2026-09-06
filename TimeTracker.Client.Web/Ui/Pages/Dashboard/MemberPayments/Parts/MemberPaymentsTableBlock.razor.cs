@@ -1,5 +1,4 @@
 using Fluxor;
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Constants;
@@ -11,15 +10,15 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts;
 public partial class MemberPaymentsTableBlock
 {
     [Inject]
-    public IState<MemberPaymentState> _state { get; set; }
+    public IState<MemberPaymentState> _state { get; set; } = null!;
 
     [Inject]
     public ISecurityManager SecurityManager { get; set; } = null!;
 
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private bool _isLoading => _state.Value.IsListLoading;
-    
-    private MemberPaymentDto? _paymentToDelete;
-    private MemberPaymentDto? _paymentToUpdate;
 
     private bool CanUpdatePayments => SecurityManager.HasPermission(WorkspacePermission.UpdateMemberPayment);
 
@@ -28,19 +27,25 @@ public partial class MemberPaymentsTableBlock
         await base.OnInitializedAsync();
     }
 
-    private Task OnRowClickHandler(DataGridRowClickEventArgs<MemberPaymentDto> arg)
+    private async Task OpenUpdateModal(MemberPaymentDto payment)
     {
         if (!CanUpdatePayments)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        _paymentToUpdate = arg.Item;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowUpdateMemberPaymentModal(payment);
     }
 
-    private void OnDeleteMemberPayment()
+    private async Task OpenDeleteConfirmation(MemberPaymentDto payment)
     {
-        Dispatcher.Dispatch(new DeleteMemberPaymentAction(_paymentToDelete!.Id));
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["Delete"].Value,
+            DashboardLocalizer["AreYouSure"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new DeleteMemberPaymentAction(payment.Id));
+        }
     }
 }

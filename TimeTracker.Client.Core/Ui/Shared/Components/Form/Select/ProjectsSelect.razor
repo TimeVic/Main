@@ -1,0 +1,82 @@
+@inherits TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TimeTracker.Api.Shared.Dto.Entity.ProjectDto>
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core
+
+<div
+    class="@Class @(FullWidth ? "w-full" : "")">
+    <AppSelect
+        TValue="ProjectDto"
+        Value="@_selectedItem"
+        ValueChanged="@OnProjectSelected"
+        Label="@Label"
+        Placeholder="@_placeholder"
+        IsDisabled="@Disabled"
+        IsClearable="@Clearable"
+        IsFullWidth="@FullWidth"
+        Variant="@ResolvedVariant">
+        <TriggerContent>
+            @if (_selectedItem != null)
+            {
+                <span
+                    class="truncate">
+                    @_selectedItem.Name
+                </span>
+            }
+            else
+            {
+                <span
+                    class="text-slate-400">
+                    @_placeholder
+                </span>
+            }
+        </TriggerContent>
+        <ChildContent>
+            @if (_shouldShowAddFirstClientAction)
+            {
+                <div
+                    class="w-full px-3 py-2 rounded-lg text-xs md:text-sm flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer select-none transition-colors font-medium"
+                    @onclick="OnAddFirstClient">
+                    <i
+                        class="fa-solid fa-plus text-xs">
+                    </i>
+                    <span>
+                        @DashboardLocalizer["AddFirstClient"]
+                    </span>
+                </div>
+            }
+            @foreach (var group in _projectGroups)
+            {
+                @if (_shouldGroupByClient)
+                {
+                    <div
+                        class="px-3 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 select-none">
+                        @group.Name
+                    </div>
+                }
+                @if (IsCanCreateProject && _state.Value.IsLoaded && !group.Projects.Any() && group.ClientId != Guid.Empty)
+                {
+                    <div
+                        class="w-full px-3 py-1.5 rounded-lg text-xs flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer select-none transition-colors"
+                        @onclick="@(() => OnAddProject(group.ClientId))">
+                        <i
+                            class="fa-solid fa-plus text-xs">
+                        </i>
+                        <span>
+                            @DashboardLocalizer["AddProject"]
+                        </span>
+                    </div>
+                }
+                @foreach (var project in group.Projects)
+                {
+                    <AppSelectItem
+                        TValue="ProjectDto"
+                        Value="@project"
+                        Text="@project.Name"
+                        Description="@GetProjectDescription(project)">
+                    </AppSelectItem>
+                }
+            }
+        </ChildContent>
+    </AppSelect>
+</div>

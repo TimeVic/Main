@@ -1,22 +1,74 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using TimeTracker.Api.Shared.Dto.Model.Report.TeamSummary
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Shared.Components
 
-<LumexCard Class="mt-10">
-    <LumexCardHeader>
+<AppCard
+    Class="mt-10">
+    <AppCardHeader>
+<AppCard>
+    <AppCardHeader Class="p-5 border-b border-slate-100">
         <SummarySectionHeader
             Title="@DashboardLocalizer["TeamPerformance"].Value"/>
-    </LumexCardHeader>
-    <LumexCardBody>
-        <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
-            <PropertyColumn Title="@DashboardLocalizer["Member"].Value" Property="@(item => item.Name)">
-                <Content><div class="font-medium text-slate-900">@context.Name</div><div class="text-xs text-slate-500">@context.Email</div></Content>
-            </PropertyColumn>
-            <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(item => item.Duration)"><Content>@context.Duration.ToReadableShortString()</Content></PropertyColumn>
-            <PropertyColumn Title="@DashboardLocalizer["TeamLaborCost"].Value" Property="@(item => item.TeamLaborCost)"><Content><AmountDisplay Amount="@context.TeamLaborCost"/></Content></PropertyColumn>
-            <PropertyColumn Title="@DashboardLocalizer["ClientBillable"].Value" Property="@(item => item.ClientBillable)"><Content><AmountDisplay Amount="@context.ClientBillable"/></Content></PropertyColumn>
-            <PropertyColumn Title="@DashboardLocalizer["Margin"].Value" Property="@(item => item.GrossProfit)"><Content><span class="@(context.GrossProfit < 0 ? "text-red-600" : "text-emerald-700")"><AmountDisplay Amount="@context.GrossProfit"/></span></Content></PropertyColumn>
-            <PropertyColumn Title="@DashboardLocalizer["MarginPercent"].Value" Property="@(item => item.MarginPercent)"><Content>@(context.MarginPercent?.ToString("0.#") ?? "—")</Content></PropertyColumn>
-        </LumexDataGrid>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardHeader>
+    <AppCardBody>
+    <AppCardBody Class="p-5">
+        <AppTable
+            TGridItem="TeamSummaryMemberReportItemDto"
+            Items="@Items.AsQueryable()">
+            <AppTableColumn
+                Title="@DashboardLocalizer["Member"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.Name))">
+                <div
+                    class="font-medium text-slate-900">
+                    @context.Name
+                </div>
+                <div
+                    class="text-xs text-slate-500">
+                    @context.Email
+                </div>
+            </AppTableColumn>
+
+            <AppTableColumn
+                Title="@DashboardLocalizer["Duration"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.Duration))">
+                <span
+                    class="font-mono text-sm">
+                    @context.Duration.ToReadableShortString()
+                </span>
+            </AppTableColumn>
+
+            <AppTableColumn
+                Title="@DashboardLocalizer["TeamLaborCost"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.TeamLaborCost))">
+                <AmountDisplay
+                    Amount="@context.TeamLaborCost"/>
+            </AppTableColumn>
+
+            <AppTableColumn
+                Title="@DashboardLocalizer["ClientBillable"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.ClientBillable))">
+                <AmountDisplay
+                    Amount="@context.ClientBillable"/>
+            </AppTableColumn>
+
+            <AppTableColumn
+                Title="@DashboardLocalizer["Margin"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.GrossProfit))">
+                <span
+                    class="@(context.GrossProfit < 0 ? "text-red-600" : "text-emerald-700 font-medium")">
+                    <AmountDisplay
+                        Amount="@context.GrossProfit"/>
+                </span>
+            </AppTableColumn>
+
+            <AppTableColumn
+                Title="@DashboardLocalizer["MarginPercent"].Value"
+                SortBy="@(GridSort<TeamSummaryMemberReportItemDto>.ByAscending(item => item.MarginPercent))">
+                <span>
+                    @(context.MarginPercent?.ToString("0.#") ?? "—")
+                </span>
+            </AppTableColumn>
+        </AppTable>
+    </AppCardBody>
+</AppCard>

@@ -1,67 +1,63 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Small">
-    <LumexModalContent>
-        <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-solid fa-user-plus"></i>
-                </div>
+<AppModalHeader
+    Title="@DashboardLocalizer["AddMemberModal_Title"]"
+    Description="@DashboardLocalizer["AddMemberModal_Description"]">
+    <Icon>
+        <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <i
+                class="fa-solid fa-user-plus"></i>
+        </div>
+    </Icon>
+</AppModalHeader>
+
+<AppModalBody>
+    <EditForm
+        Context="form"
+        @ref="_form"
+        Model="@_model"
+        novalidate>
+        <DataAnnotationsValidator/>
+
+            <div
+                class="flex flex-col gap-4">
                 <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["AddMemberModal_Title"]</h2>
-                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["AddMemberModal_Description"]</p>
+                    <SmartUserSearchInput
+                        Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
+                        @bind-Value="_model.EmailOrLogin" />
+                    <CustomValidationMessage
+                        For="@(() => _model.EmailOrLogin)" />
+                </div>
+
+                <div>
+                    <EnumSelect
+                        TItem="MembershipAccessType"
+                        Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
+                        AllowedValues="_allowedAccessLevels"
+                        Value="@_model.Access"
+                        ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
                 </div>
             </div>
-        </LumexModalHeader>
-        <LumexModalBody Class="pt-3">
-            <EditForm
-                Context="form"
-                @ref="_form"
-                Model="@_model"
-                novalidate>
-                <DataAnnotationsValidator/>
+        </EditForm>
+</AppModalBody>
 
-                <div class="flex flex-col gap-4">
-                    <div>
-                        <SmartUserSearchInput
-                            Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
-                            @bind-Value="_model.EmailOrLogin" />
-                        <CustomValidationMessage For="@(() => _model.EmailOrLogin)" />
-                    </div>
-
-                    <div>
-                        <EnumDropDown
-                            TItem="MembershipAccessType"
-                            Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
-                            AllowedValues="_allowedAccessLevels"
-                            Value="@_model.Access"
-                            ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
-                    </div>
-                </div>
-            </EditForm>
-        </LumexModalBody>
-        <LumexModalFooter>
-            <CustomButton
-                FullWidth="@true"
-                OnClick="@Submit"
-                IsLoading="_isLoading"
-                Color="@ThemeColor.Primary"
-                Radius="@Radius.Full">
-                <StartContent>
-                    <i class="fa-solid fa-user-plus"></i>
-                </StartContent>
-                <ChildContent>
-                    @DashboardLocalizer["AddMemberModal_InviteMember"]
-                </ChildContent>
-            </CustomButton>
-        </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+<AppModalFooter>
+    <AppButton
+        FullWidth="@true"
+        OnClick="@Submit"
+        IsLoading="_isLoading"
+        Color="@ComponentColor.Primary"
+        Radius="@ButtonRadius.Full">
+        <StartContent>
+            <i
+                class="fa-solid fa-user-plus"></i>
+        </StartContent>
+        <ChildContent>
+            @DashboardLocalizer["AddMemberModal_InviteMember"]
+        </ChildContent>
+    </AppButton>
+</AppModalFooter>

@@ -5,15 +5,15 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<LumexCard>
-    <LumexCardHeader Class="flex items-center gap-3">
+<AppCard>
+    <AppCardHeader Class="flex items-center gap-3">
         <div class="flex flex-col items-start justify-between gap-1">
             <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">@DashboardLocalizer["EmojiPicker_EmojiLibrary"]</p>
             <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["EmojiPicker_ChooseEmoji"]</h2>
             <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["EmojiPicker_Description"]</p>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
+    </AppCardHeader>
+    <AppCardBody>
         <div class="mt-2 flex flex-col items-baseline gap-3 lg:flex-row lg:items-center">
                 <div class="min-w-0 flex-1">
                     <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["EmojiPicker_SearchEmoji"]</label>
@@ -60,5 +60,5 @@
                     </div>
                 }
             </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

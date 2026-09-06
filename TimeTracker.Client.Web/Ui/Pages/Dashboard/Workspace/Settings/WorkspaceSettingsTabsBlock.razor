@@ -1,47 +1,46 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 
 @inherits BaseReactiveComponent
 
-<div class="space-y-6">
-    <nav aria-label="@DashboardLocalizer["Settings"]">
-        <div class="flex gap-2 overflow-x-auto border-b border-slate-200 pb-px">
-            <LumexLink Href="@UrlService.GetDashboardUrl("workspace/settings")" Class="@GetTabClass("general")" Underline="@Underline.None">
-                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-                <span>@DashboardLocalizer["Settings"]</span>
-            </LumexLink>
-            <LumexLink Href="@UrlService.GetDashboardUrl("workspace/settings/clients")" Class="@GetTabClass("clients")" Underline="@Underline.None">
-                <i class="fa-regular fa-building" aria-hidden="true"></i>
-                <span>@DashboardLocalizer["SettingsPage_ClientsAndProjectsTab"]</span>
-            </LumexLink>
-            <LumexLink Href="@UrlService.GetDashboardUrl("workspace/settings/tags")" Class="@GetTabClass("tags")" Underline="@Underline.None">
-                <i class="fa-solid fa-tags" aria-hidden="true"></i>
-                <span>@DashboardLocalizer["Tags"]</span>
-            </LumexLink>
-            @if (SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceMembers))
-            {
-                <LumexLink Href="@UrlService.GetDashboardUrl("workspace/settings/members")" Class="@GetTabClass("members")" Underline="@Underline.None">
-                    <i class="fa-solid fa-users" aria-hidden="true"></i>
-                    <span>@DashboardLocalizer["Members"]</span>
-                </LumexLink>
-            }
-            <LumexLink
-                Href="@UrlService.GetDashboardUrl("workspace/settings/integrations")"
-                Class="@GetTabClass("integrations")"
-                Underline="@Underline.None">
-                <i class="fa-solid fa-plug-circle-check" aria-hidden="true"></i>
-                <span>@DashboardLocalizer["Integrations"]</span>
-            </LumexLink>
-            <LumexLink
-                Href="@UrlService.GetDashboardUrl("workspace/settings/import")"
-                Class="@GetTabClass("import")"
-                Underline="@Underline.None">
-                <i class="fa-solid fa-file-import" aria-hidden="true"></i>
-                <span>@DashboardLocalizer["SettingsPage_ImportTab"]</span>
-            </LumexLink>
-        </div>
-    </nav>
+<div
+    class="space-y-6">
+    <AppTabs
+        ActiveKey="@ActiveSection"
+        AriaLabel="@DashboardLocalizer["Settings"]">
+        <AppTab
+            Key="general"
+            Title="@DashboardLocalizer["Settings"]"
+            Icon="fa-solid fa-sliders"
+            Href="@UrlService.GetDashboardUrl("workspace/settings")" />
+        <AppTab
+            Key="clients"
+            Title="@DashboardLocalizer["SettingsPage_ClientsAndProjectsTab"]"
+            Icon="fa-regular fa-building"
+            Href="@UrlService.GetDashboardUrl("workspace/settings/clients")" />
+        <AppTab
+            Key="tags"
+            Title="@DashboardLocalizer["Tags"]"
+            Icon="fa-solid fa-tags"
+            Href="@UrlService.GetDashboardUrl("workspace/settings/tags")" />
+        @if (SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceMembers))
+        {
+            <AppTab
+                Key="members"
+                Title="@DashboardLocalizer["Members"]"
+                Icon="fa-solid fa-users"
+                Href="@UrlService.GetDashboardUrl("workspace/settings/members")" />
+        }
+        <AppTab
+            Key="integrations"
+            Title="@DashboardLocalizer["Integrations"]"
+            Icon="fa-solid fa-plug-circle-check"
+            Href="@UrlService.GetDashboardUrl("workspace/settings/integrations")" />
+        <AppTab
+            Key="import"
+            Title="@DashboardLocalizer["SettingsPage_ImportTab"]"
+            Icon="fa-solid fa-file-import"
+            Href="@UrlService.GetDashboardUrl("workspace/settings/import")" />
+    </AppTabs>
 
     @ChildContent
 </div>

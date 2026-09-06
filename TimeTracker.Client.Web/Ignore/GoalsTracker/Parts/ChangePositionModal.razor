@@ -1,9 +1,13 @@
-﻿@inherits BaseComponent
+@inherits BaseComponent
 
 <MudDialog Style="min-width: 300px;">
     <DialogContent>
         <Dropzone Items="@_goals">
-            <MudCard Class="pa-2 mb-2 cursor-move">@context.Name</MudCard>
+            <AppCard Class="mb-2 cursor-move">
+                <AppCardBody Class="p-2">
+                    @context.Name
+                </AppCardBody>
+            </AppCard>
         </Dropzone>
     </DialogContent>
     <DialogActions>

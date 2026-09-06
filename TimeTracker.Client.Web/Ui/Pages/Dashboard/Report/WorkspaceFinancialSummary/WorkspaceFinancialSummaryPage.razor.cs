@@ -12,15 +12,8 @@ public partial class WorkspaceFinancialSummaryPage
     private WorkspaceFinancialSummaryReportResponse? _reportData
         => _state.Value.WorkspaceFinancialSummaryData;
 
-    private bool _isPayoutModalOpened;
-
-    private Guid _selectedMemberId;
-    private decimal? _selectedAmount;
-    private Guid _selectedProjectId;
-
-    private Guid _sharingClientId;
-    private string _sharingClientName = string.Empty;
-    private bool _isShareModalOpened;
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,36 +22,25 @@ public partial class WorkspaceFinancialSummaryPage
         Dispatcher.Dispatch(new ReportFetchWorkspaceFinancialSummaryAction());
     }
 
-    private void OpenPayoutModal(WorkspaceFinancialMemberBalanceDto item)
+    private async Task OpenPayoutModal(WorkspaceFinancialMemberBalanceDto item)
     {
-        _selectedMemberId = item.MemberId;
-        _selectedAmount = item.Owed > 0 ? item.Owed : null;
-        _selectedProjectId = item.Projects.Count == 1 ? item.Projects.First().Project.Id : Guid.Empty;
-        _isPayoutModalOpened = true;
+        var memberId = item.MemberId;
+        var amount = item.Owed > 0 ? (decimal?)item.Owed : null;
+        var projectId = item.Projects.Count == 1 ? item.Projects.First().Project.Id : Guid.Empty;
+
+        await _modalDialogService.ShowAddMemberPaymentModal(
+            initialMemberId: memberId,
+            initialAmount: amount,
+            initialProjectId: projectId,
+            onClose: _ =>
+            {
+                Dispatcher.Dispatch(new ReportFetchWorkspaceFinancialSummaryAction());
+            }
+        );
     }
 
-    private void OnPayoutModalStateChanged(bool isOpened)
+    private async Task OpenShareModal((Guid ClientId, string ClientName) client)
     {
-        _isPayoutModalOpened = isOpened;
-        if (!isOpened)
-        {
-            _selectedMemberId = Guid.Empty;
-            _selectedAmount = null;
-            _selectedProjectId = Guid.Empty;
-            Dispatcher.Dispatch(new ReportFetchWorkspaceFinancialSummaryAction());
-        }
-    }
-
-    private void OpenShareModal((Guid ClientId, string ClientName) client)
-    {
-        _sharingClientId = client.ClientId;
-        _sharingClientName = client.ClientName;
-        _isShareModalOpened = true;
-    }
-
-    private Task OnShareModalOpenedChanged(bool isOpened)
-    {
-        _isShareModalOpened = isOpened;
-        return Task.CompletedTask;
+        await _modalDialogService.ShowClientShareReportModal(client.ClientId, client.ClientName);
     }
 }

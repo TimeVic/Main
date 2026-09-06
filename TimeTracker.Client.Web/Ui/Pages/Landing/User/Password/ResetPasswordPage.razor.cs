@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Client.Web.Services;
@@ -23,7 +23,8 @@ public partial class ResetPasswordPage
     private IAuthorizationService _authorizationService { get; set; }
     
     [Inject] 
-    private ToastService _toastService { get; set; }
+    private IToastService _toastService { get; set; }
+
     
     private ResetPasswordStep1Request model = new();
     private bool _isLoading;

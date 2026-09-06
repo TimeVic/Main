@@ -1,11 +1,11 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Client.Core.Services.Security;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.MemberPayments;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
 
@@ -13,11 +13,8 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals;
 
 public partial class AddMemberPaymentModal : IDisposable
 {   
-    [Parameter]
-    public required bool IsOpened { get; set; } = false;
-    
-    [Parameter]
-    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     [Parameter]
     public Guid InitialMemberId { get; set; }
@@ -29,20 +26,16 @@ public partial class AddMemberPaymentModal : IDisposable
     public Guid InitialProjectId { get; set; }
     
     [Inject]
-    public ILogger<AddMemberPaymentModal> _logger { get; set; }
+    public ILogger<AddMemberPaymentModal> _logger { get; set; } = default!;
 
     [Inject]
-    public ISecurityManager SecurityManager { get; set; }
+    public ISecurityManager SecurityManager { get; set; } = default!;
 
     [Inject]
-    public IState<WorkspaceMembersState> WorkspaceMembersState { get; set; }
+    public IState<WorkspaceMembersState> WorkspaceMembersState { get; set; } = default!;
     
-    private AddRequest model;
-    private bool _isLoading = false;
-    private EditForm _form;
-    private bool _isValid = false;
-    private LumexModal modal;
-    private bool _wasOpened;
+    private AddRequest model = default!;
+    private EditForm _form = default!;
     private bool CanCreatePaymentForOtherMembers =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
@@ -55,24 +48,19 @@ public partial class AddMemberPaymentModal : IDisposable
 
     protected override void OnParametersSet()
     {
-        if (IsOpened && !_wasOpened)
+        if (InitialMemberId != Guid.Empty)
         {
-            InitModel();
-            if (InitialMemberId != Guid.Empty)
-            {
-                model.MemberId = InitialMemberId;
-            }
-            if (InitialAmount.HasValue && InitialAmount.Value > 0)
-            {
-                model.Amount = InitialAmount.Value;
-            }
-            if (InitialProjectId != Guid.Empty)
-            {
-                model.ProjectId = InitialProjectId;
-            }
+            model.MemberId = InitialMemberId;
+        }
+        if (InitialAmount.HasValue && InitialAmount.Value > 0)
+        {
+            model.Amount = InitialAmount.Value;
+        }
+        if (InitialProjectId != Guid.Empty)
+        {
+            model.ProjectId = InitialProjectId;
         }
 
-        _wasOpened = IsOpened;
         base.OnParametersSet();
     }
 
@@ -85,14 +73,11 @@ public partial class AddMemberPaymentModal : IDisposable
         
         Dispatcher.Dispatch(new AddMemberPaymentAction(model));
         InitModel();
-        await modal.CloseAsync();
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+        }
         StateHasChanged();
-    }
-
-    private void OnCloseModal()
-    {
-        IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
     }
 
     private void InitModel()
@@ -117,7 +102,6 @@ public partial class AddMemberPaymentModal : IDisposable
 
     private void SetCurrentUserMemberAsDefault()
     {
-        // Fixes the add payment form default member so it uses the current user's workspace member.
         var currentMember = WorkspaceMembersState.Value.List.FirstOrDefault(
             item => item.User.Id == AuthState.Value.User.Id
         );

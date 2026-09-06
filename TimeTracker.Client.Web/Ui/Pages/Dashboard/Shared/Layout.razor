@@ -1,4 +1,3 @@
-@using LumexUI
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
 @using TimeTracker.Client.Web.Ui.Shared
@@ -40,6 +39,9 @@
         </style>
     }
 </div>
-<LumexToastProvider RichColors="@true" Id="tv-toaster-rich-colors-id" />
 <BaseModalDialogRenderBlock/>
+<AppModalContainer/>
 <PortalHostComponent/>
+<AppToastContainer/>
+
+

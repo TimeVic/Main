@@ -1,4 +1,4 @@
-@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.ClientPayments.Parts.Modals
 @using TimeTracker.Client.Web.Ui.Shared.Components
@@ -6,126 +6,128 @@
 
 @inherits BaseReactiveComponent
 
-@if (_paymentToView != null)
-{
-    <ViewClientPaymentModal
-        ClientPayment="_paymentToView"
-        IsOpened="true"
-        IsOpenedChanged="isOpened => _paymentToView = isOpened ? _paymentToView : null"/>
-}
+<AppTable
+    TGridItem="ClientPaymentDto"
+    Items="@Items.AsQueryable()"
+    IsLoading="@_isLoading">
+    <AppTableColumn
+        Title="@DashboardLocalizer["Date"].Value"
+        SortBy="@(GridSort<ClientPaymentDto>.ByAscending(p => p.PaymentTime))">
+        <span
+            class="text-sm text-slate-700">
+            @context.PaymentTime.ToShortDateString()
+        </span>
+    </AppTableColumn>
 
-@if (_paymentToUpdate != null)
-{
-    <UpdateClientPaymentModal
-        ClientPayment="_paymentToUpdate"
-        IsOpened="true"
-        IsOpenedChanged="isOpened => _paymentToUpdate = isOpened ? _paymentToUpdate : null"/>
-}
+    <AppTableColumn
+        Title="@DashboardLocalizer["Client"].Value"
+        SortBy="@(GridSort<ClientPaymentDto>.ByAscending(p => p.Client.Name))">
+        <div
+            class="font-medium text-slate-900">
+            @context.Client?.Name
+        </div>
+    </AppTableColumn>
 
-@if (_paymentToDelete != null)
-{
-    <ConfirmationModal
-        OnClose="@(() => _paymentToDelete = null)"
-        OnConfirm="OnDeleteClientPayment"/>
-}
-
-<LumexDataGrid
-    T="ClientPaymentDto"
-    Class="min-w-full divide-y divide-slate-200"
-    Data="@Items.AsQueryable()"
-    Hoverable="true"
-    Loading="_isLoading">
-    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Date"].Value" Property="@(p => p.PaymentTime)">
-        <Content>
-            <span class="text-sm text-slate-700">@context.PaymentTime.ToShortDateString()</span>
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Client"].Value" Property="@(p => p.Client.Name)">
-        <Content>
-            <div class="font-medium text-slate-900">@context.Client?.Name</div>
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Project"].Value" Property="@(p => p.Project)">
-        <Content>
-            @if (context.Project != null)
-            {
-                <span class="text-sm text-slate-700">@context.Project.Name</span>
-            }
-            else
-            {
-                <span class="text-sm text-slate-400">@DashboardLocalizer["NoProject"]</span>
-            }
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn
-        Title="@DashboardLocalizer["Amount"].Value"
-        Property="@(p => p.Amount)"
-        Sortable="@true">
-        <Content>
-            <span class="font-semibold text-emerald-700">
-                <AmountDisplay Amount="@context.Amount"></AmountDisplay>
+    <AppTableColumn
+        Title="@DashboardLocalizer["Project"].Value">
+        @if (context.Project != null)
+        {
+            <span
+                class="text-sm text-slate-700">
+                @context.Project.Name
             </span>
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="@DashboardLocalizer["AddedBy"].Value" Property="@(p => p.Id)">
-        <Content>
-            <span class="text-sm text-slate-400">@DashboardLocalizer["NotTracked"]</span>
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn
+        }
+        else
+        {
+            <span
+                class="text-sm text-slate-400">
+                @DashboardLocalizer["NoProject"]
+            </span>
+        }
+    </AppTableColumn>
+
+    <AppTableColumn
+        Title="@DashboardLocalizer["Amount"].Value"
+        SortBy="@(GridSort<ClientPaymentDto>.ByAscending(p => p.Amount))">
+        <span
+            class="font-semibold text-emerald-700">
+            <AmountDisplay
+                Amount="@context.Amount" />
+        </span>
+    </AppTableColumn>
+
+    <AppTableColumn
+        Title="@DashboardLocalizer["AddedBy"].Value">
+        <span
+            class="text-sm text-slate-400">
+            @DashboardLocalizer["NotTracked"]
+        </span>
+    </AppTableColumn>
+
+    <AppTableColumn
         Title="@DashboardLocalizer["PaymentNoteReference"].Value"
-        Property="@(p => p.Description)"
-        Sortable="@true">
-        <Content>
-            @if (string.IsNullOrWhiteSpace(context.Description))
-            {
-                <span class="text-sm text-slate-400">@DashboardLocalizer["NoNote"]</span>
-            }
-            else
-            {
-                <span class="text-sm text-slate-700">@context.Description</span>
-            }
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn
+        SortBy="@(GridSort<ClientPaymentDto>.ByAscending(p => p.Description))">
+        @if (string.IsNullOrWhiteSpace(context.Description))
+        {
+            <span
+                class="text-sm text-slate-400">
+                @DashboardLocalizer["NoNote"]
+            </span>
+        }
+        else
+        {
+            <span
+                class="text-sm text-slate-700">
+                @context.Description
+            </span>
+        }
+    </AppTableColumn>
+
+    <AppTableColumn
         Title="@DashboardLocalizer["Actions"].Value"
-        Property="@(p => p.Id)">
-        <Content>
-            <div class="flex items-center gap-2" @onclick:stopPropagation="true">
-                <CustomButton
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
-                    OnClick="() => _paymentToView = context"
+        Align="Align.End">
+        <div
+            class="flex items-center justify-end gap-2"
+            @onclick:stopPropagation="true">
+            <AppButton
+                Variant="ButtonVariant.Outlined"
+                Color="ComponentColor.Default"
+                OnClick="() => OpenViewModal(context)"
+                IconOnly="true"
+                Size="ComponentSize.Small">
+                <StartContent>
+                    <i
+                        class="fa-regular fa-eye">
+                    </i>
+                </StartContent>
+            </AppButton>
+            @if (CanUpdatePayments)
+            {
+                <AppButton
+                    Variant="ButtonVariant.Outlined"
+                    Color="ComponentColor.Primary"
+                    OnClick="() => OpenUpdateModal(context)"
                     IconOnly="true"
-                    Size="Size.Small">
+                    Size="ComponentSize.Small">
                     <StartContent>
-                        <i class="fa-regular fa-eye"></i>
+                        <i
+                            class="fa-regular fa-pen-to-square">
+                        </i>
                     </StartContent>
-                </CustomButton>
-                @if (CanUpdatePayments)
-                {
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Primary"
-                        OnClick="() => _paymentToUpdate = context"
-                        IconOnly="true"
-                        Size="Size.Small">
-                        <StartContent>
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </StartContent>
-                    </CustomButton>
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Danger"
-                        OnClick="() => _paymentToDelete = context"
-                        IconOnly="true"
-                        Size="Size.Small">
-                        <StartContent>
-                            <i class="fa-regular fa-trash-can"></i>
-                        </StartContent>
-                    </CustomButton>
-                }
-            </div>
-        </Content>
-    </LumexUI.PropertyColumn>
-</LumexDataGrid>
+                </AppButton>
+                <AppButton
+                    Variant="ButtonVariant.Outlined"
+                    Color="ComponentColor.Danger"
+                    OnClick="() => OpenDeleteConfirmation(context)"
+                    IconOnly="true"
+                    Size="ComponentSize.Small">
+                    <StartContent>
+                        <i
+                            class="fa-regular fa-trash-can">
+                        </i>
+                    </StartContent>
+                </AppButton>
+            }
+        </div>
+    </AppTableColumn>
+</AppTable>

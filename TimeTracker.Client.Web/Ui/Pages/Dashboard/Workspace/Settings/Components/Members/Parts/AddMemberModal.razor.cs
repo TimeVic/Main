@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Services.UI.Modal;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts;
 
@@ -16,11 +17,8 @@ public partial class AddMemberModal
         public MembershipAccessType Access { get; set; } = MembershipAccessType.User;
     }
 
-    [Parameter]
-    public required bool IsOpened { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
 
     private readonly ICollection<MembershipAccessType> _allowedAccessLevels = new List<MembershipAccessType>
     {
@@ -51,7 +49,7 @@ public partial class AddMemberModal
                 {
                     Dispatcher.Dispatch(new LoadListAction(true));
                     ToastService.ShowInfo(DashboardLocalizer["AddMemberModal_InvitationSent"].Value);
-                    await OnCloseModal();
+                    OnCloseModal();
                 }
             }
         }
@@ -68,10 +66,9 @@ public partial class AddMemberModal
         StateHasChanged();
     }
 
-    private async Task OnCloseModal()
+    private void OnCloseModal()
     {
         _model = new InviteModel();
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
+        ModalInstance?.Close(AppModalResult.Ok("submit"));
     }
 }

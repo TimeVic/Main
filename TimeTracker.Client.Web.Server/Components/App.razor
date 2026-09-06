@@ -2,7 +2,7 @@
 @using TimeTracker.Client.Web
 
 <!DOCTYPE html>
-<html lang="en" class="bg-white dark:bg-gray-950 scheme-light dark:scheme-dark">
+<html lang="en" class="bg-white scheme-light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -34,7 +34,6 @@ else
 }
 @if (!IsStaticServerPage)
 {
-    <script src="_content/LumexUI/js/LumexUI.js" type="module"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LerVNUhAAAAAKZSPljJNpjJhR6PIraWTUbzBHHS"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>

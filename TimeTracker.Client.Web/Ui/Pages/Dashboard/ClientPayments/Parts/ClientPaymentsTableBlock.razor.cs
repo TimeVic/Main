@@ -18,17 +18,32 @@ public partial class ClientPaymentsTableBlock
     [Inject]
     public ISecurityManager SecurityManager { get; set; }
 
+    [Inject]
+    private TimeTracker.Client.Web.Services.UI.IModalDialogProviderService _modalDialogService { get; set; } = null!;
+
     private bool _isLoading => _state.Value.IsListLoading;
 
     private bool CanUpdatePayments => SecurityManager.HasPermission(WorkspacePermission.UpdateClientPayment);
 
-    private ClientPaymentDto? _paymentToDelete;
-    private ClientPaymentDto? _paymentToUpdate;
-    private ClientPaymentDto? _paymentToView;
-
-    private void OnDeleteClientPayment()
+    private async Task OpenViewModal(ClientPaymentDto payment)
     {
-        Dispatcher.Dispatch(new DeleteClientPaymentAction(_paymentToDelete!.Id));
-        _paymentToDelete = null;
+        await _modalDialogService.ShowViewClientPaymentModal(payment);
+    }
+
+    private async Task OpenUpdateModal(ClientPaymentDto payment)
+    {
+        await _modalDialogService.ShowUpdateClientPaymentModal(payment);
+    }
+
+    private async Task OpenDeleteConfirmation(ClientPaymentDto payment)
+    {
+        var confirmed = await _modalDialogService.ShowConfirmationAsync(
+            DashboardLocalizer["Delete"].Value,
+            DashboardLocalizer["AreYouSure"].Value
+        );
+        if (confirmed)
+        {
+            Dispatcher.Dispatch(new DeleteClientPaymentAction(payment.Id));
+        }
     }
 }

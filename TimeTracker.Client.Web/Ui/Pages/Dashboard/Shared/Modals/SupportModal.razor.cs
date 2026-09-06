@@ -1,22 +1,17 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Web.Constants;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Modals;
 
 public partial class SupportModal
 {
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Inject]
     private IConfiguration Configuration { get; set; } = null!;
-
-    [Parameter]
-    public bool IsOpened { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
-
-    private LumexModal? _modal;
 
     private string SupportEmail => SiteMetadata.SupportEmail;
 
@@ -26,7 +21,9 @@ public partial class SupportModal
 
     private async Task OnCloseModal()
     {
-        IsOpened = false;
-        await IsOpenedChanged.InvokeAsync(false);
+        if (ModalInstance != null)
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+        }
     }
 }

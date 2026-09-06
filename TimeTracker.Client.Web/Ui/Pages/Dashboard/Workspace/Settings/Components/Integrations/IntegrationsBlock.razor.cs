@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Client.Web.Services.UI;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Integrations;
 
@@ -9,6 +10,9 @@ public partial class IntegrationsBlock
 {
     [Inject]
     public ILogger<IntegrationsBlock> Logger { get; set; } = null!;
+
+    [Inject]
+    public IModalDialogProviderService ModalDialogService { get; set; } = null!;
 
     private GetIntegrationSettingsResponse _settings = new();
     private SetClickUpSettingsRequest _clickUpModel = new();
@@ -21,7 +25,6 @@ public partial class IntegrationsBlock
 
     private bool _isLoading = true;
     private IntegrationServiceType? _savingService;
-    private IntegrationHelpInfo? _helpInfo;
 
     protected override async Task OnInitializedAsync()
     {
@@ -194,7 +197,7 @@ public partial class IntegrationsBlock
 
     private void ShowHelp(IntegrationHelpInfo helpInfo)
     {
-        _helpInfo = helpInfo;
+        _ = ModalDialogService.ShowIntegrationHelpModal(helpInfo);
     }
 
     private IntegrationHelpInfo ClickUpHelpInfo => new(
@@ -218,22 +221,10 @@ public partial class IntegrationsBlock
         DashboardLocalizer["IntegrationsBlock_JiraHelpFieldsInstruction"].Value
     );
 
-    private void CloseHelpModal()
-    {
-        _helpInfo = null;
-    }
-
     private enum IntegrationServiceType
     {
         ClickUp,
         Redmine,
         Jira
     }
-
-    private sealed record IntegrationHelpInfo(
-        string Name,
-        string Summary,
-        string TokenInstruction,
-        string FieldsInstruction
-    );
 }

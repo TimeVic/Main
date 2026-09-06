@@ -1,8 +1,8 @@
 using Fluxor;
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts;
 
@@ -18,10 +18,10 @@ public partial class TaskTimeTrackerButton
     public bool IconOnly { get; set; } = true;
 
     [Parameter]
-    public Size Size { get; set; } = Size.Small;
+    public ComponentSize Size { get; set; } = ComponentSize.Small;
 
     [Parameter]
-    public Variant Variant { get; set; } = Variant.Outlined;
+    public ButtonVariant Variant { get; set; } = ButtonVariant.Outlined;
 
     [Inject]
     public IState<TimeEntryState> TimeEntryState { get; set; } = null!;

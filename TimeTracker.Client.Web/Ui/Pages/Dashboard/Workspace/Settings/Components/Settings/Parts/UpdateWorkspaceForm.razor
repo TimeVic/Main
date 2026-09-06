@@ -1,4 +1,3 @@
-@using LumexUI.Common
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Constants.Ui
 @inherits BaseReactiveComponent
@@ -20,20 +19,10 @@
             </div>
 
             <div>
-                <LumexSelect 
-                    TValue="string"
+                <TimeZonesSelect 
                     Label="@DashboardLocalizer["UpdateWorkspaceForm_TimeZone"]"
-                    LabelPlacement="@LabelPlacement.Outside"
-                    Variant="InputVariant.Outlined"
-                    Required="true"
-                    @bind-Value="model.TimeZone">
-                    @foreach (var timeZone in _timeZones)
-                    {
-                        <LumexSelectItem @key="@timeZone.Id" Value="@timeZone.Id">
-                            @timeZone.DisplayName
-                        </LumexSelectItem>
-                    }
-                </LumexSelect>
+                    IsRequired="true"
+                    @bind-Value="model.TimeZone" />
             </div>
             
             <div>
@@ -51,10 +40,10 @@
         </div>
 
         <div class="flex justify-end pt-2">
-            <CustomButton
+            <AppButton
                 Class="w-full sm:w-auto sm:min-w-[200px]"
-                Color="ThemeColor.Primary"
-                Variant="Variant.Solid"
+                Color="ComponentColor.Primary"
+                Variant="ButtonVariant.Solid"
                 OnClick="@OnSave">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>
@@ -62,7 +51,7 @@
                 <ChildContent>
                     @DashboardLocalizer["UpdateWorkspaceForm_SaveSettings"]
                 </ChildContent>
-            </CustomButton>
+            </AppButton>
         </div>
     </EditForm>
 </div>

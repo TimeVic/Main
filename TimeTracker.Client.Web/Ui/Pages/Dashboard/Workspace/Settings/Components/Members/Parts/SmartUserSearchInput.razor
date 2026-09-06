@@ -1,20 +1,16 @@
-@using LumexUI
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
 
 @inherits BaseReactiveComponent
 
 <div class="relative w-full @Class" @onfocusin="OnFocus" @onfocusout="OnBlur">
     <div class="relative">
-        <LumexTextbox
+        <InputTextField
             Value="@Value"
             ValueChanged="OnValueChanged"
             Label="@Label"
-            LabelPlacement="@LabelPlacement"
             Placeholder="@(string.IsNullOrEmpty(Placeholder) ? DashboardLocalizer["SmartUserSearchInput_Placeholder"].Value : Placeholder)"
             Disabled="@Disabled"
-            FullWidth="true"
-            Variant="@Variant">
+            FullWidth="true">
             <EndContent>
                 @if (_isSearching)
                 {
@@ -23,7 +19,7 @@
                     </span>
                 }
             </EndContent>
-        </LumexTextbox>
+        </InputTextField>
     </div>
 
     @if (_isOpen && _searchResults.Count > 0)

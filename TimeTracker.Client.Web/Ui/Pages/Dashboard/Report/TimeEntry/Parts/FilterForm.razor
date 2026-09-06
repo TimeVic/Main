@@ -1,15 +1,14 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Constants.Ui
 
 @inherits BaseReactiveComponent
 
-<LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
-    <LumexCardBody>
+<AppCard Class="border-slate-200 bg-slate-50/50 shadow-none">
+    <AppCardBody>
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div>
-                <ProjectsDropDown
+                <ProjectsSelect
                     Type="DropDownType.Select"
                     Label="@DashboardLocalizer["Projects"].Value"
                     Clearable="true"
@@ -21,7 +20,7 @@
             @if (_securityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
             {
                 <div>
-                    <MembersDropDown
+                    <MembersSelect
                         Type="DropDownType.Select"
                         Label="@DashboardLocalizer["Member"].Value"
                         FullWidth="true"
@@ -31,7 +30,7 @@
                 </div>
             }
             <div>
-                <BooleanDropDown
+                <BooleanSelect
                     SelectType="DropDownType.Select"
                     Label="@DashboardLocalizer["Billable"].Value"
                     FullWidth="true"
@@ -40,38 +39,32 @@
                     ValueChanged="OnChangeBillable"/>
             </div>
             <div>
-                <LumexDatebox
+                <InputDateField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateFrom"].Value"
                     Value="@_state.Value.Filter.DateFrom"
                     ValueChanged="OnChangeDateFrom"
                     Clearable="true"
-                    Variant="InputVariant.Outlined"
-                    LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
             </div>
             <div>
-                <LumexDatebox
+                <InputDateField
                     TValue="DateTime?"
                     Label="@DashboardLocalizer["DateTo"].Value"
                     Value="@_state.Value.Filter.DateTo"
                     ValueChanged="OnChangeDateTo"
                     Clearable="true"
-                    Variant="InputVariant.Outlined"
-                    LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
             </div>
         </div>
         <div class="mt-4">
-            <LumexTextbox
-                TValue="string"
+            <InputTextField
                 Label="@DashboardLocalizer["Search"].Value"
                 Placeholder="@DashboardLocalizer["SearchByDescription"].Value"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"
-                FullWidth="true"
-                LabelPlacement="LabelPlacement.Outside"
-                Variant="InputVariant.Outlined"/>
+                Clearable="true"
+                FullWidth="true"/>
         </div>
-    </LumexCardBody>
-</LumexCard>
+    </AppCardBody>
+</AppCard>

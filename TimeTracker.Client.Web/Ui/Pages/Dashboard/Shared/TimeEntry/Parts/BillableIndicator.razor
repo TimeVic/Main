@@ -1,24 +1,24 @@
-@using LumexUI
-@using LumexUI.Common
+@using TimeTracker.Client.Core.Ui.Shared.Components.Enums
+@using TimeTracker.Client.Core.Ui.Shared.Components.Popover
 
 @inherits BaseReactiveComponent
 
 @if (Entry?.IsBillable == true)
 {
-    <LumexPopover>
-        <LumexPopoverTrigger>
-            <CustomButton
-                Variant="Variant.Outlined"
-                Size="Size.Medium"
-                Radius="Radius.Full"
-                Color="ThemeColor.Info"
+    <AppPopover>
+        <Trigger>
+            <AppButton
+                Variant="ButtonVariant.Outlined"
+                Size="ComponentSize.Medium"
+                Radius="ButtonRadius.Full"
+                Color="ComponentColor.Info"
                 IconOnly="true">
                 <StartContent>
                     <i class="fa-solid fa-coins text-sm"></i>
                 </StartContent>
-            </CustomButton>
-        </LumexPopoverTrigger>
-        <LumexPopoverContent>
+            </AppButton>
+        </Trigger>
+        <Content>
             <div class="min-w-[220px] space-y-2 p-3">
                 <div>
                     <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Billable"]</p>
@@ -52,6 +52,7 @@
                     <span class="font-medium text-slate-700">@_durationLabel</span>
                 </div>
             </div>
-        </LumexPopoverContent>
-    </LumexPopover>
+        </Content>
+    </AppPopover>
 }
+

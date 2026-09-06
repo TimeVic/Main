@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Project;
 using LoadListAction = TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction;
 
@@ -18,14 +19,11 @@ public partial class UpdateMemberModal
         public required IReadOnlyCollection<MemberProjectAccessRequest> ProjectsAccess { get; init; }
     }
 
+    [CascadingParameter]
+    public AppModalInstance? ModalInstance { get; set; }
+
     [Parameter]
     public required WorkspaceMemberDto Member { get; set; }
-
-    [Parameter]
-    public required bool IsOpened { get; set; }
-
-    [Parameter]
-    public EventCallback<bool> IsOpenedChanged { get; set; }
 
     [Inject]
     private IState<ProjectState> ProjectState { get; set; } = default!;
@@ -59,23 +57,19 @@ public partial class UpdateMemberModal
     private IReadOnlyCollection<ProjectAccessGroup> GetProjectAccessGroups()
     {
         return _model.ProjectsAccess
-            .Select(item => new
-            {
-                ProjectAccess = item,
-                Project = GetProject(item.ProjectId)
-            })
-            .GroupBy(item => item.Project?.Client?.Id)
+            .GroupBy(item => GetClientGroupName(GetProject(item.ProjectId)))
+            .OrderBy(group => group.Key)
             .Select(group => new ProjectAccessGroup
             {
-                ClientName = GetClientGroupName(group.First().Project),
-                ProjectsAccess = group.Select(item => item.ProjectAccess).ToList()
+                ClientName = group.Key,
+                ProjectsAccess = group.OrderBy(item => GetProjectName(item.ProjectId)).ToList()
             })
             .ToList();
     }
 
     private ProjectDto? GetProject(Guid projectId)
     {
-        return ProjectState.Value.List.FirstOrDefault(p => p.Id == projectId);
+        return ProjectState.Value.List.FirstOrDefault(item => item.Id == projectId);
     }
 
     private string GetClientGroupName(ProjectDto? project)
@@ -106,7 +100,10 @@ public partial class UpdateMemberModal
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 ToastService.ShowInfo(DashboardLocalizer["UpdateMemberModal_MemberAccessUpdated"].Value);
-                await OnCloseModal();
+                if (ModalInstance != null)
+                {
+                    await ModalInstance.Close(AppModalResult.Ok());
+                }
             }
         }
         catch (Exception)
@@ -119,16 +116,4 @@ public partial class UpdateMemberModal
         }
         StateHasChanged();
     }
-
-    private async Task OnCloseModal()
-    {
-        await IsOpenedChanged.InvokeAsync(false);
-        IsOpened = false;
-    }
 }
-
-
-
-
-
-
