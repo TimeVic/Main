@@ -46,9 +46,12 @@
                                 @(item.LastPayoutDate.HasValue ? item.LastPayoutDate.Value.ToString("MMM d, yyyy") : DashboardLocalizer["NoPayoutsRecorded"].Value)
                             </td>
                             <td class="px-3 py-2">
-                                <span class="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                                <AppBadge
+                                    Color="ComponentColor.Warning"
+                                    Variant="BadgeVariant.Flat"
+                                    Size="ComponentSize.Small">
                                     @DashboardLocalizer["Owed"]
-                                </span>
+                                </AppBadge>
                             </td>
                         </tr>
                     }

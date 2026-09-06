@@ -1,20 +1,19 @@
-@using LumexUI.Common
 @using TimeTracker.Client.Core.Constants.Ui
 
 @inherits BaseComponent
 
 <span @ref="_triggerElement" class="inline-flex" @onclick:stopPropagation="true">
-    <LumexButton
+    <AppButton
         Class="text-slate-500 hover:text-blue-600"
-        Color="ThemeColor.Default"
+        Color="ComponentColor.Default"
         IconOnly="true"
         OnClick="@TogglePicker"
-        Size="Size.Small"
-        Variant="Variant.Light">
+        Size="ComponentSize.Small"
+        Variant="ButtonVariant.Light">
         <StartContent>
             <span class="text-base leading-none">😊</span>
         </StartContent>
-    </LumexButton>
+    </AppButton>
 </span>
 
 @if (_isOpen)

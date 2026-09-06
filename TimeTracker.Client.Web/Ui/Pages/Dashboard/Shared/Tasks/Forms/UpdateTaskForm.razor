@@ -151,9 +151,12 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                             <div>
                                 <p class="text-xs font-medium text-slate-500">@DashboardLocalizer["Status"]</p>
                                 <div class="mt-1">
-                                    <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@_task.ExtendedStatus.GetThemeColor()">
+                                    <AppBadge
+                                        Size="ComponentSize.Small"
+                                        Variant="BadgeVariant.Flat"
+                                        Color="@_task.ExtendedStatus.GetComponentColor()">
                                         @DashboardLocalizer["TaskStatus_InProgress"]
-                                    </LumexChip>
+                                    </AppBadge>
                                 </div>
                             </div>
                         }

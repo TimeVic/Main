@@ -26,13 +26,14 @@
 
         <div class="relative mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,420px)] lg:px-8 lg:py-24">
             <section class="max-w-3xl">
-                <LumexChip
-                    Variant="@ChipVariant.Flat"
-                    Color="@ThemeColor.Primary"
-                    Radius="@Radius.Full"
-                    Class="border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
+                <AppBadge
+                    Variant="BadgeVariant.Flat"
+                    Color="ComponentColor.Success"
+                    Radius="BadgeRadius.Full"
+                    Size="ComponentSize.Large"
+                    Class="border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-xs">
                     @Localizer["Content_ForFreelanceDevelopersWithMultipleClients"]
-                </LumexChip>
+                </AppBadge>
 
                 <h1 class="mt-6 text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
                     @Localizer["Content_ForFreelanceDevelopersWorkingWithMultipleClients"]
@@ -43,17 +44,19 @@
                 </p>
 
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <LumexButton
-                        Size="@Size.Large"
-                        Radius="@Radius.Large"
-                        Color="@ThemeColor.Success"
+                    <AppButton
+                        Size="@ComponentSize.Large"
+                        Radius="@ButtonRadius.Large"
+                        Color="@ComponentColor.Success"
                         Class="w-full rounded-2xl px-6 font-semibold shadow-sm shadow-emerald-200/80 sm:w-auto"
                         OnClick="@(() => NavigationManager.NavigateTo(LocalizedUrl(SiteUrl.Registration_Step1)))">
                         <StartContent>
                             <i class="fa-solid fa-wallet"></i>
                         </StartContent>
-                        <ChildContent>@SharedLocalizer["CTA_StartTrackingIncome"]</ChildContent>
-                    </LumexButton>
+                        <ChildContent>
+                            @SharedLocalizer["CTA_StartTrackingIncome"]
+                        </ChildContent>
+                    </AppButton>
 
                     <a href="#use-cases" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
                         <i class="fa-regular fa-eye"></i>
@@ -158,13 +161,13 @@
                     Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70">
                     <AppCardBody Class="h-full gap-6 p-7">
                         <div class="flex items-center justify-between gap-4">
-                            <LumexChip
-                                Variant="@ChipVariant.Flat"
-                                Color="@ThemeColor.Info"
-                                Radius="@Radius.Full"
-                                Class="bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">
+                            <AppBadge
+                                Variant="BadgeVariant.Flat"
+                                Color="ComponentColor.Info"
+                                Radius="BadgeRadius.Full"
+                                Class="uppercase tracking-[0.24em]">
                                 @Localizer["Content_UseCase01"]
-                            </LumexChip>
+                            </AppBadge>
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
                                 <i class="fa-solid fa-code-branch"></i>
                             </span>
@@ -207,13 +210,13 @@
                     <AppCardHeader Class="border-b border-red-100 px-7 py-6">
                         <div class="flex w-full items-center justify-between gap-4">
                             <div>
-                                <LumexChip
-                                    Variant="@ChipVariant.Flat"
-                                    Color="@ThemeColor.Danger"
-                                    Radius="@Radius.Full"
-                                    Class="bg-red-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-red-700">
+                                <AppBadge
+                                    Variant="BadgeVariant.Flat"
+                                    Color="ComponentColor.Danger"
+                                    Radius="BadgeRadius.Full"
+                                    Class="uppercase tracking-[0.24em]">
                                     @Localizer["Content_MostImportantUseCase"]
-                                </LumexChip>
+                                </AppBadge>
                                 <h3 class="mt-4 text-2xl font-semibold text-slate-950">@Localizer["Content_UnpaidWorkVisibility"]</h3>
                             </div>
                             <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white shadow-sm">
@@ -273,13 +276,13 @@
                     Class="h-full rounded-[2rem] border border-slate-200 bg-slate-50/70">
                     <AppCardBody Class="h-full gap-6 p-7">
                         <div class="flex items-center justify-between gap-4">
-                            <LumexChip
-                                Variant="@ChipVariant.Flat"
-                                Color="@ThemeColor.Warning"
-                                Radius="@Radius.Full"
-                                Class="bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
+                            <AppBadge
+                                Variant="BadgeVariant.Flat"
+                                Color="ComponentColor.Warning"
+                                Radius="BadgeRadius.Full"
+                                Class="uppercase tracking-[0.24em]">
                                 @Localizer["Content_UseCase03"]
-                            </LumexChip>
+                            </AppBadge>
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
                                 <i class="fa-solid fa-gauge-high"></i>
                             </span>
@@ -372,17 +375,19 @@
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <LumexButton
-                            Size="@Size.Large"
-                            Radius="@Radius.Large"
-                            Color="@ThemeColor.Success"
+                        <AppButton
+                            Size="@ComponentSize.Large"
+                            Radius="@ButtonRadius.Large"
+                            Color="@ComponentColor.Success"
                             Class="w-full rounded-2xl px-6 font-semibold shadow-sm shadow-emerald-950/20 sm:w-auto"
                             OnClick="@(() => NavigationManager.NavigateTo(LocalizedUrl(SiteUrl.Registration_Step1)))">
                             <StartContent>
                                 <i class="fa-solid fa-user-plus"></i>
                             </StartContent>
-                            <ChildContent>@SharedLocalizer["CTA_StartFree"]</ChildContent>
-                        </LumexButton>
+                            <ChildContent>
+                                @SharedLocalizer["CTA_StartFree"]
+                            </ChildContent>
+                        </AppButton>
 
                         <a href="@LocalizedUrl(SiteUrl.LoginAsDemo)" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
                             <i class="fa-solid fa-flask"></i>

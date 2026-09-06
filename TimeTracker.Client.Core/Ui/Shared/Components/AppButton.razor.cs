@@ -54,6 +54,8 @@ public partial class AppButton : ComponentBase
         set => IconOnly = value;
     }
 
+    protected bool IsIconMode => IconOnly || IsIconOnly;
+
     [Parameter]
     public string Class { get; set; } = string.Empty;
 
@@ -92,26 +94,34 @@ public partial class AppButton : ComponentBase
         {
             var baseClasses = "inline-flex items-center justify-center font-medium transition-all duration-150 select-none cursor-pointer outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2";
             
-            var widthClasses = (FullWidth || IsFullWidth) ? "w-full" : "w-auto";
+            var widthClasses = (FullWidth || IsFullWidth) ? "w-full" : string.Empty;
             
             var disabledClasses = (Disabled || IsLoading) 
                 ? "opacity-60 cursor-not-allowed pointer-events-none active:scale-100 shadow-none" 
                 : "active:scale-[0.98]";
 
+            var isIconMode = IsIconMode;
+
             var sizeClasses = Size switch
             {
-                ComponentSize.Small => IconOnly ? "h-8 w-8 p-0 text-xs" : "h-8 px-3 text-xs gap-1.5",
-                ComponentSize.Large => IconOnly ? "h-12 w-12 p-0 text-base" : "h-12 px-6 text-base gap-2.5",
-                _ => IconOnly ? "h-10 w-10 p-0 text-sm" : "h-10 px-4 text-sm gap-2"
+                ComponentSize.Small => isIconMode 
+                    ? "h-8 w-8 min-w-8 max-w-8 shrink-0 aspect-square p-0 text-xs" 
+                    : "h-8 px-3 text-xs gap-1.5 shrink-0",
+                ComponentSize.Large => isIconMode 
+                    ? "h-12 w-12 min-w-12 max-w-12 shrink-0 aspect-square p-0 text-base" 
+                    : "h-12 px-6 text-base gap-2.5 shrink-0",
+                _ => isIconMode 
+                    ? "h-10 w-10 min-w-10 max-w-10 shrink-0 aspect-square p-0 text-sm" 
+                    : "h-10 px-4 text-sm gap-2 shrink-0"
             };
 
             var radiusClasses = Radius switch
             {
                 ButtonRadius.None => "rounded-none",
                 ButtonRadius.Small => "rounded-md",
-                ButtonRadius.Large => "rounded-2xl",
+                ButtonRadius.Large => "rounded-xl",
                 ButtonRadius.Full => "rounded-full",
-                _ => "rounded-xl"
+                _ => "rounded-lg"
             };
 
             var colorVariantClasses = (Variant, Color) switch

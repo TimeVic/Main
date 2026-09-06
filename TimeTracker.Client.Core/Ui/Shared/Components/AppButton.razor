@@ -30,22 +30,25 @@
     }
     else if (StartContent != null)
     {
-        <span class="inline-flex items-center shrink-0">
+        <span class="inline-flex items-center justify-center shrink-0">
             @StartContent
         </span>
     }
 
-    @if (!IconOnly || !IsLoading)
+    @if (!IsIconMode && !IsLoading && ChildContent != null)
     {
-        @if (ChildContent != null)
-        {
-            <span class="@(IsLoading && IconOnly ? "hidden" : "inline-flex items-center")">
-                @ChildContent
-            </span>
-        }
+        <span class="inline-flex items-center">
+            @ChildContent
+        </span>
+    }
+    else if (IsIconMode && !IsLoading && StartContent == null && ChildContent != null)
+    {
+        <span class="inline-flex items-center justify-center shrink-0">
+            @ChildContent
+        </span>
     }
 
-    @if (!IsLoading && EndContent != null)
+    @if (!IsLoading && !IsIconMode && EndContent != null)
     {
         <span class="inline-flex items-center shrink-0">
             @EndContent

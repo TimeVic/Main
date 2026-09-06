@@ -6,6 +6,9 @@ using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts;
 using TimeTracker.Client.Web.Services.UI;
 
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
+
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members;
 
 public partial class MembersBlock
@@ -37,4 +40,12 @@ public partial class MembersBlock
         Dispatcher.Dispatch(new DeleteMemberAction(member));
         return Task.CompletedTask;
     }
+
+    private static ComponentColor GetAccessBadgeColor(MembershipAccessType access) => access switch
+    {
+        MembershipAccessType.Owner => ComponentColor.Primary,
+        MembershipAccessType.Manager => ComponentColor.Info,
+        _ => ComponentColor.Secondary
+    };
 }
+

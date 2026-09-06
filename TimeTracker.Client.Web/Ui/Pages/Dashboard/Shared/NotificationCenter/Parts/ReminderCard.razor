@@ -16,22 +16,24 @@
                     Color="Color.Error"
                     Overlap="true"
                     Bordered="true">
-                    <MudChip
-                        Icon="@Icons.Material.Filled.AccessTime"
-                        Size="Size.Small"
-                        Color="Color.Primary">
-                        @DashboardLocalizer["Reminder"]
-                    </MudChip>
+                    <AppBadge
+                        Icon="fa-regular fa-clock"
+                        Size="ComponentSize.Small"
+                        Color="ComponentColor.Primary"
+                        Variant="BadgeVariant.Flat"
+                        Text="@DashboardLocalizer["Reminder"]">
+                    </AppBadge>
                 </MudBadge>
             }
             else
             {
-                <MudChip
-                    Icon="@Icons.Material.Filled.AccessTime"
-                    Size="Size.Small"
-                    Color="Color.Surface">
-                    @DashboardLocalizer["Reminder"]
-                </MudChip>
+                <AppBadge
+                    Icon="fa-regular fa-clock"
+                    Size="ComponentSize.Small"
+                    Color="ComponentColor.Default"
+                    Variant="BadgeVariant.Flat"
+                    Text="@DashboardLocalizer["Reminder"]">
+                </AppBadge>
             }
             <MudText
                 Class="mt-1 ml-2"

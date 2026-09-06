@@ -79,7 +79,7 @@
             <col class="hidden lg:table-column lg:w-28" />
             <col class="hidden lg:table-column lg:w-24" />
             <col class="hidden lg:table-column lg:w-36" />
-            <col class="w-20" />
+            <col class="w-24" />
         </colgroup>
         <thead class="bg-slate-50/80 sticky top-0 z-10">
             <tr class="text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
@@ -156,9 +156,12 @@
                                     <div class="flex flex-wrap items-center gap-1.5 lg:hidden" @onclick:stopPropagation="true">
                                         @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                                         {
-                                            <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@task.ExtendedStatus.GetThemeColor()">
+                                            <AppBadge
+                                                Size="ComponentSize.Small"
+                                                Variant="BadgeVariant.Flat"
+                                                Color="@task.ExtendedStatus.GetComponentColor()">
                                                 @DashboardLocalizer["TaskStatus_InProgress"]
-                                            </LumexChip>
+                                            </AppBadge>
                                         }
                                         else
                                         {
@@ -190,9 +193,12 @@
                         <td class="hidden @GetCellBorderClass(task) px-2 py-2 align-top lg:table-cell">
                             @if (task.ExtendedStatus == ExtendedTaskStatus.InProgress)
                             {
-                                <LumexChip Size="Size.Small" Variant="ChipVariant.Flat" Color="@task.ExtendedStatus.GetThemeColor()">
+                                <AppBadge
+                                    Size="ComponentSize.Small"
+                                    Variant="BadgeVariant.Flat"
+                                    Color="@task.ExtendedStatus.GetComponentColor()">
                                     @DashboardLocalizer["TaskStatus_InProgress"]
-                                </LumexChip>
+                                </AppBadge>
                             }
                             else
                             {
@@ -227,17 +233,17 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right">
-                            <div class="flex items-center justify-end gap-1">
+                        <td class="@GetCellBorderClass(task) px-2 py-2 align-top text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-1 shrink-0">
                                 <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>
                                     <LumexDropdownTrigger>
-                                        <LumexButton
+                                        <AppButton
                                             IconOnly="true"
-                                            Size="Size.Small"
-                                            Variant="@Variant.Outlined">
+                                            Size="ComponentSize.Small"
+                                            Variant="ButtonVariant.Outlined">
                                             <i class="fa-solid fa-ellipsis-h"></i>
-                                        </LumexButton>
+                                        </AppButton>
                                     </LumexDropdownTrigger>
                                     <LumexDropdownMenu>
                                         <LumexDropdownItem

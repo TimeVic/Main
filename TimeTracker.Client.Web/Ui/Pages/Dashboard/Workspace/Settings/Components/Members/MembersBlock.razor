@@ -59,11 +59,16 @@
             Title="@DashboardLocalizer["Login"].Value"
             Property="@(p => p.User.FormattedLogin)"
             Sortable="true" />
-        <AppPropertyColumn
+        <AppTableColumn
             TGridItem="WorkspaceMemberDto"
-            TProp="string"
-            Title="@DashboardLocalizer["MembersBlock_Access"].Value"
-            Property="@(p => p.Access.ToString())" />
+            Title="@DashboardLocalizer["MembersBlock_Access"].Value">
+            <AppBadge
+                Size="ComponentSize.Small"
+                Variant="BadgeVariant.Flat"
+                Color="@GetAccessBadgeColor(context.Access)">
+                @context.Access.ToString()
+            </AppBadge>
+        </AppTableColumn>
         <AppTableColumn
             TGridItem="WorkspaceMemberDto"
             Title="@DashboardLocalizer["Actions"].Value"

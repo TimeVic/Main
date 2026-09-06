@@ -1,9 +1,8 @@
-@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits BaseReactiveComponent
 
-<span class="@Class" title="@ButtonTitle">
+<span class="inline-flex shrink-0 @Class" title="@ButtonTitle">
     @if (IsCurrentTaskTimerActive)
     {
         <AppButton

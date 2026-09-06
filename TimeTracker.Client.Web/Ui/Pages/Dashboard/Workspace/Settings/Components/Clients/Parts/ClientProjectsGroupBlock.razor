@@ -16,12 +16,12 @@
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
                                 <h3 class="truncate text-base font-semibold text-slate-900">@Client.Name</h3>
-                                <LumexChip
-                                    Size="Size.Small"
-                                    Variant="ChipVariant.Flat"
-                                    Color="ThemeColor.Primary">
+                                <AppBadge
+                                    Size="ComponentSize.Small"
+                                    Variant="BadgeVariant.Flat"
+                                    Color="ComponentColor.Primary">
                                     @string.Format(DashboardLocalizer["ClientProjectsGroupBlock_ProjectsCount"], Projects.Count)
-                                </LumexChip>
+                                </AppBadge>
                             </div>
                         </div>
                     }

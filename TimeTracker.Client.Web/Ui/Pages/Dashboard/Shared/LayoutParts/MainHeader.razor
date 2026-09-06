@@ -55,11 +55,11 @@
             @if (IsTeamInvitationAvailable)
             {
                 <LumexNavbarItem>
-                    <LumexButton
+                    <AppButton
                         Class="group border border-slate-200 px-3.5 py-2 text-sm font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-blue-600"
-                        Color="ThemeColor.Default"
-                        Radius="Radius.Medium"
-                        Variant="Variant.Outlined"
+                        Color="ComponentColor.Default"
+                        Radius="ButtonRadius.Medium"
+                        Variant="ButtonVariant.Outlined"
                         OnClick="@OpenInviteTeamModal">
                         <StartContent>
                             <i class="fa-solid fa-user-plus text-slate-400 transition-colors group-hover:text-blue-600" aria-hidden="true"></i>
@@ -67,15 +67,15 @@
                         <ChildContent>
                             @DashboardLocalizer["MainHeader_InviteTeam"]
                         </ChildContent>
-                    </LumexButton>
+                    </AppButton>
                 </LumexNavbarItem>
             }
             <LumexNavbarItem>
                 <LumexDropdown>
                     <LumexDropdownTrigger>
-                        <LumexButton
+                        <AppButton
                             Class="min-w-[180px] justify-start max-[420px]:min-w-0"
-                            Variant="@Variant.Outlined">
+                            Variant="ButtonVariant.Outlined">
                             <ChildContent>
                                 <span class="inline-flex min-w-0 flex-1 items-center gap-3">
                                     <span class="min-w-0 text-left">
@@ -88,7 +88,7 @@
                             <EndContent>
                                 <i class="fa-solid fa-chevron-down text-xs text-slate-500"></i>
                             </EndContent>
-                        </LumexButton>
+                        </AppButton>
                     </LumexDropdownTrigger>
                     <LumexDropdownMenu Class="p-3">
                         <LumexDropdownItem

@@ -12,6 +12,15 @@
                 <i class="fa-solid @(IsActive ? "fa-link" : "fa-link-slash")"></i>
                 @(IsActive ? DashboardLocalizer["IntegrationServiceHeader_Active"] : DashboardLocalizer["IntegrationServiceHeader_Inactive"])
             </span>
+            <div class="mt-3">
+                <AppBadge
+                    Color="@(IsActive ? ComponentColor.Success : ComponentColor.Secondary)"
+                    Variant="BadgeVariant.Flat"
+                    Size="ComponentSize.Small"
+                    Icon="@(IsActive ? "fa-solid fa-link" : "fa-solid fa-link-slash")">
+                    @(IsActive ? DashboardLocalizer["IntegrationServiceHeader_Active"] : DashboardLocalizer["IntegrationServiceHeader_Inactive"])
+                </AppBadge>
+            </div>
         </div>
     </div>
     <span title="@string.Format(DashboardLocalizer["IntegrationServiceHeader_HowToConnect"], ServiceName)">

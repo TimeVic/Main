@@ -84,11 +84,13 @@
                                 }
                             </td>
                             <td class="px-3 py-2">
-                                <span
-                                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class"
+                                <AppBadge
+                                    Color="@status.Color"
+                                    Variant="BadgeVariant.Flat"
+                                    Size="ComponentSize.Small"
                                     title="@status.Tooltip">
                                     @status.Text
-                                </span>
+                                </AppBadge>
                             </td>
                         </tr>
                     }
@@ -133,10 +135,10 @@
         return "text-emerald-700";
     }
 
-    private (string Text, string Class, string Tooltip) GetClientStatus(decimal balance)
+    private (string Text, ComponentColor Color, string Tooltip) GetClientStatus(decimal balance)
     {
-        if (balance > 0) return (DashboardLocalizer["Due"].Value, "bg-red-100 text-red-700", DueTooltip);
-        if (balance < 0) return (DashboardLocalizer["Credit"].Value, "bg-blue-100 text-blue-700", CreditTooltip);
-        return (DashboardLocalizer["Settled"].Value, "bg-emerald-100 text-emerald-700", DashboardLocalizer["ClientBalancesTableBlock_SettledTooltip"].Value);
+        if (balance > 0) return (DashboardLocalizer["Due"].Value, ComponentColor.Danger, DueTooltip);
+        if (balance < 0) return (DashboardLocalizer["Credit"].Value, ComponentColor.Primary, CreditTooltip);
+        return (DashboardLocalizer["Settled"].Value, ComponentColor.Success, DashboardLocalizer["ClientBalancesTableBlock_SettledTooltip"].Value);
     }
 }

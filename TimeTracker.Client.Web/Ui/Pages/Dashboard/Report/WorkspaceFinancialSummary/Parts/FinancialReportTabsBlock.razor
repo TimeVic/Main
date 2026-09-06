@@ -1,6 +1,6 @@
-@using LumexUI.Common
 <AppTabs
-    Size="ComponentSize.Medium">
+    Size="ComponentSize.Medium"
+    BodyClass="pt-4">
     <AppTab
         Title="@DashboardLocalizer["WorkspaceMoney_ClientBalancesTab"]">
         <ClientBalancesTabBlock
@@ -15,22 +15,6 @@
         <ProjectProfitabilityTabBlock />
     </AppTab>
 </AppTabs>
-
-<LumexTabs
-    Size="Size.Large"
-    Variant="TabVariant.Outlined"
-    Color="ThemeColor.Primary"
-    FullWidth="true">
-    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_ClientBalancesTab"]">
-        <ClientBalancesTabBlock OnShareClient="OnShareClient"/>
-    </LumexTab>
-    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_TeamSettlementsTab"]">
-        <TeamSettlementsTabBlock/>
-    </LumexTab>
-    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_ProjectProfitabilityTab"]">
-        <ProjectProfitabilityTabBlock/>
-    </LumexTab>
-</LumexTabs>
 
 @code {
     [Parameter]

@@ -86,9 +86,12 @@
                 <AppCardBody Class="p-4">
                     <div class="flex items-center justify-between">
                         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["OutstandingBalance"]</p>
-                        <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium @GetOutstandingBadgeClass(_report.Totals.Outstanding)">
+                        <AppBadge
+                            Color="@GetOutstandingBadgeColor(_report.Totals.Outstanding)"
+                            Variant="BadgeVariant.Flat"
+                            Size="ComponentSize.Small">
                             @GetOutstandingBadgeLabel(_report.Totals.Outstanding)
-                        </span>
+                        </AppBadge>
                     </div>
                     <p class="mt-2 text-2xl font-bold @GetOutstandingTextClass(_report.Totals.Outstanding)">
                         <AmountDisplay Amount="@_report.Totals.Outstanding"/>
@@ -150,10 +153,13 @@
                                         <AmountDisplay Amount="@client.Outstanding"/>
                                     </td>
                                     <td class="px-3 py-2 text-center">
-                                        <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold @GetStatusBadgeClass(client.Outstanding)">
-                                            <span class="h-1.5 w-1.5 rounded-full @GetStatusDotClass(client.Outstanding)"></span>
+                                        <AppBadge
+                                            Color="@GetStatusColor(client.Outstanding)"
+                                            Variant="BadgeVariant.Flat"
+                                            Size="ComponentSize.Small"
+                                            IsDot="true">
                                             @GetStatus(client.Outstanding)
-                                        </span>
+                                        </AppBadge>
                                     </td>
                                 </tr>
                                 @if (isExpanded)
@@ -323,10 +329,13 @@
                                     <AmountDisplay Amount="@_report.Totals.Outstanding"/>
                                 </td>
                                 <td class="px-3 py-2.5 text-center">
-                                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold @GetStatusBadgeClass(_report.Totals.Outstanding)">
-                                        <span class="h-1.5 w-1.5 rounded-full @GetStatusDotClass(_report.Totals.Outstanding)"></span>
+                                    <AppBadge
+                                        Color="@GetStatusColor(_report.Totals.Outstanding)"
+                                        Variant="BadgeVariant.Flat"
+                                        Size="ComponentSize.Small"
+                                        IsDot="true">
                                         @GetStatus(_report.Totals.Outstanding)
-                                    </span>
+                                    </AppBadge>
                                 </td>
                             </tr>
                         </tfoot>

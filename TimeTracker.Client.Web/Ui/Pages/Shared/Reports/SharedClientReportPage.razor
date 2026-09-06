@@ -77,6 +77,15 @@ else
                                 <i class="fa-solid @balance.BadgeIcon"></i>
                                 @balance.BadgeText
                             </span>
+                            <div class="mt-2.5">
+                                <AppBadge
+                                    Color="@balance.BadgeColor"
+                                    Variant="BadgeVariant.Flat"
+                                    Size="ComponentSize.Small"
+                                    Icon="@($"fa-solid {balance.BadgeIcon}")">
+                                    @balance.BadgeText
+                                </AppBadge>
+                            </div>
                         </div>
                         <i class="fa-solid @balance.CardIcon text-lg"></i>
                     </div>

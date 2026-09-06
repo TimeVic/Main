@@ -15,12 +15,12 @@
             {
                 <LumexDropdown>
                 <LumexDropdownTrigger>
-                    <LumexButton
+                    <AppButton
                         IconOnly="true"
-                        Size="Size.Small"
-                        Variant="@Variant.Outlined">
+                        Size="ComponentSize.Small"
+                        Variant="ButtonVariant.Outlined">
                         <i class="fa-solid fa-ellipsis-h"></i>
-                    </LumexButton>
+                    </AppButton>
                 </LumexDropdownTrigger>
                 <LumexDropdownMenu>
                     <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
