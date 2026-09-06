@@ -39,9 +39,9 @@ public partial class AppCard : ComponentBase
     {
         get
         {
-            var baseClasses = "relative flex flex-col rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-xs transition-all duration-200";
+            var baseClasses = "relative flex flex-col rounded-2xl border border-slate-200/80 bg-white text-slate-800 shadow-xs transition-all duration-200";
             var interactiveClass = (IsHoverable || OnClick.HasDelegate)
-                ? "hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 cursor-pointer"
+                ? "hover:shadow-md hover:border-slate-300 cursor-pointer"
                 : "";
 
             return $"{baseClasses} {interactiveClass} {Class}".Trim();

@@ -24,7 +24,6 @@
             <div>
                 <ClientsSelect
                     Type="DropDownType.Select"
-                    Size="ComponentSize.Small"
                     Label="@DashboardLocalizer["Client"].Value"
                     Value="model.ClientId"
                     ValueExpression="() => model.ClientId"
@@ -34,7 +33,6 @@
             <div>
                 <ProjectsSelect
                     Type="DropDownType.Select"
-                    Size="ComponentSize.Small"
                     Label="@DashboardLocalizer["Project"].Value"
                     ClientId="model.ClientId"
                     Value="model.ProjectId"
@@ -44,7 +42,6 @@
             </div>
             <div>
                 <InputDateField
-                    Size="ComponentSize.Small"
                     Required="true"
                     @bind-Value="@model.PaymentTime"
                     Label="@DashboardLocalizer["PaymentDate"].Value"/>
@@ -53,7 +50,6 @@
             <div>
                 <InputNumericField
                     TItem="decimal"
-                    Size="ComponentSize.Small"
                     Required="true"
                     @bind-Value="@model.Amount"
                     Label="@DashboardLocalizer["Amount"].Value"/>

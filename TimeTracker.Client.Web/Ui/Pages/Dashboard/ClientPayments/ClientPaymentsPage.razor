@@ -64,12 +64,14 @@
 
     <AppCard>
         <AppCardHeader>
+        <AppCardHeader Class="p-5 pb-0">
             <div>
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Filters"]</p>
                 <p class="text-sm text-slate-500">@DashboardLocalizer["PaymentsFiltersHelper"]</p>
             </div>
         </AppCardHeader>
         <AppCardBody>
+        <AppCardBody Class="p-5">
             <div class="grid gap-4 md:grid-cols-3">
                 <div>
                     <ClientsSelect
@@ -98,14 +100,16 @@
         </AppCardBody>
     </AppCard>
 
-    <AppCard Class="overflow-x-auto pb-2">
+    <AppCard>
         <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <AppCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-slate-100">
             <div>
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["ReceivedClientPayments"]</p>
                 <p class="text-sm text-slate-500">@DashboardLocalizer["ReceivedClientPaymentsHelper"]</p>
             </div>
         </AppCardHeader>
         <AppCardBody>
+        <AppCardBody Class="p-5">
             @if (!_state.Value.IsListLoading && !FilteredPayments.Any())
             {
                 <div class="px-4 py-12 text-center">

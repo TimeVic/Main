@@ -139,7 +139,7 @@ public partial class AppTable<TGridItem> : ComponentBase
     }
 
     protected string ComputedContainerClass =>
-        $"app-table-container w-full overflow-x-auto rounded-xl {(HasTableBorder ? "border border-slate-200 dark:border-slate-800" : "")} bg-white dark:bg-slate-900 {ContainerClass}".Trim();
+        $"app-table-container w-full overflow-x-auto rounded-xl {(HasTableBorder ? "border border-slate-200" : "")} bg-white {ContainerClass}".Trim();
 
     protected string ComputedGridClass
     {
@@ -148,6 +148,7 @@ public partial class AppTable<TGridItem> : ComponentBase
             var classes = new List<string>
             {
                 "w-full text-left text-sm border-collapse"
+                "w-full text-left text-sm border-collapse quickgrid-table theme-tailwind"
             };
 
             if (IsStriped)

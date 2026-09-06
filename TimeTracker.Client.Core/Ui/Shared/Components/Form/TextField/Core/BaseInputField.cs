@@ -138,20 +138,20 @@ public abstract class BaseInputField<TValue> : BaseReactiveComponent, IDisposabl
 
             if (HasError)
             {
-                return $"{baseClasses} border-rose-500 ring-3 ring-rose-500/15 text-rose-900 dark:text-rose-300 bg-white dark:bg-slate-800";
+                return $"{baseClasses} border-rose-500 ring-3 ring-rose-500/15 text-rose-900 bg-white";
             }
 
             if (IsDisabled)
             {
-                return $"{baseClasses} border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed opacity-75";
+                return $"{baseClasses} border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed opacity-75";
             }
 
             if (IsFlat)
             {
-                return $"{baseClasses} border-transparent bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-slate-200/70 focus-within:bg-white dark:focus-within:bg-slate-800 focus-within:border-blue-500 focus-within:ring-3 focus-within:ring-blue-500/15";
+                return $"{baseClasses} border-transparent bg-slate-100 text-slate-800 hover:bg-slate-200/70 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-3 focus-within:ring-blue-500/15";
             }
 
-            return $"{baseClasses} border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:border-slate-300 dark:hover:border-slate-600 focus-within:border-blue-500 focus-within:ring-3 focus-within:ring-blue-500/15 shadow-2xs";
+            return $"{baseClasses} border-slate-200 bg-white text-slate-800 hover:border-slate-300 focus-within:border-blue-500 focus-within:ring-3 focus-within:ring-blue-500/15 shadow-2xs";
         }
     }
 
@@ -175,6 +175,11 @@ public abstract class BaseInputField<TValue> : BaseReactiveComponent, IDisposabl
     public virtual async Task SetValueAsync(TValue? newValue)
     {
         if (IsDisabled || IsReadOnly)
+        {
+            return;
+        }
+
+        if (EqualityComparer<TValue>.Default.Equals(Value, newValue))
         {
             return;
         }

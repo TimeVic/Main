@@ -36,6 +36,7 @@
             type="text"
             inputmode="numeric"
             value="@_textValue"
+            @onfocus="HandleFocus"
             @oninput="HandleInput"
             @onkeydown="HandleKeyDown"
             @onkeydown:preventDefault="IsArrowKey(lastKeyDownKey)"
@@ -112,6 +113,7 @@
     private string _textValue = string.Empty;
     private DateTime? _baseDate;
     private string lastKeyDownKey = string.Empty;
+    private bool _isFocused;
 
     private bool IsArrowKey(string key) => key is "ArrowUp" or "ArrowDown";
 
@@ -119,19 +121,31 @@
     {
         base.OnParametersSet();
 
-        if (Value.HasValue && Value.Value != default)
+        if (!_isFocused)
+        {
+            if (Value.HasValue && Value.Value != default)
+            {
+                _baseDate = Value.Value.Date;
+                _textValue = Value.Value.ToString("HH:mm");
+            }
+            else if (TimeValue.HasValue)
+            {
+                _textValue = $"{(int)TimeValue.Value.TotalHours:00}:{TimeValue.Value.Minutes:00}";
+            }
+            else
+            {
+                _textValue = string.Empty;
+            }
+        }
+        else if (Value.HasValue && Value.Value != default)
         {
             _baseDate = Value.Value.Date;
-            _textValue = Value.Value.ToString("HH:mm");
         }
-        else if (TimeValue.HasValue)
-        {
-            _textValue = $"{(int)TimeValue.Value.TotalHours:00}:{TimeValue.Value.Minutes:00}";
-        }
-        else
-        {
-            _textValue = string.Empty;
-        }
+    }
+
+    private void HandleFocus()
+    {
+        _isFocused = true;
     }
 
     private async Task HandleInput(ChangeEventArgs e)
@@ -167,9 +181,14 @@
 
     private async Task HandleBlur()
     {
+        _isFocused = false;
+
         if (string.IsNullOrWhiteSpace(_textValue))
         {
-            await ClearTimeAsync();
+            if (Value.HasValue || TimeValue.HasValue)
+            {
+                await ClearTimeAsync();
+            }
             return;
         }
 
@@ -182,10 +201,17 @@
         {
             _textValue = Value.Value.ToString("HH:mm");
         }
+        else if (TimeValue.HasValue)
+        {
+            _textValue = $"{(int)TimeValue.Value.TotalHours:00}:{TimeValue.Value.Minutes:00}";
+        }
         else
         {
             _textValue = string.Empty;
-            await ClearTimeAsync();
+            if (Value.HasValue || TimeValue.HasValue)
+            {
+                await ClearTimeAsync();
+            }
         }
     }
 
@@ -270,6 +296,22 @@
         var baseDate = _baseDate ?? DateTime.Today;
         var dt = baseDate.Date.Add(ts);
 
+        // Do not commit or trigger events if the time value has not changed
+        if (Value.HasValue && Value.Value != default)
+        {
+            if (Value.Value.Date == dt.Date && Value.Value.Hour == hours && Value.Value.Minute == minutes)
+            {
+                return;
+            }
+        }
+        else if (TimeValue.HasValue)
+        {
+            if ((int)TimeValue.Value.TotalHours == hours && TimeValue.Value.Minutes == minutes)
+            {
+                return;
+            }
+        }
+
         await SetValueAsync(dt);
         await TimeValueChanged.InvokeAsync(ts);
         await Changed.InvokeAsync(dt);
@@ -278,6 +320,11 @@
     public async Task ClearTimeAsync()
     {
         _textValue = string.Empty;
+        if (!Value.HasValue && !TimeValue.HasValue)
+        {
+            return;
+        }
+
         await SetValueAsync(null);
         await TimeValueChanged.InvokeAsync(null);
         await Changed.InvokeAsync(null);

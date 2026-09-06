@@ -48,6 +48,7 @@
         TGridItem="TagDto"
         Items="@_state.Value.List.AsQueryable()"
         Class="mt-3">
+        Items="@_state.Value.List.AsQueryable()">
         <AppPropertyColumn
             Title="@DashboardLocalizer["Name"].Value"
             Property="@(p => p.Name)"

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.never-match-dark));
+
 @source "../../TimeTracker.Client.Core/**/*.razor";
 @source "../../TimeTracker.Client.Core/**/*.cs";
 
@@ -104,36 +106,53 @@
         }
     }
 
-    /* Mantine-style Table Theme for QuickGrid in AppTable */
-    table.quickgrid.theme-tailwind {
+    /* Polished Table Theme for QuickGrid in AppTable */
+    table.quickgrid,
+    table.quickgrid.theme-tailwind,
+    table.quickgrid[theme="tailwind"],
+    .app-table-container table {
         width: 100%;
         text-align: left;
         font-size: 0.875rem;
         border-collapse: collapse;
     }
 
-    /* Mantine Table Header: clean, bold, natural casing */
-    table.quickgrid.theme-tailwind thead {
-        background-color: transparent;
+    .app-table-container {
+        border-radius: 0.75rem;
     }
 
-    table.quickgrid.theme-tailwind thead th {
-        padding: 0.625rem 1rem;
-        font-size: 0.875rem;
-        font-weight: 700;
-        text-transform: none;
-        letter-spacing: normal;
-        color: #111827;
+    table.quickgrid thead,
+    .app-table-container table thead {
+        background-color: #f8fafc;
+    }
+
+    table.quickgrid thead th,
+    .app-table-container table thead th {
+        background-color: #f8fafc;
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
         white-space: nowrap;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid #e2e8f0;
     }
 
-    .dark table.quickgrid.theme-tailwind thead th {
-        color: #f8fafc;
-        border-bottom-color: #334155;
+    table.quickgrid thead th:first-child,
+    .app-table-container table thead th:first-child {
+        padding-left: 1.25rem;
+        border-top-left-radius: 0.75rem;
     }
 
-    table.quickgrid.theme-tailwind thead th button.col-title {
+    table.quickgrid thead th:last-child,
+    .app-table-container table thead th:last-child {
+        padding-right: 1.25rem;
+        border-top-right-radius: 0.75rem;
+    }
+
+    table.quickgrid thead th button.col-title,
+    .app-table-container table thead th button.col-title {
         display: inline-flex;
         align-items: center;
         gap: 0.375rem;
@@ -143,104 +162,101 @@
         margin: 0;
         font: inherit;
         font-size: inherit;
-        font-weight: 700;
-        text-transform: none;
-        letter-spacing: normal;
+        font-weight: 600;
+        text-transform: inherit;
+        letter-spacing: inherit;
         color: inherit;
         cursor: pointer;
         transition: color 0.15s ease;
     }
 
-    table.quickgrid.theme-tailwind thead th button.col-title:hover {
+    table.quickgrid thead th button.col-title:hover,
+    .app-table-container table thead th button.col-title:hover {
         color: #2563eb;
     }
 
-    .dark table.quickgrid.theme-tailwind thead th button.col-title:hover {
-        color: #60a5fa;
-    }
-
-    /* Mantine Table Body Cells */
-    table.quickgrid.theme-tailwind tbody td {
-        padding: 0.625rem 1rem;
+    /* Table Body Cells */
+    table.quickgrid tbody td,
+    .app-table-container table tbody td {
+        padding: 0.875rem 1rem;
         font-size: 0.875rem;
-        color: #1f2937;
+        color: #334155;
         vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
     }
 
-    .dark table.quickgrid.theme-tailwind tbody td {
-        color: #e2e8f0;
+    table.quickgrid tbody td:first-child,
+    .app-table-container table tbody td:first-child {
+        padding-left: 1.25rem;
     }
 
-    /* Mantine Table: With row borders */
-    table.quickgrid.theme-tailwind.table-row-borders tbody tr,
-    table.quickgrid.theme-tailwind tbody tr {
+    table.quickgrid tbody td:last-child,
+    .app-table-container table tbody td:last-child {
+        padding-right: 1.25rem;
+    }
+
+    table.quickgrid tbody tr,
+    .app-table-container table tbody tr {
         border-bottom: 1px solid #f1f5f9;
         transition: background-color 0.15s ease;
     }
 
-    .dark table.quickgrid.theme-tailwind.table-row-borders tbody tr,
-    .dark table.quickgrid.theme-tailwind tbody tr {
-        border-bottom-color: rgb(51 65 85 / 0.4);
-    }
-
-    table.quickgrid.theme-tailwind tbody tr:last-child {
+    table.quickgrid tbody tr:last-child,
+    .app-table-container table tbody tr:last-child {
         border-bottom: none;
     }
 
-    /* Mantine Table: Striped (odd rows tinted) */
-    table.quickgrid.theme-tailwind.table-striped tbody tr:nth-of-type(odd) {
-        background-color: #f8fafc;
+    /* Striped (odd rows lightly tinted) */
+    table.quickgrid.table-striped tbody tr:nth-of-type(odd),
+    .app-table-container table.table-striped tbody tr:nth-of-type(odd) {
+        background-color: #fbfcfe;
     }
 
-    .dark table.quickgrid.theme-tailwind.table-striped tbody tr:nth-of-type(odd) {
-        background-color: rgb(30 41 59 / 0.4);
-    }
-
-    table.quickgrid.theme-tailwind.table-striped tbody tr:nth-of-type(even) {
+    table.quickgrid.table-striped tbody tr:nth-of-type(even),
+    .app-table-container table.table-striped tbody tr:nth-of-type(even) {
         background-color: transparent;
     }
 
-    /* Mantine Table: Highlight on hover */
-    table.quickgrid.theme-tailwind.table-hover tbody tr:hover,
-    table.quickgrid.theme-tailwind tbody tr.app-table-row-hover:hover {
-        background-color: #f1f5f9 !important;
+    /* Highlight on hover */
+    table.quickgrid.table-hover tbody tr:hover,
+    table.quickgrid tbody tr.app-table-row-hover:hover,
+    .app-table-container table tbody tr:hover,
+    .app-table-container table tbody tr.app-table-row-hover:hover {
+        background-color: #f8fafc !important;
     }
 
-    .dark table.quickgrid.theme-tailwind.table-hover tbody tr:hover,
-    .dark table.quickgrid.theme-tailwind tbody tr.app-table-row-hover:hover {
-        background-color: rgb(51 65 85 / 0.6) !important;
-    }
-
-    /* Mantine Table: With column borders */
-    table.quickgrid.theme-tailwind.table-column-borders thead th:not(:last-child),
-    table.quickgrid.theme-tailwind.table-column-borders tbody td:not(:last-child) {
-        border-right: 1px solid #e5e7eb;
-    }
-
-    .dark table.quickgrid.theme-tailwind.table-column-borders thead th:not(:last-child),
-    .dark table.quickgrid.theme-tailwind.table-column-borders tbody td:not(:last-child) {
-        border-right-color: #334155;
+    /* Column borders */
+    table.quickgrid.table-column-borders thead th:not(:last-child),
+    table.quickgrid.table-column-borders tbody td:not(:last-child),
+    .app-table-container table.table-column-borders thead th:not(:last-child),
+    .app-table-container table.table-column-borders tbody td:not(:last-child) {
+        border-right: 1px solid #e2e8f0;
     }
 
     /* Alignment helpers */
-    table.quickgrid.theme-tailwind .col-justify-center {
+    table.quickgrid .col-justify-center,
+    .app-table-container table .col-justify-center {
         text-align: center;
     }
 
-    table.quickgrid.theme-tailwind .col-justify-center button.col-title {
+    table.quickgrid .col-justify-center button.col-title,
+    .app-table-container table .col-justify-center button.col-title {
         margin-left: auto;
         margin-right: auto;
     }
 
-    table.quickgrid.theme-tailwind .col-justify-end {
+    table.quickgrid .col-justify-end,
+    .app-table-container table .col-justify-end {
         text-align: right;
     }
 
-    table.quickgrid.theme-tailwind .col-justify-end button.col-title {
+    table.quickgrid .col-justify-end button.col-title,
+    .app-table-container table .col-justify-end button.col-title {
         margin-left: auto;
     }
 
-    table.quickgrid.theme-tailwind .col-sort-button {
+    table.quickgrid .col-sort-button,
+    .app-table-container table .col-sort-button {
         display: inline-flex;
         align-items: center;
     }

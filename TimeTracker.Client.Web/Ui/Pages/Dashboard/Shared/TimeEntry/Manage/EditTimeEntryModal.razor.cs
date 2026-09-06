@@ -165,23 +165,38 @@ public partial class EditTimeEntryModal: IDisposable
     {
         if (startTime != null)
         {
-            _model.StartTime = startTime > _model.EndTime ? _model.EndTime.Value : startTime.Value;
-            await UpdateTimeEntry();
+            var newStartTime = startTime > _model.EndTime ? _model.EndTime.Value : startTime.Value;
+            var isChanged = _model.StartTime.Date != newStartTime.Date 
+                            || _model.StartTime.Hour != newStartTime.Hour 
+                            || _model.StartTime.Minute != newStartTime.Minute;
+            if (isChanged)
+            {
+                _model.StartTime = newStartTime;
+                await UpdateTimeEntry();
+            }
         }
     }
 
     private async Task OnChangeEndTime(DateTime? endTime)
     {
-        if (endTime != null)
+        if (endTime.HasValue)
         {
-            _model.EndTime = endTime < _model.StartTime ? _model.StartTime : endTime;
-            await UpdateTimeEntry();
+            var newEndTime = endTime.Value < _model.StartTime ? _model.StartTime : endTime.Value;
+            var isChanged = !_model.EndTime.HasValue 
+                            || _model.EndTime.Value.Date != newEndTime.Date 
+                            || _model.EndTime.Value.Hour != newEndTime.Hour 
+                            || _model.EndTime.Value.Minute != newEndTime.Minute;
+            if (isChanged)
+            {
+                _model.EndTime = newEndTime;
+                await UpdateTimeEntry();
+            }
         }
     }
 
     private async Task OnDateChanged(DateTime? date)
     {
-        if (!date.HasValue)
+        if (!date.HasValue || date.Value.Date == _model.StartTime.Date)
         {
             return;
         }
@@ -199,20 +214,29 @@ public partial class EditTimeEntryModal: IDisposable
 
     private async Task OnDescriptionChanged(string description)
     {
-        _model.Description = description;
-        await UpdateTimeEntry();
+        if (_model.Description != description)
+        {
+            _model.Description = description;
+            await UpdateTimeEntry();
+        }
     }
 
     private async Task OnChangeBillable(bool isBillable)
     {
-        _model.IsBillable = isBillable;
-        await UpdateTimeEntry();
+        if (_model.IsBillable != isBillable)
+        {
+            _model.IsBillable = isBillable;
+            await UpdateTimeEntry();
+        }
     }
 
     private async Task OnChangeBillableAmount(decimal? hourlyRate)
     {
-        _model.HourlyRate = hourlyRate;
-        await UpdateTimeEntry();
+        if (_model.HourlyRate != hourlyRate)
+        {
+            _model.HourlyRate = hourlyRate;
+            await UpdateTimeEntry();
+        }
     }
 
     private string GetTimeZoneLabel()

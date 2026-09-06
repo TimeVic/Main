@@ -46,7 +46,6 @@
             }
             <div>
                 <InputDateField
-                    Size="ComponentSize.Small"
                     Required="true"
                     @bind-Value="@model.PaymentTime"
                     Label="@DashboardLocalizer["PaymentDate"].Value"/>
@@ -55,7 +54,6 @@
             <div>
                 <InputNumericField
                     TItem="decimal"
-                    Size="ComponentSize.Small"
                     Required="true"
                     @bind-Value="@model.Amount"
                     Label="@DashboardLocalizer["Amount"].Value"/>

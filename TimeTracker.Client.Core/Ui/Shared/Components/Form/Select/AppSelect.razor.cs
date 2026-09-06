@@ -80,7 +80,7 @@ public partial class AppSelect<TValue> : AppBaseSelect
         {
             if (IsInvalid)
             {
-                return "border-red-500 ring-3 ring-red-500/15 text-red-900 dark:text-red-300";
+                return "border-red-500 ring-3 ring-red-500/15 text-red-900";
             }
 
             if (IsOpen)
@@ -88,7 +88,7 @@ public partial class AppSelect<TValue> : AppBaseSelect
                 return "border-blue-500 ring-3 ring-blue-500/15 shadow-sm";
             }
 
-            return "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600";
+            return "border-slate-200 hover:border-slate-300";
         }
     }
 

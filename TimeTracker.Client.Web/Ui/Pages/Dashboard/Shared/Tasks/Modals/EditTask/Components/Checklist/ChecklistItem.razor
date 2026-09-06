@@ -2,7 +2,7 @@
 @inherits BaseComponent
 
 <div
-    class="group flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-slate-50 transition-colors duration-150 @(IsDragging ? "opacity-30 bg-slate-100" : "") @(IsDropTarget ? "border-t-2 border-blue-500" : "")"
+    class="group flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-slate-50 transition-colors duration-150 min-w-0 @(IsDragging ? "opacity-30 bg-slate-100" : "") @(IsDropTarget ? "border-t-2 border-blue-500" : "")"
     draggable="@(!_isEditing ? "true" : "false")"
     @ondragstart="HandleDragStart"
     @ondragover:preventDefault="true"
@@ -26,7 +26,7 @@
         <input
             @ref="_editInputRef"
             type="text"
-            class="flex-1 text-sm text-slate-800 bg-white border border-blue-400 focus:ring-2 focus:ring-blue-500/20 rounded px-2 py-0.5 outline-none"
+            class="flex-1 min-w-0 text-sm text-slate-800 bg-white border border-blue-400 focus:ring-2 focus:ring-blue-500/20 rounded px-2 py-0.5 outline-none"
             value="@_editingTitle"
             @oninput="HandleEditInput"
             @onkeydown="HandleEditKeyDown"
@@ -36,7 +36,7 @@
     else
     {
         <span
-            class="@(SubTask.IsCompleted ? "text-sm text-slate-400 line-through flex-1 leading-relaxed select-none break-words transition-all cursor-pointer" : "text-sm text-slate-700 flex-1 leading-relaxed select-none break-words cursor-pointer")"
+            class="@(SubTask.IsCompleted ? "text-sm text-slate-400 line-through flex-1 min-w-0 leading-relaxed select-none break-all transition-all cursor-pointer" : "text-sm text-slate-700 flex-1 min-w-0 leading-relaxed select-none break-all cursor-pointer")"
             @onclick="StartEdit">
             @SubTask.Title
         </span>
@@ -46,7 +46,7 @@
     {
         <button
             type="button"
-            class="opacity-0 group-hover:opacity-60 hover:!opacity-100 text-slate-400 hover:text-red-600 transition-all p-1 rounded hover:bg-red-50 ml-auto cursor-pointer"
+            class="opacity-0 group-hover:opacity-60 hover:!opacity-100 text-slate-400 hover:text-red-600 transition-all p-1 rounded hover:bg-red-50 ml-auto shrink-0 cursor-pointer"
             @onclick="Delete"
             title="@DashboardLocalizer["Checklist_DeleteTooltip"].Value">
             <i class="fa-regular fa-trash-can text-xs"></i>

@@ -24,7 +24,7 @@
         <div class="grid gap-4">
 
             <AppCard>
-                <AppCardBody>
+                <AppCardBody Class="p-4">
                     @if (_model.Task == null)
                     {
                         <div class="flex items-center gap-2">
@@ -61,12 +61,11 @@
                 </AppCardBody>
             </AppCard>
             <AppCard>
-                <AppCardBody>
+                <AppCardBody Class="p-4">
                     <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
                         <div>
                             <InputDateField 
                                 TValue="DateTime?"
-                                Size="ComponentSize.Small"
                                 Required="true"
                                 Value="@_model.StartTime.Date"
                                 ValueChanged="OnDateChanged"
@@ -112,7 +111,7 @@
                 <AppTab
                     Title="@DashboardLocalizer["Description"]">
                     <AppCard>
-                        <AppCardBody>
+                        <AppCardBody Class="p-4">
                             <InputTextareaField
                                 Rows="6"
                                 MaxLength="500"
@@ -125,7 +124,7 @@
                 <AppTab
                     Title="@DashboardLocalizer["EditTimeEntryModal_Pricing"]">
                     <AppCard>
-                        <AppCardBody>
+                        <AppCardBody Class="p-4">
                             <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                                 <label class="inline-flex items-center gap-3 text-sm text-slate-700">
                                     <AppSwitch
@@ -138,7 +137,6 @@
                                     <InputNumericNullableField 
                                         TItem="decimal"
                                         Label="@DashboardLocalizer["HourlyRate"].Value"
-                                        Size="ComponentSize.Small"
                                         Step="00.01"
                                         Value="@_model.HourlyRate"
                                         ValueExpression="() => _model.HourlyRate"

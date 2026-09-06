@@ -6,10 +6,13 @@
 <AppCard
     Class="mt-10">
     <AppCardHeader>
+<AppCard>
+    <AppCardHeader Class="p-5 border-b border-slate-100">
         <SummarySectionHeader
             Title="@DashboardLocalizer["TeamPerformance"].Value"/>
     </AppCardHeader>
     <AppCardBody>
+    <AppCardBody Class="p-5">
         <AppTable
             TGridItem="TeamSummaryMemberReportItemDto"
             Items="@Items.AsQueryable()">
