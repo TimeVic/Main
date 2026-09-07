@@ -13,4 +13,7 @@ public class AppModalOptions
     public string? ModalClass { get; set; }
 
     public string? Title { get; set; }
+
+    public bool IsScrollable { get; set; } = false;
 }
+

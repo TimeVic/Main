@@ -78,7 +78,7 @@ public partial class AppSelect<TValue> : AppBaseSelect
     {
         get
         {
-            if (IsInvalid)
+            if (ResolvedIsInvalid)
             {
                 return "border-red-500 ring-3 ring-red-500/15 text-red-900";
             }

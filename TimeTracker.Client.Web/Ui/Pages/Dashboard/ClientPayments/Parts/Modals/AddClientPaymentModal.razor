@@ -1,17 +1,12 @@
 @using TimeTracker.Client.Core.Constants.Ui
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-        <i class="fa-solid fa-plus"></i>
-    </div>
-    <div>
-        <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["AddClientPayment"]</h2>
-        <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["RecordMoneyReceivedClient"]</p>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["AddClientPayment"]"
+    Description="@DashboardLocalizer["RecordMoneyReceivedClient"]"
+    Icon="fa-solid fa-plus"
+    Color="ComponentColor.Success" />
 <AppModalBody Class="pt-3">
     <EditForm
         Context="form"
@@ -28,7 +23,6 @@
                     Value="model.ClientId"
                     ValueExpression="() => model.ClientId"
                     SelectedItemChanged="OnChangeClient"/>
-                <CustomValidationMessage For="@(() => model.ClientId)"/>
             </div>
             <div>
                 <ProjectsSelect
@@ -45,7 +39,6 @@
                     Required="true"
                     @bind-Value="@model.PaymentTime"
                     Label="@DashboardLocalizer["PaymentDate"].Value"/>
-                <CustomValidationMessage For="@(() => model.PaymentTime)"/>
             </div>
             <div>
                 <InputNumericField
@@ -53,7 +46,6 @@
                     Required="true"
                     @bind-Value="@model.Amount"
                     Label="@DashboardLocalizer["Amount"].Value"/>
-                <CustomValidationMessage For="@(() => model.Amount)"/>
             </div>
             <div class="md:col-span-2">
                 <InputTextareaField
@@ -63,8 +55,6 @@
                     @bind-Value="model.Description"/>
             </div>
         </div>
-
-        <CustomValidationSummary/>
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

@@ -1,21 +1,14 @@
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes
 @using TimeTracker.Business.Common.Constants.Notes
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
 <div class="notes-node-modal">
     <AppModalHeader
         Title="@DashboardLocalizer["CreateNote"]"
-        Description="@DashboardLocalizer["Notes_CreateNoteDescription"]">
-        <Icon>
-            <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                <i
-                    class="fa-regular fa-note-sticky"></i>
-            </div>
-        </Icon>
-    </AppModalHeader>
+        Description="@DashboardLocalizer["Notes_CreateNoteDescription"]"
+        Icon="fa-regular fa-note-sticky"
+        Color="ComponentColor.Success" />
     <AppModalBody
         Class="pt-3">
         <EditForm
@@ -42,10 +35,7 @@
                         Label="@DashboardLocalizer["Title"].Value"
                         Placeholder="@DashboardLocalizer["Notes_NoteTitlePlaceholder"].Value"
                         @bind-Value="_model.Title"/>
-                    <CustomValidationMessage
-                        For="@(() => _model.Title)"/>
                 </div>
-                <CustomValidationSummary/>
             </div>
         </EditForm>
     </AppModalBody>

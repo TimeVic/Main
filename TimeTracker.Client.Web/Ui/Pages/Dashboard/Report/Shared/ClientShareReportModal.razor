@@ -3,15 +3,10 @@
 @inherits BaseReactiveComponent
 @inject UiHelperService UiHelperService
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-        <i class="fa-solid fa-link"></i>
-    </div>
-    <div>
-        <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["ClientShareReport_Title"]</h2>
-        <p class="mt-1 text-sm text-slate-600">@string.Format(DashboardLocalizer["ClientShareReport_Description"].Value, ClientName)</p>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["ClientShareReport_Title"]"
+    Description="@string.Format(DashboardLocalizer["ClientShareReport_Description"].Value, ClientName)"
+    Icon="fa-solid fa-link" />
 <AppModalBody Class="space-y-5 pt-3">
     @if (_isLoading)
     {

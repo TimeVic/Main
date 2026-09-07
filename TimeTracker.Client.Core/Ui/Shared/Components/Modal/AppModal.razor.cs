@@ -31,6 +31,9 @@ public partial class AppModal : ComponentBase
     public bool IsCloseOnEscapeKey { get; set; } = true;
 
     [Parameter]
+    public bool IsScrollable { get; set; } = false;
+
+    [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     private ElementReference _rootElement;
@@ -65,6 +68,10 @@ public partial class AppModal : ComponentBase
         AppModalSize.Full => "max-w-6xl",
         _ => "max-w-lg"
     };
+
+    private string _cardScrollClass => IsScrollable
+        ? "max-h-[90vh] flex flex-col overflow-hidden"
+        : "overflow-visible";
 
     public async Task CloseAsync()
     {

@@ -94,6 +94,10 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
                                  && FieldIdentifier.Model != null 
                                  && CurrentEditContext.GetValidationMessages(FieldIdentifier).Any();
 
+    protected string FirstError => CurrentEditContext != null && FieldIdentifier.Model != null
+        ? CurrentEditContext.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty
+        : string.Empty;
+
     protected string SelectClass
     {
         get

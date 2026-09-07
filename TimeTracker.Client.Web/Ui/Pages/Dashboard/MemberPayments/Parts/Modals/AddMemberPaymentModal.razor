@@ -1,14 +1,11 @@
 @using TimeTracker.Client.Core.Constants.Ui
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
-        <i class="fa-solid fa-plus text-xl"></i>
-    </div>
-    @DashboardLocalizer["AddPaymentList"]
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["AddPaymentList"]"
+    Icon="fa-solid fa-plus"
+    Color="ComponentColor.Success" />
 <AppModalBody Class="pt-3">
     <EditForm
         Context="form"
@@ -26,7 +23,6 @@
                     Value="model.ProjectId"
                     ValueExpression="() => model.ProjectId"
                     SelectedItemChanged="OnProjectSelected"/>
-                <CustomValidationMessage For="@(() => model.ProjectId)"/>
             </div>
             @if (CanCreatePaymentForOtherMembers)
             {
@@ -44,7 +40,6 @@
                     Required="true"
                     @bind-Value="@model.PaymentTime"
                     Label="@DashboardLocalizer["PaymentDate"].Value"/>
-                <CustomValidationMessage For="@(() => model.PaymentTime)"/>
             </div>
             <div>
                 <InputNumericField
@@ -52,7 +47,6 @@
                     Required="true"
                     @bind-Value="@model.Amount"
                     Label="@DashboardLocalizer["Amount"].Value"/>
-                <CustomValidationMessage For="@(() => model.Amount)" />
             </div>
             <div class="md:col-span-2">
                 <InputTextareaField 
@@ -62,8 +56,6 @@
                     @bind-Value="model.Description"/>
             </div>
         </div>
-        
-        <CustomValidationSummary />
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

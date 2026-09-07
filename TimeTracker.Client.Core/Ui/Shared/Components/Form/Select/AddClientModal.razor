@@ -1,19 +1,11 @@
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 @inject IStringLocalizer<DashboardResource> DashboardLocalizer
 
 @inherits BaseReactiveComponent
 
 <AppModalHeader
     Title="@DashboardLocalizer["AddClient"]"
-    Description="@DashboardLocalizer["AddClientModal_Description"]">
-    <Icon>
-        <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-            <i
-                class="fa-solid fa-plus"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    Description="@DashboardLocalizer["AddClientModal_Description"]"
+    Icon="fa-solid fa-plus" />
 <AppModalBody>
     <EditForm
         Context="form"
@@ -38,11 +30,7 @@
                 Placeholder="@DashboardLocalizer["ClientName"]"
                 IsShowEmojiButton="true"
                 @bind-Value="model.Name"/>
-            <CustomValidationMessage
-                For="@(() => model.Name)"/>
         </div>
-
-        <CustomValidationSummary/>
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

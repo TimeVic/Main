@@ -2,14 +2,8 @@
 
 <AppModalHeader
     Title="@DashboardLocalizer["AddWorkspaceModal_Title"]"
-    Description="@DashboardLocalizer["AddWorkspaceModal_Description"]">
-    <ChildContent>
-        <p
-            class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600 mb-1">
-            @DashboardLocalizer["AddWorkspaceModal_Kicker"]
-        </p>
-    </ChildContent>
-</AppModalHeader>
+    Description="@DashboardLocalizer["AddWorkspaceModal_Description"]"
+    Icon="fa-solid fa-briefcase" />
 <AppModalBody
     Class="pt-3">
     <EditForm
@@ -44,6 +38,13 @@
         IsLoading="_isLoading"
         Color="@ComponentColor.Primary"
         Radius="@ButtonRadius.Full">
-        @DashboardLocalizer["Add"]
+        <StartContent>
+            <i
+                class="fa-solid fa-plus"></i>
+        </StartContent>
+        <ChildContent>
+            @DashboardLocalizer["Add"]
+        </ChildContent>
     </AppButton>
 </AppModalFooter>
+

@@ -3,15 +3,9 @@
 
 <AppModalHeader
     Title="@(string.IsNullOrWhiteSpace(Title) ? CommonLocalizer["ConfirmAction"].Value : Title)"
-    HasCloseButton="true">
-    <Icon>
-        <div
-            class="flex h-9 w-9 items-center justify-center rounded-xl @_iconBoxClass">
-            <i
-                class="@_iconClass"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    HasCloseButton="true"
+    Icon="@_iconClass"
+    IconColorClass="@_iconBoxClass" />
 
 <AppModalBody>
     <p

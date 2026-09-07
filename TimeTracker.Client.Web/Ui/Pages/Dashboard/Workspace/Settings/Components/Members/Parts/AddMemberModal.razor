@@ -1,19 +1,11 @@
 @using TimeTracker.Business.Common.Constants
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
 <AppModalHeader
     Title="@DashboardLocalizer["AddMemberModal_Title"]"
-    Description="@DashboardLocalizer["AddMemberModal_Description"]">
-    <Icon>
-        <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-            <i
-                class="fa-solid fa-user-plus"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    Description="@DashboardLocalizer["AddMemberModal_Description"]"
+    Icon="fa-solid fa-user-plus" />
 
 <AppModalBody>
     <EditForm
@@ -29,8 +21,6 @@
                     <SmartUserSearchInput
                         Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
                         @bind-Value="_model.EmailOrLogin" />
-                    <CustomValidationMessage
-                        For="@(() => _model.EmailOrLogin)" />
                 </div>
 
                 <div>
