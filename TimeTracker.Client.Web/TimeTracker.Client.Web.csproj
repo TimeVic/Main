@@ -355,8 +355,8 @@
     </ItemGroup>
 
     <Target Name="Npm" BeforeTargets="CompileLess;TailwindCssBuild;Build" Condition="!Exists('node_modules')">
-        <Message Text="Running npm ci..." Importance="high" />
-      <Exec Command="npm ci" />
+        <Message Text="Running npm install..." Importance="high" />
+      <Exec Command="npm install" />
     </Target>
 
     <Target Name="CompileLess" BeforeTargets="ResolveScopedCssInputs;Build;PrepareForPublish">
