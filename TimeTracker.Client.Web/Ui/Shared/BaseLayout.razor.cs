@@ -12,22 +12,22 @@ namespace TimeTracker.Client.Web.Ui.Shared;
 public partial class BaseLayout
 {
     [Inject]
-    protected IAuthorizationService AuthService { get; set; }
+    protected IAuthorizationService AuthService { get; set; } = default!;
     
     [Inject]
-    protected NavigationManager NavigationManager { get; set; }
+    protected NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject]
-    protected IReCaptchaService ReCaptchaService { get; set; }
+    protected IReCaptchaService ReCaptchaService { get; set; } = default!;
 
     [Inject]
-    protected IState<AuthState> AuthState { get; set; }
+    protected IState<AuthState> AuthState { get; set; } = default!;
     
     [Inject]
-    protected IState<CommonState> CommonState { get; set; }
+    protected IState<CommonState> CommonState { get; set; } = default!;
     
     [Inject]
-    protected IDispatcher Dispatcher { get; set; }
+    protected IDispatcher Dispatcher { get; set; } = default!;
     
     protected bool IsRedirectIfNotLoggedIn = true;
 

@@ -50,7 +50,7 @@ public partial class TagsSelect : BaseReactiveComponent, IDisposable
     public bool FullWidth { get; set; } = true;
 
     [Inject]
-    public IState<TagState> _state { get; set; }
+    public IState<TagState> _state { get; set; } = default!;
 
     [Inject]
     public IAppModalDialogService _modalDialogService { get; set; } = null!;

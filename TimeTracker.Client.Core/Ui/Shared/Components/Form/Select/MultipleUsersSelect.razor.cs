@@ -69,10 +69,10 @@ public partial class MultipleUsersSelect : BaseReactiveComponent, IDisposable
     }
 
     [Inject]
-    private ISecurityManager _securityManager { get; set; }
+    private ISecurityManager _securityManager { get; set; } = default!;
 
     [Inject]
-    public IState<WorkspaceMembersState> _state { get; set; }
+    public IState<WorkspaceMembersState> _state { get; set; } = default!;
 
     private IEnumerable<Guid> _allowedIds = new List<Guid>();
     private IEnumerable<Guid> _selectedIds = new List<Guid>();

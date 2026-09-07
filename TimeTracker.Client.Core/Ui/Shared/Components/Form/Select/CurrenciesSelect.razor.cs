@@ -14,7 +14,7 @@ public partial class CurrenciesSelect : IDisposable
     private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
 
     [Inject]
-    public IState<CurrencyState> _state { get; set; }
+    public IState<CurrencyState> _state { get; set; } = default!;
 
     protected override void OnInitialized()
     {

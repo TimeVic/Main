@@ -17,28 +17,28 @@ public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     public Guid WorkspaceId { get; set; }
     
     [Inject]
-    protected IDispatcher Dispatcher { get; set; }
+    protected IDispatcher Dispatcher { get; set; } = default!;
     
     [Inject]
-    protected IJSRuntime Js { get; set; }
+    protected IJSRuntime Js { get; set; } = default!;
     
     [Inject]
-    protected ApiService ApiService { get; set; }
+    protected ApiService ApiService { get; set; } = default!;
     
     [Inject]
-    protected NavigationManager NavigationManager { get; set; }
+    protected NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject]
-    protected UrlService UrlService { get; set; }
+    protected UrlService UrlService { get; set; } = default!;
 
     [Inject]
-    protected IState<AuthState> AuthState { get; set; }
+    protected IState<AuthState> AuthState { get; set; } = default!;
     
     [Inject] 
-    protected IToastService ToastService { get; set; }
+    protected IToastService ToastService { get; set; } = default!;
     
     [Inject] 
-    protected UserDateTimeProviderService UserDateTimeProviderService { get; set; }
+    protected UserDateTimeProviderService UserDateTimeProviderService { get; set; } = default!;
     
     private List<Action> _actionsToRunAfterRender = [];
     protected override Task OnAfterRenderAsync(bool firstRender)

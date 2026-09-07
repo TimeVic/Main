@@ -37,7 +37,7 @@ public partial class TaskListsSelect : BaseSingleSelect<TaskListDto>, IDisposabl
     public bool IsExtendedInfo { get; set; } = true;
 
     [Inject]
-    public IState<TasksListState> _state { get; set; }
+    public IState<TasksListState> _state { get; set; } = default!;
 
     private Guid? _projectId;
     private bool _isInitialized;

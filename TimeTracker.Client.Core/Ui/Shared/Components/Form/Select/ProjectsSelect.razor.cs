@@ -41,16 +41,16 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
     }
 
     [Inject]
-    public IState<ProjectState> _state { get; set; }
+    public IState<ProjectState> _state { get; set; } = default!;
 
     [Inject]
-    public IState<ClientState> _clientState { get; set; }
+    public IState<ClientState> _clientState { get; set; } = default!;
 
     [Inject]
-    public IState<WorkspacePermissionsState> _workspacePermissionsState { get; set; }
+    public IState<WorkspacePermissionsState> _workspacePermissionsState { get; set; } = default!;
 
     [Inject]
-    public ISecurityManager _securityManager { get; set; }
+    public ISecurityManager _securityManager { get; set; } = default!;
 
     [Inject]
     public IAppModalDialogService _modalDialogService { get; set; } = null!;

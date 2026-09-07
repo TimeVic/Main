@@ -26,28 +26,28 @@ public partial class InitializationContainer : IDisposable
     public bool IsRegisterPushNotificationToken { get; set; }
 
     [Inject]
-    protected IJSRuntime Js { get; set; }
+    protected IJSRuntime Js { get; set; } = default!;
     
     [Inject]
-    protected IReCaptchaService ReCaptchaService { get; set; }
+    protected IReCaptchaService ReCaptchaService { get; set; } = default!;
     
     [Inject]
-    protected IAuthorizationService AuthService { get; set; }
+    protected IAuthorizationService AuthService { get; set; } = default!;
     
     [Inject]
-    protected IState<AuthState> AuthState { get; set; }
+    protected IState<AuthState> AuthState { get; set; } = default!;
     
     [Inject]
-    protected IState<TimeEntryState> TimeEntryState { get; set; }
+    protected IState<TimeEntryState> TimeEntryState { get; set; } = default!;
 
     [Inject]
-    protected IDispatcher TimeEntryDispatcher { get; set; }
+    protected IDispatcher TimeEntryDispatcher { get; set; } = default!;
     
     [Inject]
-    protected NavigationManager NavigationManager { get; set; }
+    protected NavigationManager NavigationManager { get; set; } = default!;
     
     [Inject]
-    protected WorkspaceInitializationService WorkspaceInitializationService { get; set; }
+    protected WorkspaceInitializationService WorkspaceInitializationService { get; set; } = default!;
 
     [Inject]
     protected FcmService FcmService { get; set; } = null!;
@@ -56,10 +56,10 @@ public partial class InitializationContainer : IDisposable
     protected ILogger<InitializationContainer> Logger { get; set; } = null!;
 
     [Inject]
-    protected UrlService UrlService { get; set; }
+    protected UrlService UrlService { get; set; } = default!;
     
     [Inject]
-    protected IState<CommonState> CommonState { get; set; }
+    protected IState<CommonState> CommonState { get; set; } = default!;
     
     protected override async Task OnInitializedAsync()
     {

@@ -27,25 +27,25 @@ public partial class FileUploader
     public EventCallback<StoredFileDto> FileUploaded { get; set; }
     
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
     
     [Inject]
-    public ApiService _apiService { get; set; }
+    public ApiService _apiService { get; set; } = default!;
     
     [Inject]
-    public IToastService _toastService { get; set; }
+    public IToastService _toastService { get; set; } = default!;
 
     
     [Inject]
-    public ILogger<FileUploader> _logger { get; set; }
+    public ILogger<FileUploader> _logger { get; set; } = default!;
     
     [Inject]
-    public UiHelperService _uiHelperService { get; set; }
+    public UiHelperService _uiHelperService { get; set; } = default!;
 
     [Inject]
-    public IState<AuthState> _authState { get; set; }
+    public IState<AuthState> _authState { get; set; } = default!;
     
-    public InputFile _fileInput { get; set; }
+    public InputFile _fileInput { get; set; } = default!;
     public bool _isLoading = false;
 
     public string _acceptTypes

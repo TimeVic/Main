@@ -43,10 +43,10 @@ public partial class AttachmentsBlock
     public string PreviewItemClass { get; set; } = "relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition";
 
     [Inject]
-    public UrlService _urlService { get; set; }
+    public UrlService _urlService { get; set; } = default!;
 
     [Inject]
-    public ILogger<AttachmentsBlock> _logger { get; set; }
+    public ILogger<AttachmentsBlock> _logger { get; set; } = default!;
 
     private readonly HashSet<Guid> _deletingAttachmentIds = new();
     private readonly HashSet<Guid> _copyingAttachmentIds = new();

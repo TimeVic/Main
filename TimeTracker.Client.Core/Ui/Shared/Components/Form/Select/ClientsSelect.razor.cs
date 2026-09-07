@@ -17,10 +17,10 @@ public partial class ClientsSelect
     private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
 
     [Inject]
-    public IState<ClientState> _state { get; set; }
+    public IState<ClientState> _state { get; set; } = default!;
 
     [Inject]
-    public ISecurityManager _securityManager { get; set; }
+    public ISecurityManager _securityManager { get; set; } = default!;
 
     [Inject]
     public IAppModalDialogService _modalDialogService { get; set; } = null!;
