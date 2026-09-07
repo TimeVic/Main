@@ -190,7 +190,6 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
             return;
         }
 
-        await _modalDialogService.ShowAsync<AddClientModal>(
         var result = await _modalDialogService.ShowAsync<AddClientModal>(
             options: new AppModalOptions
             {
@@ -214,7 +213,6 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
             return;
         }
 
-        await _modalDialogService.ShowAsync<AddProjectModal>(
         var result = await _modalDialogService.ShowAsync<AddProjectModal>(
             parameters: new Dictionary<string, object?>
             {

@@ -57,7 +57,6 @@ public partial class TagsSelect : BaseReactiveComponent, IDisposable
 
     private async Task OnAddTag()
     {
-        await _modalDialogService.ShowAsync<AddTagModal>(
         var result = await _modalDialogService.ShowAsync<AddTagModal>(
             options: new AppModalOptions
             {

@@ -34,7 +34,9 @@ public partial class AddClientModal
         Dispatcher.Dispatch(new AddAction(model));
         model = new AddRequest();
         if (ModalInstance != null)
-        _isLoading = true;
+        {
+            _isLoading = true;
+        }
         try
         {
             await ModalInstance.Close(AppModalResult.Ok());
@@ -49,7 +51,6 @@ public partial class AddClientModal
                 }
             }
         }
-        StateHasChanged();
         catch (Exception e)
         {
             ToastService.ShowError(e.Message);

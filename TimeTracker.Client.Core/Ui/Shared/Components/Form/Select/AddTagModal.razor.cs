@@ -29,7 +29,9 @@ public partial class AddTagModal
         Dispatcher.Dispatch(new AddAction(model));
         model = new AddRequest { Name = string.Empty };
         if (ModalInstance != null)
-        _isLoading = true;
+        {
+            _isLoading = true;
+        }
         try
         {
             await ModalInstance.Close(AppModalResult.Ok());
@@ -44,7 +46,6 @@ public partial class AddTagModal
                 }
             }
         }
-        StateHasChanged();
         catch (Exception e)
         {
             ToastService.ShowError(e.Message);

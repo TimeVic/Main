@@ -65,7 +65,6 @@ public partial class ClientsSelect
             return;
         }
 
-        await _modalDialogService.ShowAsync<AddClientModal>(
         var result = await _modalDialogService.ShowAsync<AddClientModal>(
             options: new AppModalOptions
             {

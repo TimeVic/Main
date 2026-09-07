@@ -9,11 +9,10 @@ using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class AddProjectModal
 public partial class AddProjectModal : IDisposable
 {
     [CascadingParameter]
-    public AppModalInstance? ModalInstance { get; set; }
+    public AppModalInstance ModalInstance { get; set; } = default!;
     
     [Parameter]
     public Guid? InitialClientId { get; set; }
@@ -39,9 +38,6 @@ public partial class AddProjectModal : IDisposable
     protected override void OnParametersSet()
     {
         if (InitialClientId.HasValue && model.ClientId == Guid.Empty)
-        base.OnParametersSet();
-
-        if (InitialClientId.HasValue && InitialClientId.Value != Guid.Empty && model.ClientId == Guid.Empty)
         {
             model.ClientId = InitialClientId.Value;
         }
@@ -49,9 +45,9 @@ public partial class AddProjectModal : IDisposable
         {
             TrySelectDefaultClient();
         }
+        base.OnParametersSet();
     }
 
-        base.OnParametersSet();
     private void OnClientStateChanged(object? sender, EventArgs e)
     {
         TrySelectDefaultClient();
@@ -78,9 +74,12 @@ public partial class AddProjectModal : IDisposable
             return;
         }
 
-        Dispatcher.Dispatch(new AddAction(model));
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.AddAction(model));
         model = new AddRequest();
         if (ModalInstance != null)
+        {
+            _isLoading = true;
+        }
         if (model.ClientId == Guid.Empty)
         {
             await ModalInstance.Close(AppModalResult.Ok());
@@ -89,7 +88,6 @@ public partial class AddProjectModal : IDisposable
         }
         StateHasChanged();
 
-        _isLoading = true;
         try
         {
             var response = await ApiService.ProjectAddAsync(model);
