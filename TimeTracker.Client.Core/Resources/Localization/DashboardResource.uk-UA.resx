@@ -622,6 +622,15 @@
   <data name="UserSettings_SaveError" xml:space="preserve"><value>Не вдалося зберегти налаштування акаунта</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Оновіть назву проєкту або перенесіть його до іншого клієнта, якщо потрібно.</value></data>
+  <data name="UpdateClientModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateClientModal_Description" xml:space="preserve"><value>Оновіть назву та деталі клієнта.</value></data>
+  <data name="ClientProjectsGroupBlock_Billable" xml:space="preserve"><value>Оплатний</value></data>
+  <data name="ClientProjectsGroupBlock_NonBillable" xml:space="preserve"><value>Неоплатний</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsCount" xml:space="preserve"><value>{0} проєктів</value></data>
+  <data name="ClientProjectsGroupBlock_NoRate" xml:space="preserve"><value>Не вказано</value></data>
+  <data name="ClientProjectsGroupBlock_NoProjects" xml:space="preserve"><value>У цього клієнта ще немає проєктів.</value></data>
+  <data name="SearchClientsAndProjects" xml:space="preserve"><value>Пошук клієнтів або проєктів...</value></data>
+  <data name="NoMatchingResults" xml:space="preserve"><value>Клієнтів або проєктів за вашим запитом не знайдено.</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefaultDescription" xml:space="preserve"><value>Автоматично використовувати погодинну ставку проєкту для нових записів часу.</value></data>
   <data name="UpdateProjectModal_RateCurrencyHint" xml:space="preserve"><value>Зберігається у {0} і застосовується, коли проєкт оплачуваний за замовчуванням.</value></data>
