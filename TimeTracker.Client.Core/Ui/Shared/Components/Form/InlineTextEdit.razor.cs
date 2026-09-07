@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Localization;
+using TimeTracker.Client.Core.Localization;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form;
 
 public partial class InlineTextEdit
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public required string Value { get; set; }
 

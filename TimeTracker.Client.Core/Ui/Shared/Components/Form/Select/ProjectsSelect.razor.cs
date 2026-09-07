@@ -1,8 +1,10 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Constants.Ui;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Client;
@@ -15,6 +17,8 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
 
     [Parameter]
     public bool IsShowProjectsWithoutClients { get; set; } = true;

@@ -1,6 +1,7 @@
 @inherits BaseInputField<DateTime?>
 @using System.Globalization
 @inject IJSRuntime JSRuntime
+@inject IStringLocalizer<CommonComponentsResource> CommonLocalizer
 
 <div class="@(IsFullWidth ? "w-full" : "w-auto") @WrapperClass">
     @if (!string.IsNullOrWhiteSpace(Label))

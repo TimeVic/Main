@@ -1,6 +1,7 @@
 @inherits BaseInputField<TValue>
 @using System.Globalization
 @typeparam TValue
+@inject IStringLocalizer<CommonComponentsResource> CommonLocalizer
 
 <div
     class="relative @(IsFullWidth ? "w-full" : "w-auto") @WrapperClass"

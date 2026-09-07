@@ -1,12 +1,17 @@
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Localization;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class TimeZonesSelect : AppBaseSelect
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public string? Value
     {

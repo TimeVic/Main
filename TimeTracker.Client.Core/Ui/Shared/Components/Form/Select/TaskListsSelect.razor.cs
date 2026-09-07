@@ -1,6 +1,8 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Store.TasksList;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
@@ -8,6 +10,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class TaskListsSelect : BaseSingleSelect<TaskListDto>, IDisposable
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public Guid? ProjectId
     {

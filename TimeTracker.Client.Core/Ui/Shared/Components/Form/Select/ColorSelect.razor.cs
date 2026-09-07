@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Client.Core.Constants.Ui;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Models;
 
@@ -7,6 +9,8 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class ColorSelect
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
 
     [Parameter]
     public string? Label { get; set; }
