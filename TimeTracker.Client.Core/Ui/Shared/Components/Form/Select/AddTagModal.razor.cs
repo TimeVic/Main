@@ -5,7 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Client.Core.Services.UI.Modal;
 using TimeTracker.Client.Core.Store.Tag;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tags;
+namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class AddTagModal
 {
@@ -17,6 +17,7 @@ public partial class AddTagModal
 
     private AddRequest model = new() { Name = string.Empty };
     private EditForm _form = default!;
+    private bool _isLoading = false;
 
     private async Task Submit()
     {
@@ -29,8 +30,30 @@ public partial class AddTagModal
         model = new AddRequest { Name = string.Empty };
         if (ModalInstance != null)
         {
-            await ModalInstance.Close(AppModalResult.Ok());
+            _isLoading = true;
         }
-        StateHasChanged();
+        try
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+            var response = await ApiService.TagAddAsync(model);
+            if (response != null)
+            {
+                Dispatcher.Dispatch(new SetListItemAction(response));
+                ToastService.ShowSuccess(DashboardLocalizer["TagAdded"].Value);
+                if (ModalInstance != null)
+                {
+                    await ModalInstance.Close(AppModalResult.Ok(response));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
     }
 }

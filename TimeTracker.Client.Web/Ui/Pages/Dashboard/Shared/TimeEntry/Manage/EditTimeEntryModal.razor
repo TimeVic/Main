@@ -106,6 +106,7 @@
                             <InputTextareaField
                                 Rows="6"
                                 MaxLength="500"
+                                BindOnInput="false"
                                 Value="@_model.Description"
                                 ValueChanged="@(async (string? description) => await OnDescriptionChanged(description ?? string.Empty))"
                                 ValueExpression="() => _model.Description" />

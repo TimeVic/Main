@@ -28,8 +28,11 @@
 
         <input
             type="@ResolvedHtmlInputType"
-            value="@Value"
+            value="@_inputValue"
             @oninput="HandleInput"
+            @onchange="HandleChange"
+            @onfocus="HandleFocus"
+            @onblur="HandleBlur"
             placeholder="@Placeholder"
             disabled="@IsDisabled"
             readonly="@IsReadOnly"
@@ -99,58 +102,3 @@
     }
 </div>
 
-@code {
-    [Parameter]
-    public InputType Type { get; set; } = InputType.Text;
-
-    [Parameter]
-    public bool IsShowEmojiButton { get; set; }
-
-    [Parameter]
-    public bool IsShowValidationState { get; set; }
-
-    [Parameter]
-    public bool ShowValidationState
-    {
-        get => IsShowValidationState;
-        set => IsShowValidationState = value;
-    }
-
-    private bool _isPasswordVisible;
-
-    private bool IsSuccess => !HasError && !string.IsNullOrWhiteSpace(Value);
-
-    private bool HasEndElements =>
-        EndContent != null
-        || IsShowEmojiButton
-        || (IsShowValidationState && IsSuccess)
-        || (Type == InputType.Password)
-        || (IsClearable && !IsDisabled && !IsReadOnly && !string.IsNullOrEmpty(Value));
-
-    private string ResolvedHtmlInputType => Type switch
-    {
-        InputType.Password => _isPasswordVisible ? "text" : "password",
-        InputType.Email => "email",
-        InputType.Url => "url",
-        InputType.Number => "number",
-        InputType.Tel => "tel",
-        InputType.Search => "search",
-        _ => "text"
-    };
-
-    private async Task HandleInput(ChangeEventArgs e)
-    {
-        await SetValueAsync(e.Value?.ToString() ?? string.Empty);
-    }
-
-    private void TogglePasswordVisibility()
-    {
-        _isPasswordVisible = !_isPasswordVisible;
-    }
-
-    private async Task OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
-    {
-        var newValue = string.Concat(Value, emoji.Symbol);
-        await SetValueAsync(newValue);
-    }
-}

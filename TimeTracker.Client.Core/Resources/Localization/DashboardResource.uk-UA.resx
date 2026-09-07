@@ -113,6 +113,8 @@
   <data name="NoTaskSelected" xml:space="preserve"><value>Задачу не вибрано</value></data>
   <data name="WhatAreYouWorkingOn" xml:space="preserve"><value>Над чим працюєте?</value></data>
   <data name="AddProject" xml:space="preserve"><value>Додати проєкт</value></data>
+  <data name="ProjectAdded" xml:space="preserve"><value>Проєкт успішно додано</value></data>
+  <data name="AddProjectModal_ClientRequired" xml:space="preserve"><value>Будь ласка, виберіть клієнта</value></data>
   <data name="CreateProject" xml:space="preserve"><value>Створити проєкт</value></data>
   <data name="EditProject" xml:space="preserve"><value>Редагувати проєкт</value></data>
   <data name="DeleteProject" xml:space="preserve"><value>Видалити проєкт</value></data>
@@ -122,6 +124,7 @@
   <data name="ProjectClient" xml:space="preserve"><value>Клієнт проєкту</value></data>
   <data name="BillableByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>
   <data name="AddClient" xml:space="preserve"><value>Додати клієнта</value></data>
+  <data name="ClientAdded" xml:space="preserve"><value>Клієнта успішно додано</value></data>
   <data name="AddFirstClient" xml:space="preserve"><value>Додати першого клієнта</value></data>
   <data name="CreateClient" xml:space="preserve"><value>Створити клієнта</value></data>
   <data name="EditClient" xml:space="preserve"><value>Редагувати клієнта</value></data>
@@ -609,6 +612,7 @@
   <data name="UserSettings_RequestDeletionConfirmMessage" xml:space="preserve"><value>Ви впевнені, що хочете запросити видалення акаунта? Цю дію неможливо скасувати.</value></data>
   <data name="UserSettings_SaveChanges" xml:space="preserve"><value>Зберегти зміни</value></data>
   <data name="UserSettings_SaveError" xml:space="preserve"><value>Не вдалося зберегти налаштування акаунта</value></data>
+  <data name="UserSettings_ChangesSaved" xml:space="preserve"><value>Налаштування акаунта успішно збережено</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Оновіть назву проєкту або перенесіть його до іншого клієнта, якщо потрібно.</value></data>
   <data name="UpdateClientModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>

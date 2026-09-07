@@ -61,6 +61,7 @@
             <InputTextField
                 Label="@DashboardLocalizer["Search"].Value"
                 Placeholder="@DashboardLocalizer["SearchByDescription"].Value"
+                IsUpdateOnInput="true"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"
                 Clearable="true"

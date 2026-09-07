@@ -31,7 +31,7 @@ public partial class TimeInput
     public EventCallback<TimeSpan> ValueChanged { get; set; }
 
     [Inject]
-    private ITimeParsingService _timeParsingService { get; set; }
+    private ITimeParsingService _timeParsingService { get; set; } = default!;
     
     private TimeSpan _value;
     private MudTimePicker _timePicker;

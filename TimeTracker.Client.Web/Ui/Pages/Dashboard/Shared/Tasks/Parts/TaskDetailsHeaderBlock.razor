@@ -41,8 +41,15 @@
             IconOnly="false" />
         @if (!IsFullPage)
         {
-            <a href="@TaskUrl" target="_blank" rel="noopener" title="@DashboardLocalizer["TaskDetail_OpenFullPage"]" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-blue-700">
-                <i class="fa-solid fa-up-right-from-square text-sm"></i>
+            <a
+                href="@TaskUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="@DashboardLocalizer["TaskDetail_OpenFullPage"]"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-blue-700">
+                <i
+                    class="fa-solid fa-up-right-from-square text-sm">
+                </i>
             </a>
         }
     </div>

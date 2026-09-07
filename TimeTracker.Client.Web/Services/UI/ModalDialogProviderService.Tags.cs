@@ -1,6 +1,6 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Services.UI.Modal;
-using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tags;
+using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags.Parts;
 
 namespace TimeTracker.Client.Web.Services.UI;

@@ -11,7 +11,7 @@ namespace TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 public partial class FilesList
 {
     [Parameter]
-    public ICollection<StoredFileDto> Files { get; set; }
+    public ICollection<StoredFileDto> Files { get; set; } = new List<StoredFileDto>();
 
     [Parameter]
     public Guid? EntityId { get; set; }
@@ -20,29 +20,29 @@ public partial class FilesList
     public StorageEntityType? EntityType { get; set; }
     
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
     
     [Parameter]
     public EventCallback<ICollection<StoredFileDto>> ListUpdated { get; set; }
     
     [Inject]
-    public UiHelperService _uiHelperService { get; set; }
+    public UiHelperService _uiHelperService { get; set; } = default!;
     
     [Inject]
-    public UrlService _urlService { get; set; }
+    public UrlService _urlService { get; set; } = default!;
     
     [Inject]
-    public ApiService _apiService { get; set; }
+    public ApiService _apiService { get; set; } = default!;
     
     [Inject]
-    public ILogger<FilesList> _logger { get; set; }
+    public ILogger<FilesList> _logger { get; set; } = default!;
     
     [Inject]
-    public IToastService _toastService { get; set; }
+    public IToastService _toastService { get; set; } = default!;
 
     
     [Inject]
-    protected IState<AuthState> _authState { get; set; }
+    protected IState<AuthState> _authState { get; set; } = default!;
     private async Task OnCLickDelete(StoredFileDto file)
     {
         // var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(

@@ -28,7 +28,7 @@ public partial class MembersSelect
     public ICollection<Guid> AllowedIds { get; set; } = new List<Guid>();
 
     [Inject]
-    public IState<WorkspaceMembersState> _state { get; set; }
+    public IState<WorkspaceMembersState> _state { get; set; } = default!;
 
     private Guid? _userId;
 

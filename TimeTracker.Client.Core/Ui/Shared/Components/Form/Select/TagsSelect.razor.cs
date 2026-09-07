@@ -50,7 +50,35 @@ public partial class TagsSelect : BaseReactiveComponent, IDisposable
     public bool FullWidth { get; set; } = true;
 
     [Inject]
-    public IState<TagState> _state { get; set; }
+    public IState<TagState> _state { get; set; } = default!;
+
+    [Inject]
+    public IAppModalDialogService _modalDialogService { get; set; } = null!;
+
+    private async Task OnAddTag()
+    {
+        var result = await _modalDialogService.ShowAsync<AddTagModal>(
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Small,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            }
+        );
+
+        if (result.IsSuccess && result.Data is TagDto createdTag)
+        {
+            UpdateList();
+            if (!_selectedIds.Contains(createdTag.Id))
+            {
+                _selectedIds.Add(createdTag.Id);
+                await SelectedItemChanged.InvokeAsync(_selectedTagList);
+                await ValueChanged.InvokeAsync(_selectedIds);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
 
     private ICollection<Guid> _selectedIds = [];
     private ICollection<TagDto> _list = [];

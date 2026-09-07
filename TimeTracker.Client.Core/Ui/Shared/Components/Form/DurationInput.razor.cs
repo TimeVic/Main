@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.TextField.Core;
 
@@ -23,16 +24,32 @@ public partial class DurationInput : BaseInputField<TimeSpan?>
     private async Task OnStringValueChanged(string? val)
     {
         _displayString = val ?? string.Empty;
+        await CommitValueAsync();
+    }
 
-        if (string.IsNullOrWhiteSpace(val))
+    private async Task OnInputBlur(FocusEventArgs e)
+    {
+        await CommitValueAsync();
+    }
+
+    private async Task CommitValueAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_displayString))
         {
+            _displayString = string.Empty;
             await SetValueAsync(null);
             return;
         }
 
-        if (TimeParsingService.TryParseDuration(val, out var parsed))
+        if (TimeParsingService.TryParseDuration(_displayString, out var parsed))
         {
+            _displayString = TimeParsingService.TimeSpanToDurationString(parsed) ?? string.Empty;
             await SetValueAsync(parsed);
+        }
+        else
+        {
+            // Reset to previously valid value if input is invalid
+            _displayString = TimeParsingService.TimeSpanToDurationString(Value) ?? string.Empty;
         }
     }
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Services.UI.Modal;
+using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Modal;
 
@@ -41,13 +42,13 @@ public partial class AppConfirmationModal : ComponentBase
         _ => "bg-amber-50 text-amber-600"
     };
 
-    private string _confirmButtonClass => Type switch
+    private ComponentColor _confirmButtonColor => Type switch
     {
-        AppConfirmationType.Alert => "bg-amber-600 hover:bg-amber-700 text-white",
-        AppConfirmationType.Info => "bg-blue-600 hover:bg-blue-700 text-white",
-        AppConfirmationType.Danger => "bg-rose-600 hover:bg-rose-700 text-white",
-        AppConfirmationType.Success => "bg-emerald-600 hover:bg-emerald-700 text-white",
-        _ => "bg-blue-600 hover:bg-blue-700 text-white"
+        AppConfirmationType.Alert => ComponentColor.Warning,
+        AppConfirmationType.Info => ComponentColor.Primary,
+        AppConfirmationType.Danger => ComponentColor.Danger,
+        AppConfirmationType.Success => ComponentColor.Success,
+        _ => ComponentColor.Primary
     };
 
     private void OnCancel()

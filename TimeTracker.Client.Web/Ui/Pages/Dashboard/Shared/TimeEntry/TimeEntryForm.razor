@@ -107,6 +107,24 @@
                 }
 
                 <div class="w-time-form__timer-actions flex items-center gap-2">
+                    @if (_activeEntry != null)
+                    {
+                        <div class="w-time-form__control w-time-form__timer-button">
+                            <AppButton
+                                OnClick="@OpenEditModal"
+                                Class="w-time-form__wide-button"
+                                Variant="ButtonVariant.Outlined"
+                                Size="ComponentSize.Medium"
+                                Radius="ButtonRadius.Full"
+                                IconOnly="true"
+                                Color="ComponentColor.Default">
+                                <StartContent>
+                                    <i class="fa-solid fa-pencil"></i>
+                                </StartContent>
+                            </AppButton>
+                        </div>
+                    }
+
                     <div class="w-time-form__control w-time-form__counter">
                         <TimeCounterField
                             Class="@counterClass"
@@ -130,23 +148,6 @@
                         </AppButton>
                     </div>
 
-                    @if (_activeEntry != null)
-                    {
-                        <div class="w-time-form__control w-time-form__timer-button">
-                            <AppButton
-                                OnClick="@OpenEditModal"
-                                Class="w-time-form__wide-button"
-                                Variant="ButtonVariant.Outlined"
-                                Size="ComponentSize.Medium"
-                                Radius="ButtonRadius.Full"
-                                IconOnly="true"
-                                Color="ComponentColor.Default">
-                                <StartContent>
-                                    <i class="fa-solid fa-pencil"></i>
-                                </StartContent>
-                            </AppButton>
-                        </div>
-                    }
                 </div>
             </div>
         </div>

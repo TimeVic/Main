@@ -17,6 +17,7 @@ public partial class AddClientModal
 
     private AddRequest model = new();
     private EditForm _form = default!;
+    private bool _isLoading = false;
 
     private Task SubmitForm(EditContext editContext)
     {
@@ -34,8 +35,30 @@ public partial class AddClientModal
         model = new AddRequest();
         if (ModalInstance != null)
         {
-            await ModalInstance.Close(AppModalResult.Ok());
+            _isLoading = true;
         }
-        StateHasChanged();
+        try
+        {
+            await ModalInstance.Close(AppModalResult.Ok());
+            var response = await ApiService.ClientAddAsync(model);
+            if (response != null)
+            {
+                Dispatcher.Dispatch(new SetListItemAction(response));
+                ToastService.ShowSuccess(DashboardLocalizer["ClientAdded"].Value);
+                if (ModalInstance != null)
+                {
+                    await ModalInstance.Close(AppModalResult.Ok(response));
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
     }
 }

@@ -113,6 +113,8 @@
   <data name="NoTaskSelected" xml:space="preserve"><value>No task selected</value></data>
   <data name="WhatAreYouWorkingOn" xml:space="preserve"><value>What are you working on?</value></data>
   <data name="AddProject" xml:space="preserve"><value>Add project</value></data>
+  <data name="ProjectAdded" xml:space="preserve"><value>Project has been added</value></data>
+  <data name="AddProjectModal_ClientRequired" xml:space="preserve"><value>Please select a client</value></data>
   <data name="CreateProject" xml:space="preserve"><value>Create project</value></data>
   <data name="EditProject" xml:space="preserve"><value>Edit project</value></data>
   <data name="DeleteProject" xml:space="preserve"><value>Delete project</value></data>
@@ -122,6 +124,7 @@
   <data name="ProjectClient" xml:space="preserve"><value>Project client</value></data>
   <data name="BillableByDefault" xml:space="preserve"><value>Billable by default</value></data>
   <data name="AddClient" xml:space="preserve"><value>Add client</value></data>
+  <data name="ClientAdded" xml:space="preserve"><value>Client has been added</value></data>
   <data name="AddFirstClient" xml:space="preserve"><value>Add first client</value></data>
   <data name="CreateClient" xml:space="preserve"><value>Create client</value></data>
   <data name="EditClient" xml:space="preserve"><value>Edit client</value></data>
@@ -609,6 +612,7 @@
   <data name="UserSettings_RequestDeletionConfirmMessage" xml:space="preserve"><value>Are you sure you want to request the deletion of your account? This action cannot be undone.</value></data>
   <data name="UserSettings_SaveChanges" xml:space="preserve"><value>Save changes</value></data>
   <data name="UserSettings_SaveError" xml:space="preserve"><value>Could not save account settings</value></data>
+  <data name="UserSettings_ChangesSaved" xml:space="preserve"><value>Account settings saved successfully</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Update the project name and reassign it to another client if needed.</value></data>
   <data name="UpdateClientModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
