@@ -1,20 +1,9 @@
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex items-start gap-3.5">
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
-            <i class="fa-solid fa-headset text-lg" aria-hidden="true"></i>
-        </div>
-        <div>
-            <h3 class="text-lg font-semibold text-slate-900">
-                @DashboardLocalizer["Support_Modal_Title"]
-            </h3>
-            <p class="mt-1 text-xs leading-relaxed text-slate-500">
-                @DashboardLocalizer["Support_Modal_Description"]
-            </p>
-        </div>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["Support_Modal_Title"]"
+    Description="@DashboardLocalizer["Support_Modal_Description"]"
+    Icon="fa-solid fa-headset" />
 
 <AppModalBody Class="space-y-3 pt-2">
     <a

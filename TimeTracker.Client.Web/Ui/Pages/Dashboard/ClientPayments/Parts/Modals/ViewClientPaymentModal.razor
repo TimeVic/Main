@@ -3,15 +3,11 @@
 
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-        <i class="fa-regular fa-eye"></i>
-    </div>
-    <div>
-        <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["ClientPayment"]</h2>
-        <p class="mt-1 text-sm text-slate-600">@ClientPayment.PaymentTime.ToShortDateString()</p>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["ClientPayment"]"
+    Description="@ClientPayment.PaymentTime.ToShortDateString()"
+    Icon="fa-regular fa-eye"
+    Color="ComponentColor.Success" />
 <AppModalBody Class="pt-3">
     <dl class="grid gap-4 md:grid-cols-2">
         <div>

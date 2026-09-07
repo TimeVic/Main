@@ -2,14 +2,10 @@
 
 <AppModalHeader
     Title="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmTitle"].Value"
-    Subtitle="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmSubtitle"].Value"
-    HasCloseButton="true">
-    <Icon>
-        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600">
-            <i class="fa-regular fa-trash-can"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    Description="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmSubtitle"].Value"
+    HasCloseButton="true"
+    Icon="fa-regular fa-trash-can"
+    Color="ComponentColor.Danger" />
 
 <AppModalBody Class="space-y-4">
     <InputTextField

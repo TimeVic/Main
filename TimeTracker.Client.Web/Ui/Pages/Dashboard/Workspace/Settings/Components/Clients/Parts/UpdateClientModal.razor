@@ -4,15 +4,8 @@
 
 <AppModalHeader
     Title="@string.Format(DashboardLocalizer["UpdateClientModal_Title"], Client?.Name)"
-    Description="@DashboardLocalizer["UpdateClientModal_Description"]">
-    <Icon>
-        <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-            <i
-                class="fa-regular fa-building"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    Description="@DashboardLocalizer["UpdateClientModal_Description"]"
+    Icon="fa-regular fa-building" />
 <AppModalBody
     Class="pt-3">
     <EditForm

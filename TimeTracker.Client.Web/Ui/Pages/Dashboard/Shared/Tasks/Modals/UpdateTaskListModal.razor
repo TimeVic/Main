@@ -1,14 +1,9 @@
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-        <i class="fa-regular fa-pen-to-square"></i>
-    </div>
-    <div>
-        <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["UpdateTaskListModal_Title"]</h3>
-        <p class="mt-1 text-sm text-slate-500">@TaskList.Project.Name</p>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["UpdateTaskListModal_Title"]"
+    Description="@TaskList.Project.Name"
+    Icon="fa-regular fa-pen-to-square" />
 <AppModalBody Class="pt-3">
     <EditForm
         Context="form"

@@ -3,17 +3,10 @@
 
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-            <i class="fa-regular fa-pen-to-square"></i>
-        </div>
-        <div>
-            <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["EditPayment"]</h2>
-            <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["EditPaymentHelper"]</p>
-        </div>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["EditPayment"]"
+    Description="@DashboardLocalizer["EditPaymentHelper"]"
+    Icon="fa-regular fa-pen-to-square" />
 <AppModalBody Class="pt-3">
     <EditForm
         Context="form"

@@ -3,17 +3,11 @@
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 @inherits BaseReactiveComponent
 
-<AppModalHeader Class="flex items-center gap-3">
-    <div class="flex items-start gap-4">
-        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
-            <i class="fa-solid fa-triangle-exclamation text-xl"></i>
-        </div>
-        <div>
-            <h3 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["Approvals_RejectModal_Title"]</h3>
-            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["Approvals_Description"]</p>
-        </div>
-    </div>
-</AppModalHeader>
+<AppModalHeader
+    Title="@DashboardLocalizer["Approvals_RejectModal_Title"]"
+    Description="@DashboardLocalizer["Approvals_Description"]"
+    Icon="fa-solid fa-triangle-exclamation"
+    Color="ComponentColor.Warning" />
 <AppModalBody Class="space-y-4 pt-3">
     <EditForm
         Context="form"

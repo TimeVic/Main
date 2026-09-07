@@ -2,15 +2,9 @@
 
 <AppModalHeader
     Title="@string.Format(DashboardLocalizer["IntegrationsBlock_ConnectionTitle"], HelpInfo?.Name)"
-    Description="@HelpInfo?.Summary">
-    <Icon>
-        <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
-            <i
-                class="fa-solid fa-circle-info"></i>
-        </div>
-    </Icon>
-</AppModalHeader>
+    Description="@HelpInfo?.Summary"
+    Icon="fa-solid fa-circle-info"
+    Color="ComponentColor.Info" />
 
 <AppModalBody
     Class="pt-3">

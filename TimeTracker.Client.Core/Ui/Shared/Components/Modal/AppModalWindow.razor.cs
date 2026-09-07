@@ -19,6 +19,10 @@ public partial class AppModalWindow : ComponentBase
         _ => "max-w-lg"
     };
 
+    private string _cardScrollClass => ModalInstance.Options.IsScrollable
+        ? "max-h-[90vh] flex flex-col overflow-hidden"
+        : "overflow-visible";
+
     private void OnBackdropClick()
     {
         if (ModalInstance.Options.IsCloseOnBackdropClick)
