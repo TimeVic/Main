@@ -7,6 +7,7 @@
         <InputTextField
             Value="@Value"
             ValueChanged="OnValueChanged"
+            IsUpdateOnInput="true"
             ValueExpression="@ValueExpression"
             Label="@Label"
             Placeholder="@(string.IsNullOrEmpty(Placeholder) ? DashboardLocalizer["SmartUserSearchInput_Placeholder"].Value : Placeholder)"
