@@ -147,7 +147,6 @@ public partial class AppTable<TGridItem> : ComponentBase
         {
             var classes = new List<string>
             {
-                "w-full text-left text-sm border-collapse"
                 "w-full text-left text-sm border-collapse quickgrid-table theme-tailwind"
             };
 
