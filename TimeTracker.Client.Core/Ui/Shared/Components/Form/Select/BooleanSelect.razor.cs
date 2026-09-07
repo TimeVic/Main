@@ -1,11 +1,16 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Client.Core.Constants.Ui;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class BooleanSelect
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public bool? Value { get; set; }
 

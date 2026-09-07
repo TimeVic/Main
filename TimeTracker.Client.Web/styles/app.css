@@ -1,9 +1,16 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 
 @custom-variant dark (&:where(.never-match-dark));
 
-@source "../../TimeTracker.Client.Core/**/*.razor";
-@source "../../TimeTracker.Client.Core/**/*.cs";
+@source "../App.razor";
+@source "../_Imports.razor";
+@source "../Ui/**/*.razor";
+@source "../Ui/**/*.cs";
+@source "../Server/**/*.razor";
+@source "../Server/**/*.cs";
+@source "../wwwroot/index.html";
+@source "../../TimeTracker.Client.Core/Ui/**/*.razor";
+@source "../../TimeTracker.Client.Core/Ui/**/*.cs";
 
 @keyframes shimmer {
     0% {

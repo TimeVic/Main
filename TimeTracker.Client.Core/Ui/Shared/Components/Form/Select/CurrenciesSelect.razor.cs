@@ -1,6 +1,8 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Dto.Entity.List;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Store.List.Currency;
 using TimeTracker.Client.Core.Ui.Shared.Components.Form.Select.Core;
 
@@ -8,6 +10,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class CurrenciesSelect : IDisposable
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Inject]
     public IState<CurrencyState> _state { get; set; }
 

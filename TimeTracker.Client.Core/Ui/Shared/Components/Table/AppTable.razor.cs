@@ -8,6 +8,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Table;
 [CascadingTypeParameter(nameof(TGridItem))]
 public partial class AppTable<TGridItem> : ComponentBase
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public IQueryable<TGridItem>? Items { get; set; }
 

@@ -1,7 +1,9 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Core.Components;
+using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
 using TimeTracker.Client.Core.Ui.Shared.Components.Enums;
@@ -11,6 +13,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class MultipleUsersSelect : BaseReactiveComponent, IDisposable
 {
+    [Inject]
+    private IStringLocalizer<DashboardResource> DashboardLocalizer { get; set; } = default!;
+
     [Parameter]
     public string? Label { get; set; }
 
