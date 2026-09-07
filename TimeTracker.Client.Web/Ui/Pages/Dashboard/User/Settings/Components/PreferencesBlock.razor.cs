@@ -7,6 +7,7 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.User.Settings.Components;
 public partial class PreferencesBlock
 {
     private string _selectedLanguage = string.Empty;
+    private bool _isSaving;
 
     protected override void OnInitialized()
     {
@@ -18,6 +19,7 @@ public partial class PreferencesBlock
 
     private async Task OnSave()
     {
+        _isSaving = true;
         await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, _selectedLanguage);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }

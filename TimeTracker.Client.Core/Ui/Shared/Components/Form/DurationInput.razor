@@ -5,6 +5,8 @@
     <InputTextField
         Value="@_displayString"
         ValueChanged="OnStringValueChanged"
+        IsUpdateOnInput="false"
+        OnBlur="OnInputBlur"
         Class="@Class"
         Placeholder="@Placeholder"
         Label="@Label"

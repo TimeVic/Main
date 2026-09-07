@@ -22,6 +22,12 @@
 }
 
 @layer components {
+    .app-modal-footer-full-width > * {
+        flex: 1 1 0% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
     /* Fixes the Core emoji picker when Tailwind utility generation misses library component classes. */
     .tv-emoji-popover-root {
         position: fixed;

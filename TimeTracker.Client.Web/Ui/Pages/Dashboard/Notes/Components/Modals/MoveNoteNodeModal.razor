@@ -17,9 +17,15 @@
     </AppModalBody>
     <AppModalFooter>
         <AppButton
-            FullWidth="true"
+            Color="@ComponentColor.Default"
+            Variant="@ButtonVariant.Outlined"
+            Radius="@ButtonRadius.Medium"
+            OnClick="@(() => ModalInstance?.Close(AppModalResult.Cancel()))">
+            @DashboardLocalizer["Cancel"]
+        </AppButton>
+        <AppButton
             Color="ComponentColor.Primary"
-            Radius="@ButtonRadius.Full"
+            Radius="@ButtonRadius.Medium"
             IsLoading="IsSaving"
             OnClick="@Submit">
             @DashboardLocalizer["Notes_Move"]

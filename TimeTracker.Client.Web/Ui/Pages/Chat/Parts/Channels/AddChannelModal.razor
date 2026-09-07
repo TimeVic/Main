@@ -35,10 +35,16 @@
     </EditForm>
 </AppModalBody>
 <AppModalFooter>
-    <AppButton 
-        FullWidth="@true"
+    <AppButton
+        Color="@ComponentColor.Default"
+        Variant="@ButtonVariant.Outlined"
+        Radius="@ButtonRadius.Medium"
+        OnClick="@(() => ModalInstance?.Close(AppModalResult.Cancel()))">
+        @DashboardLocalizer["Cancel"]
+    </AppButton>
+    <AppButton
         Color="@ComponentColor.Primary"
-        Radius="@ButtonRadius.Full"
+        Radius="@ButtonRadius.Medium"
         OnClick="OnSubmit">
         Create
     </AppButton>

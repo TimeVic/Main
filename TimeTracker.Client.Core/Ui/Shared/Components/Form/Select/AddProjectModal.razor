@@ -26,6 +26,7 @@
             class="grid gap-4">
             <div>
                 <ClientsSelect
+                    Label="@DashboardLocalizer["Client"]"
                     Value="model.ClientId"
                     ValueExpression="() => model.ClientId"
                     Clearable="false"
@@ -45,11 +46,18 @@
 </AppModalBody>
 <AppModalFooter>
     <AppButton
-        FullWidth="@true"
+        Color="@ComponentColor.Default"
+        Variant="@ButtonVariant.Outlined"
+        Radius="@ButtonRadius.Medium"
+        OnClick="@(() => ModalInstance?.Close(AppModalResult.Cancel()))">
+        @DashboardLocalizer["Cancel"]
+    </AppButton>
+    <AppButton
         OnClick="@Submit"
         IsLoading="_state.Value.IsSaving"
+        IsLoading="_isLoading"
         Color="@ComponentColor.Primary"
-        Radius="@ButtonRadius.Full">
+        Radius="@ButtonRadius.Medium">
         @DashboardLocalizer["Add"]
     </AppButton>
 </AppModalFooter>

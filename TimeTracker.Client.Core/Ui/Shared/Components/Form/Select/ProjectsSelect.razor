@@ -46,6 +46,19 @@
                     </span>
                 </div>
             }
+            @if (IsCanCreateProject && _state.Value.IsLoaded && !_list.Any())
+            {
+                <div
+                    class="w-full px-3 py-2 rounded-lg text-xs md:text-sm flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer select-none transition-colors font-medium"
+                    @onclick="@(() => OnAddProject(_clientId ?? Guid.Empty))">
+                    <i
+                        class="fa-solid fa-plus text-xs">
+                    </i>
+                    <span>
+                        @DashboardLocalizer["AddProject"]
+                    </span>
+                </div>
+            }
             @foreach (var group in _projectGroups)
             {
                 @if (_shouldGroupByClient)

@@ -59,6 +59,9 @@ public partial class ProfileBlock
             Dispatcher.Dispatch(new UpdateUserAction(user));
             await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, user.Language?.Code ?? _selectedLanguage);
 
+            // Show success notification after settings have been persisted.
+            ToastService.ShowSuccess(DashboardLocalizer["UserSettings_ChangesSaved"].Value);
+
             var currentCulture = CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
                 ? ILocalizationUrlService.UkrainianCultureName
                 : ILocalizationUrlService.EnglishCultureName;

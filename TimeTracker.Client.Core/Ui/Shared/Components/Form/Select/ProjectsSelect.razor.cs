@@ -127,6 +127,28 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
             })
             .ToList();
 
+        // Include any clients present on projects in _list that are not in _clientState.Value.List
+        var clientIdsInGroups = new HashSet<Guid>(groups.Select(g => g.ClientId));
+        var missingClients = _list
+            .Where(p => p.Client != null && !clientIdsInGroups.Contains(p.Client.Id))
+            .Select(p => p.Client!)
+            .DistinctBy(c => c.Id)
+            .OrderBy(c => c.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        foreach (var client in missingClients)
+        {
+            groups.Add(new ProjectClientGroup
+            {
+                ClientId = client.Id,
+                Name = client.Name,
+                Projects = _list
+                    .Where(project => project.Client?.Id == client.Id)
+                    .OrderBy(project => project.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToList()
+            });
+        }
+
         var projectsWithoutClient = _list
             .Where(project => project.Client == null)
             .OrderBy(project => project.Name, StringComparer.OrdinalIgnoreCase)
@@ -169,6 +191,7 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
         }
 
         await _modalDialogService.ShowAsync<AddClientModal>(
+        var result = await _modalDialogService.ShowAsync<AddClientModal>(
             options: new AppModalOptions
             {
                 Size = AppModalSize.Small,
@@ -177,6 +200,11 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
                 IsCloseOnEscapeKey = true
             }
         );
+
+        if (result.IsSuccess && result.Data is ClientDto createdClient)
+        {
+            await OnAddProject(createdClient.Id);
+        }
     }
 
     private async Task OnAddProject(Guid clientId)
@@ -187,6 +215,7 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
         }
 
         await _modalDialogService.ShowAsync<AddProjectModal>(
+        var result = await _modalDialogService.ShowAsync<AddProjectModal>(
             parameters: new Dictionary<string, object?>
             {
                 { nameof(AddProjectModal.InitialClientId), clientId }
@@ -199,6 +228,12 @@ public partial class ProjectsSelect : BaseSingleSelect<ProjectDto>, IDisposable
                 IsCloseOnEscapeKey = true
             }
         );
+
+        if (result.IsSuccess && result.Data is ProjectDto createdProject)
+        {
+            UpdateList();
+            OnProjectSelected(createdProject);
+        }
     }
 
     public new void Dispose()

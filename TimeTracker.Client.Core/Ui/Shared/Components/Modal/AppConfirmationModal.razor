@@ -14,18 +14,19 @@
     </p>
 </AppModalBody>
 
-<AppModalFooter
-    Class="flex items-center justify-end gap-2.5">
-    <button
-        type="button"
-        class="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition cursor-pointer"
-        @onclick="@OnCancel">
+<AppModalFooter>
+    <AppButton
+        Color="@ComponentColor.Default"
+        Variant="@ButtonVariant.Outlined"
+        Radius="@ButtonRadius.Medium"
+        OnClick="@OnCancel">
         @(string.IsNullOrWhiteSpace(CancelText) ? CommonLocalizer["Cancel"].Value : CancelText)
-    </button>
-    <button
-        type="button"
-        class="rounded-xl px-4 py-2 text-sm font-medium transition cursor-pointer @_confirmButtonClass"
-        @onclick="@OnConfirm">
+    </AppButton>
+    <AppButton
+        Color="@_confirmButtonColor"
+        Variant="@ButtonVariant.Solid"
+        Radius="@ButtonRadius.Medium"
+        OnClick="@OnConfirm">
         @(string.IsNullOrWhiteSpace(ConfirmText) ? CommonLocalizer["Confirm"].Value : ConfirmText)
-    </button>
+    </AppButton>
 </AppModalFooter>

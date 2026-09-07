@@ -30,6 +30,8 @@
             type="@ResolvedHtmlInputType"
             value="@Value"
             @oninput="HandleInput"
+            @onchange="HandleChange"
+            @onblur="HandleBlur"
             placeholder="@Placeholder"
             disabled="@IsDisabled"
             readonly="@IsReadOnly"
@@ -116,6 +118,15 @@
         set => IsShowValidationState = value;
     }
 
+    [Parameter]
+    public bool IsUpdateOnInput { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<FocusEventArgs> OnBlur { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnChange { get; set; }
+
     private bool _isPasswordVisible;
 
     private bool IsSuccess => !HasError && !string.IsNullOrWhiteSpace(Value);
@@ -140,7 +151,31 @@
 
     private async Task HandleInput(ChangeEventArgs e)
     {
-        await SetValueAsync(e.Value?.ToString() ?? string.Empty);
+        if (IsUpdateOnInput)
+        {
+            await SetValueAsync(e.Value?.ToString() ?? string.Empty);
+        }
+    }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        if (!IsUpdateOnInput)
+        {
+            await SetValueAsync(e.Value?.ToString() ?? string.Empty);
+        }
+
+        if (OnChange.HasDelegate)
+        {
+            await OnChange.InvokeAsync(e);
+        }
+    }
+
+    private async Task HandleBlur(FocusEventArgs e)
+    {
+        if (OnBlur.HasDelegate)
+        {
+            await OnBlur.InvokeAsync(e);
+        }
     }
 
     private void TogglePasswordVisibility()
