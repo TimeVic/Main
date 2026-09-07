@@ -1,5 +1,3 @@
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
-
 @inherits BaseReactiveComponent
 
 <AppModalHeader
@@ -25,12 +23,8 @@
                     Placeholder="@DashboardLocalizer["ClientName"]"
                     IsShowEmojiButton="true"
                     @bind-Value="model.Name"/>
-                <CustomValidationMessage
-                    For="@(() => model.Name)"/>
             </div>
         </div>
-
-        <CustomValidationSummary/>
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

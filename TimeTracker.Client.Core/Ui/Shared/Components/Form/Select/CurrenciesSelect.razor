@@ -16,6 +16,17 @@
         IsDisabled="@Disabled"
         IsClearable="@Clearable"
         IsFullWidth="@FullWidth"
+        IsInvalid="@IsInvalid"
         Variant="@ResolvedVariant">
     </AppSelect>
+    @if (IsInvalid && !string.IsNullOrWhiteSpace(FirstError))
+    {
+        <p
+            class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i
+                class="fa-solid fa-circle-exclamation text-[11px]">
+            </i>
+            <span>@FirstError</span>
+        </p>
+    }
 </div>

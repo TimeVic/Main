@@ -115,9 +115,12 @@ public abstract class AppBaseSelect : BaseReactiveComponent, IDisposable
 
     protected FieldIdentifier FieldIdentifier;
 
-    protected bool IsInvalid => CurrentEditContext != null
+    [Parameter]
+    public bool? IsInvalid { get; set; }
+
+    protected bool ResolvedIsInvalid => IsInvalid ?? (CurrentEditContext != null
                                 && FieldIdentifier.Model != null
-                                && CurrentEditContext.GetValidationMessages(FieldIdentifier).Any();
+                                && CurrentEditContext.GetValidationMessages(FieldIdentifier).Any());
 
     protected SelectVariant ResolvedVariant => SelectType switch
     {

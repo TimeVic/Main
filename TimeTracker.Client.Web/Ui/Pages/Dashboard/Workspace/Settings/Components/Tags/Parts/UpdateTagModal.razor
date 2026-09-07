@@ -1,5 +1,4 @@
 @using TimeTracker.Client.Core.Constants.Ui
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -25,8 +24,6 @@
                     Placeholder="@DashboardLocalizer["TagName"]"
                     IsShowEmojiButton="true"
                     @bind-Value="model.Name"/>
-                <CustomValidationMessage
-                    For="@(() => model.Name)"/>
             </div>
 
             <div
@@ -36,12 +33,8 @@
                     Type="DropDownType.Select"
                     Clearable="true"
                     @bind-Value="model.Color"/>
-                <CustomValidationMessage
-                    For="@(() => model.Color)"/>
             </div>
         </div>
-
-        <CustomValidationSummary/>
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

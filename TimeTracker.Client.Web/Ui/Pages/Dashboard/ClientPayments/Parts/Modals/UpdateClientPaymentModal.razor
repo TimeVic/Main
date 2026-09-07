@@ -1,5 +1,4 @@
 @using TimeTracker.Client.Core.Constants.Ui
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -23,7 +22,6 @@
                     Value="model.ClientId"
                     ValueExpression="() => model.ClientId"
                     SelectedItemChanged="OnChangeClient"/>
-                <CustomValidationMessage For="@(() => model.ClientId)"/>
             </div>
             <div>
                 <ProjectsSelect
@@ -40,7 +38,6 @@
                     Required="true"
                     @bind-Value="@model.PaymentTime"
                     Label="@DashboardLocalizer["PaymentDate"].Value"/>
-                <CustomValidationMessage For="@(() => model.PaymentTime)"/>
             </div>
             <div>
                 <InputNumericField
@@ -48,7 +45,6 @@
                     Required="true"
                     @bind-Value="@model.Amount"
                     Label="@DashboardLocalizer["Amount"].Value"/>
-                <CustomValidationMessage For="@(() => model.Amount)"/>
             </div>
             <div class="md:col-span-2">
                 <InputTextareaField
@@ -58,8 +54,6 @@
                     @bind-Value="model.Description"/>
             </div>
         </div>
-
-        <CustomValidationSummary/>
     </EditForm>
 </AppModalBody>
 <AppModalFooter>

@@ -1,6 +1,5 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Notes
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -35,9 +34,6 @@
                     Placeholder="@DashboardLocalizer["Title"].Value"
                     @bind-Value="_model.Title"/>
             </div>
-            <CustomValidationMessage
-                For="@(() => _model.Title)"/>
-            <CustomValidationSummary/>
         </EditForm>
     </AppModalBody>
     <AppModalFooter>

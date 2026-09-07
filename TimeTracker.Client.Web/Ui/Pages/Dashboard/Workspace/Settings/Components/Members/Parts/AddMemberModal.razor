@@ -1,5 +1,4 @@
 @using TimeTracker.Business.Common.Constants
-@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -22,8 +21,6 @@
                     <SmartUserSearchInput
                         Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
                         @bind-Value="_model.EmailOrLogin" />
-                    <CustomValidationMessage
-                        For="@(() => _model.EmailOrLogin)" />
                 </div>
 
                 <div>

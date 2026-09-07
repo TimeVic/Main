@@ -12,6 +12,9 @@ public partial class SmartUserSearchInput : IDisposable
     public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
+    public System.Linq.Expressions.Expression<Func<string>>? ValueExpression { get; set; }
+
+    [Parameter]
     public UserDto? SelectedUser { get; set; }
 
     [Parameter]

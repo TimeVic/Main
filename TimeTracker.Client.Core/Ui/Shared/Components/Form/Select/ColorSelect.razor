@@ -53,10 +53,16 @@
         </ItemTemplate>
     </AppSelect>
     @if (HasError)
+    @if (HasError && !string.IsNullOrWhiteSpace(FirstError))
     {
         <p
             class="mt-1 text-xs text-red-600">
             @FirstError
+            class="mt-1.5 text-xs text-rose-500 flex items-center gap-1">
+            <i
+                class="fa-solid fa-circle-exclamation text-[11px]">
+            </i>
+            <span>@FirstError</span>
         </p>
     }
 </div>
