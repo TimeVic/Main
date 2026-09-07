@@ -11,6 +11,9 @@ public partial class FilterForm
     [Inject]
     public IState<ReportsState> _reportsState { get; set; }
 
+    [Parameter]
+    public bool IsTeamSummary { get; set; }
+
     public SummaryReportFilterState _filterState => _reportsState.Value.SummaryReportFilter;
 
     private string FilterGridClass => IsTeamSummary
