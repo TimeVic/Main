@@ -37,7 +37,7 @@
     <value>Чи можна вказувати погодинну ставку?</value>
   </data>
   <data name="Title_CanITrackPaymentsFromClients" xml:space="preserve">
-    <value>Чи можна фіксувати оплати від клієнтів?</value>
+     <value>Як саме TimeVic допомагає контролювати розрахунки з клієнтами та запобігати боргам?</value>
   </data>
   <data name="Title_WhatHappensIfAClientHasnTPaidYet" xml:space="preserve">
     <value>Що, якщо клієнт ще не оплатив?</value>
@@ -52,7 +52,7 @@
     <value>Чи замінює TimeVic інвойси?</value>
   </data>
   <data name="Title_DoINeedToTrackEveryMinute" xml:space="preserve">
-    <value>Чи потрібно трекати кожну хвилину?</value>
+     <value>Що буде, якщо я забуду зупинити таймер і він працюватиме всю ніч?</value>
   </data>
   <data name="Title_CanIManageMultipleClients" xml:space="preserve">
     <value>Чи можна вести кілька клієнтів?</value>
@@ -61,19 +61,19 @@
     <value>Чи підходить TimeVic для команди?</value>
   </data>
   <data name="Title_CanIAttachTimeToTasks" xml:space="preserve">
-    <value>Чи можна привʼязувати час до задач?</value>
+     <value>Що відбувається, коли я запускаю таймер із задачі?</value>
   </data>
   <data name="Title_IsTimevicFree" xml:space="preserve">
     <value>Чи є TimeVic безкоштовним?</value>
   </data>
-  <data name="Title_DoINeedToInstallAnything" xml:space="preserve">
-    <value>Чи треба щось встановлювати?</value>
+  <data name="Title_CanMyTeamMembersSubmitTimeForApproval" xml:space="preserve">
+    <value>Чи можуть члени команди подавати час на затвердження до його врахування у звітах?</value>
   </data>
   <data name="Title_HowDoIStart" xml:space="preserve">
     <value>Як почати?</value>
   </data>
-  <data name="Title_HowLongDoesItTakeToSeeValue" xml:space="preserve">
-    <value>Коли буде користь?</value>
+  <data name="Title_DoesTimevicIntegrateWithExternalTaskManagers" xml:space="preserve">
+    <value>Чи працює TimeVic з Jira, ClickUp або Redmine?</value>
   </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>Для фрилансерів, які працюють з кількома клієнтами</value>
@@ -178,7 +178,7 @@
     <value>Так.</value>
   </data>
   <data name="Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst" xml:space="preserve">
-    <value>Ти можеш додавати платежі від клієнтів і порівнювати їх із заробленою сумою.</value>
+     <value>На відміну від звичайних трекерів, які лише рахують години, TimeVic працює як фінансовий контур подвійного балансу. Ви вносите отримані оплати, зокрема аванси чи депозити без прив’язки до проєктів, трекаєте час за комерційними ставками, а система автоматично розраховує Outstanding Balance. Ви одразу бачите, хто з клієнтів і скільки вам винен, а також коли передоплачений баланс вичерпано, без ручного зведення в Excel.</value>
   </data>
   <data name="Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd" xml:space="preserve">
     <value>Так видно, яка частина роботи вже оплачена, а яка ще ні.</value>
@@ -208,7 +208,7 @@
     <value>Продукт залишається сфокусованим: можливості підтримують облік часу і доходу, а не перетворюють TimeVic на enterprise/task manager.</value>
   </data>
   <data name="Content_YouCanTrackAsMuchOrAsLittleAsYou" xml:space="preserve">
-    <value>Ні. Можна трекати стільки деталей, скільки потрібно. Навіть частковий облік уже краще показує дохід, ніж розрізнені нотатки.</value>
+     <value>TimeVic має вбудований Anti-Forget Timer Engine. Якщо таймер безперервно працює понад 12 годин, система автоматично зупиняє його на позначці стандартних 8 годин і надсилає корисне email-сповіщення. Це захищає аналітику воркспейсу та звіти для клієнтів від викривлених даних і дає змогу пізніше вручну скоригувати записаний час.</value>
   </data>
   <data name="Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd" xml:space="preserve">
     <value>Так. Можна створювати клієнтів, проєкти, задачі та вести окремий облік часу й оплат по кожному з них.</value>
@@ -220,7 +220,7 @@
     <value>Але продукт не намагається замінити Jira або ClickUp — задачі потрібні насамперед для привʼязки часу до роботи.</value>
   </data>
   <data name="Content_YesYouCanAttachTimeEntriesToTasksWhenYou" xml:space="preserve">
-    <value>Так. Можна привʼязувати записи часу до задач, коли потрібен контекст, але головними залишаються час, гроші й оплати.</value>
+     <value>Натисніть Play на картці задачі, щоб запустити запис часу, прив’язаний до цієї задачі. Так облікована робота зберігає контекст задачі, поки ви відстежуєте час, дохід та оплати клієнтів.</value>
   </data>
   <data name="Content_Section4" xml:space="preserve">
     <value>Розділ 4</value>
@@ -234,8 +234,8 @@
   <data name="Content_YesTimevicIsFreeToUse" xml:space="preserve">
     <value>Зараз TimeVic доступний безкоштовно. У майбутньому можуть зʼявитися платні плани, але на поточному етапі продукт можна використовувати без оплати.</value>
   </data>
-  <data name="Content_NoTimevicWorksInYourBrowser" xml:space="preserve">
-    <value>Ні. TimeVic працює у браузері.</value>
+  <data name="Content_TeamMembersCanSubmitCompletedTimeEntriesForApproval" xml:space="preserve">
+    <value>Так. Owner і Manager можуть використовувати workflow затвердження часу. Учасники команди подають завершені записи часу на перевірку, а менеджери можуть їх затвердити або відхилити. Затверджені записи блокуються й використовуються у звітах, а відхилені повертаються до Draft для виправлення, тому до клієнтських розрахунків потрапляють лише перевірені години.</value>
   </data>
   <data name="Content_Section5" xml:space="preserve">
     <value>Розділ 5</value>
@@ -261,11 +261,8 @@
   <data name="Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe" xml:space="preserve">
     <value>Після першого запису одразу буде видно, скільки зароблено за цю роботу.</value>
   </data>
-  <data name="Content_About2Minutes" xml:space="preserve">
-    <value>Приблизно кілька хвилин.</value>
-  </data>
-  <data name="Content_AsSoonAsYouAddAClientSetARate" xml:space="preserve">
-    <value>Щойно додаси клієнта, ставку і перший запис часу, TimeVic покаже зароблену суму та неоплачений залишок.</value>
+  <data name="Content_TimevicIntegratesWithJiraClickUpAndRedmine" xml:space="preserve">
+    <value>Так. TimeVic інтегрується з Jira, ClickUp і Redmine. Коли ви прив’язуєте запис часу до задачі чи issue в одній із цих систем, TimeVic синхронізує затрекані години назад до зовнішньої платформи. Управління задачами та облік часу залишаються узгодженими без ручних оновлень.</value>
   </data>
   <data name="Content_IncomeClarity" xml:space="preserve">
     <value>Фінансова ясність</value>
@@ -277,10 +274,10 @@
     <value>Знай, скільки зароблено і хто ще винен гроші</value>
   </data>
   <data name="Title_DoDevelopersSeeClientRates" xml:space="preserve">
-    <value>Чи бачать розробники фінансові ставки клієнтів?</value>
+     <value>Чи бачать залучені фрілансери комерційні ставки клієнтів та доходи моєї студії?</value>
   </data>
   <data name="Content_DoDevelopersSeeClientRates" xml:space="preserve">
-    <value>Ні, у командному режимі розробники бачать виключно свої персональні заробітки за внутрішньою ставкою (Member Rate). Комерційна таємниця компанії надійно захищена.</value>
+     <value>Ні. Повна фінансова безпека та ізоляція забезпечуються роллю у воркспейсі. Розробники з роллю User бачать лише свої затрекані години та власний звіт про виплати, розрахований за їхньою персональною внутрішньою ставкою. Комерційні ставки клієнтів, ставки інших учасників і загальний прибуток воркспейсу залишаються конфіденційними та доступні лише Owner і Manager.</value>
   </data>
   <data name="Title_HowDoesCustomCurrencyWork" xml:space="preserve">
     <value>Як працює власна валюта воркспейсу (наприклад, знак ₵)?</value>
@@ -289,10 +286,10 @@
     <value>Ви можете обрати будь-яку стандартну валюту (USD, EUR, UAH) або використовувати кастомні умовні одиниці (внутрішні коїни воркспейсу) для розрахунків усередині вашої команди.</value>
   </data>
   <data name="Title_HowOftenClientReportsUpdated" xml:space="preserve">
-    <value>Як часто оновлюються дані в гостьовому звіті для клієнта?</value>
+     <value>Як показати клієнту години за проєктом без постійного експорту в PDF або Excel?</value>
   </data>
   <data name="Content_HowOftenClientReportsUpdated" xml:space="preserve">
-    <value>Дані оновлюються в реальному часі, але клієнт бачить тільки ті записи, які менеджер офіційно затвердив (Approved). Будь-які чернетки чи помилки розробників клієнту не відображаються.</value>
+     <value>В один клік згенеруйте захищене Shared-посилання для клієнта. Він отримає доступ до легкого гостьового дашборду з затвердженими годинами, історією оплат, неоплаченим залишком і, за потреби, розбивкою за задачами, не отримуючи доступу до внутрішніх налаштувань чи приватних даних вашого воркспейсу.</value>
   </data>
   <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
     <value>Без складного налаштування: додай клієнта, вкажи ставку і трекай час.</value>

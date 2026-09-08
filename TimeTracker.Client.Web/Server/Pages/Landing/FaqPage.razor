@@ -19,65 +19,16 @@
     PublicPagePath="@SiteUrl.Faq" />
 
 <main class="bg-white text-slate-950">
-    <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-blue-50 via-white to-emerald-50">
-        <div class="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.12),_transparent_42%)]"></div>
-        <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:py-20">
-            <div class="relative text-center">
-                <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
-                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                    <span>@Localizer["Content_ForFreelanceDevelopersWorkingWithMultipleClients"]</span>
-                </div>
-                <h1 class="mx-auto mt-6 max-w-3xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+    <section class="bg-slate-50">
+        <div class="mx-auto max-w-4xl px-4 py-16 sm:py-24">
+            <header class="mb-16 text-center">
+                <h1 class="mb-4 text-3xl font-black leading-tight text-slate-900 sm:text-4xl">
                     @Localizer["Content_EverythingAboutTrackingYourIncomeAndClientPayments"]
                 </h1>
-                <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                <p class="mx-auto max-w-2xl text-lg leading-7 text-slate-500">
                     @Localizer["Content_LearnHowTimevicHelpsFreelanceDevelopersTrackEarningsPaymentsAnd"]
                 </p>
-                <p class="mx-auto mt-4 max-w-2xl text-sm font-medium leading-6 text-slate-700 sm:text-base">
-                    @Localizer["Content_MostToolsTrackTimeTimevicHelpsYouUnderstandYourIncome"]
-                </p>
-            </div>
-
-            <div class="relative mt-10 rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-xl sm:p-8">
-                <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">@Localizer["Content_QuickExample"]</p>
-                        <h2 class="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
-                            @Localizer["Content_TrackTheWorkSeeTheMoneyImmediately"]
-                        </h2>
-                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                            @Localizer["Content_YouWorked30HoursThatEarned1500TheClient"]
-                        </p>
-                    </div>
-
-                    <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 sm:min-w-[280px]">
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                                <span class="text-sm text-slate-300">@Localizer["Content_TrackedWork"]</span>
-                                <span class="text-base font-semibold text-white">@Localizer["Content_30Hours"]</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
-                                <span class="text-sm text-emerald-100">@Localizer["Content_Earned"]</span>
-                                <span class="text-base font-semibold text-white">$1,500</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
-                                <span class="text-sm text-blue-100">@Localizer["Content_Paid"]</span>
-                                <span class="text-base font-semibold text-white">$500</span>
-                            </div>
-                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3">
-                                <span class="text-sm text-amber-100">@Localizer["Content_Outstanding"]</span>
-                                <span class="text-base font-semibold text-white">$1,000</span>
-                            </div>
-                        </div>
-                        <p class="mt-4 text-sm font-medium text-slate-200">@Localizer["Content_TimevicShowsThisInstantly"]</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-white">
-        <div class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:py-16">
+            </header>
             <div class="space-y-14">
                 <section aria-labelledby="faq-product-basics" class="scroll-mt-24">
                     <div class="mb-5">
@@ -88,8 +39,8 @@
                         </p>
                     </div>
 
-                    <div class="space-y-3">
-                        <details id="product-what" open class="faq-item">
+                    <div class="space-y-4">
+                        <details id="product-what" class="faq-item">
                             <summary class="faq-summary">
                                 <span class="faq-title">@Localizer["Title_WhatIsTimevic"]</span>
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
@@ -107,14 +58,13 @@
                             </div>
                         </details>
 
-                        <details id="product-time-tracker" open class="faq-item">
+                        <details id="product-time-tracker" class="faq-item">
                             <summary class="faq-summary">
                                 <span class="faq-title">@Localizer["Title_IsTimevicJustATimeTracker"]</span>
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
                             </summary>
                             <div class="faq-content">
-                                <p>@Localizer["Content_No"]</p>
-                                <p class="mt-3">
+                                <p>
                                     @Localizer["Content_TimeTrackingIsOnlyTheInput"]
                                 </p>
                                 <p class="mt-3">
@@ -159,7 +109,7 @@
                 </section>
 
                 <section aria-labelledby="faq-money-payments" class="scroll-mt-24">
-                    <div class="rounded-[2rem] border border-emerald-200 bg-emerald-50/70 p-6 sm:p-8">
+                    <div>
                         <div class="mb-6">
                             <div class="inline-flex items-center gap-3 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
                                 <i class="fa-solid fa-wallet"></i>
@@ -172,7 +122,7 @@
                             </p>
                         </div>
 
-                        <div class="space-y-3">
+                        <div class="space-y-4">
                             <details id="money-calculate" class="faq-item">
                                 <summary class="faq-summary">
                                     <span class="faq-title">@Localizer["Title_HowDoesTimevicCalculateEarnings"]</span>
@@ -195,13 +145,7 @@
                                 </summary>
                                 <div class="faq-content">
                                     <p>
-                                        @Localizer["Content_Yes"]
-                                    </p>
-                                    <p class="mt-3">
                                         @Localizer["Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst"]
-                                    </p>
-                                    <p class="mt-3">
-                                        @Localizer["Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd"]
                                     </p>
                                 </div>
                             </details>
@@ -228,9 +172,6 @@
                                 </summary>
                                 <div class="faq-content">
                                     <p>
-                                        @Localizer["Content_Yes"]
-                                    </p>
-                                    <p class="mt-3">
                                         @Localizer["Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor"]
                                     </p>
                                 </div>
@@ -243,9 +184,6 @@
                                 </summary>
                                 <div class="faq-content">
                                     <p>
-                                        @Localizer["Content_Yes"]
-                                    </p>
-                                    <p class="mt-3">
                                         @Localizer["Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee"]
                                     </p>
                                 </div>
@@ -258,9 +196,6 @@
                                 </summary>
                                 <div class="faq-content">
                                     <p>
-                                        @Localizer["Content_No"]
-                                    </p>
-                                    <p class="mt-3">
                                         @Localizer["Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt"]
                                     </p>
                                 </div>
@@ -290,15 +225,14 @@
                         </p>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <details id="usage-every-minute" class="faq-item">
                             <summary class="faq-summary">
                                 <span class="faq-title">@Localizer["Title_DoINeedToTrackEveryMinute"]</span>
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
                             </summary>
                             <div class="faq-content">
-                                <p>@Localizer["Content_No"]</p>
-                                <p class="mt-3">
+                                <p>
                                     @Localizer["Content_YouCanTrackAsMuchOrAsLittleAsYou"]
                                 </p>
                             </div>
@@ -346,8 +280,7 @@
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
                             </summary>
                             <div class="faq-content">
-                                <p>@Localizer["Content_No"]</p>
-                                <p class="mt-3">
+                                <p>
                                     @Localizer["Content_TimevicIsNotATaskManager"]
                                 </p>
                                 <p class="mt-3">
@@ -379,7 +312,7 @@
                         </p>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <details id="pricing-free" class="faq-item">
                             <summary class="faq-summary">
                                 <span class="faq-title">@Localizer["Title_IsTimevicFree"]</span>
@@ -394,12 +327,12 @@
 
                         <details id="pricing-install" class="faq-item">
                             <summary class="faq-summary">
-                                <span class="faq-title">@Localizer["Title_DoINeedToInstallAnything"]</span>
+                                <span class="faq-title">@Localizer["Title_CanMyTeamMembersSubmitTimeForApproval"]</span>
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
                             </summary>
                             <div class="faq-content">
                                 <p>
-                                    @Localizer["Content_NoTimevicWorksInYourBrowser"]
+                                    @Localizer["Content_TeamMembersCanSubmitCompletedTimeEntriesForApproval"]
                                 </p>
                             </div>
                         </details>
@@ -415,7 +348,7 @@
                         </p>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <details id="getting-started-how" class="faq-item">
                             <summary class="faq-summary">
                                 <span class="faq-title">@Localizer["Title_HowDoIStart"]</span>
@@ -434,15 +367,12 @@
 
                         <details id="getting-started-value" class="faq-item">
                             <summary class="faq-summary">
-                                <span class="faq-title">@Localizer["Title_HowLongDoesItTakeToSeeValue"]</span>
+                                <span class="faq-title">@Localizer["Title_DoesTimevicIntegrateWithExternalTaskManagers"]</span>
                                 <i class="fa-solid fa-chevron-down faq-chevron"></i>
                             </summary>
                             <div class="faq-content">
                                 <p>
-                                    @Localizer["Content_About2Minutes"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_AsSoonAsYouAddAClientSetARate"]
+                                    @Localizer["Content_TimevicIntegratesWithJiraClickUpAndRedmine"]
                                 </p>
                             </div>
                         </details>
@@ -473,6 +403,18 @@
         </div>
     </section>
 </main>
+
+<script>
+    document.querySelectorAll('.faq-item').forEach(function (faqItem) {
+        faqItem.addEventListener('focusout', function () {
+            window.setTimeout(function () {
+                if (faqItem.open && !faqItem.contains(document.activeElement)) {
+                    faqItem.open = false;
+                }
+            });
+        });
+    });
+</script>
 
 @code {
     private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;

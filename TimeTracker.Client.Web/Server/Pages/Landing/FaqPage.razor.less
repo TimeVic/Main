@@ -1,13 +1,15 @@
 .faq-item {
-    border-radius: 1.5rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #f1f5f9;
+    border-radius: 1rem;
     background-color: #ffffff;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
-    transition: box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px 0 rgb(15 23 42 / 0.03);
+    cursor: pointer;
     overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
-        box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.1);
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 12px 0 rgb(15 23 42 / 0.08);
     }
 }
 
@@ -16,7 +18,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.25rem 1.5rem;
+    padding: 1.25rem;
     cursor: pointer;
     list-style: none;
     user-select: none;
@@ -24,13 +26,19 @@
     &::-webkit-details-marker {
         display: none;
     }
+
+    &:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: -2px;
+    }
 }
 
 .faq-title {
     font-size: 1rem;
     font-weight: 600;
     line-height: 1.5rem;
-    color: #020617;
+    color: #0f172a;
+    transition: color 0.15s ease;
 
     @media (min-width: 640px) {
         font-size: 1.125rem;
@@ -40,8 +48,16 @@
 .faq-chevron {
     flex-shrink: 0;
     color: #94a3b8;
-    font-size: 0.75rem;
-    transition: transform 0.2s ease;
+    font-size: 1.25rem;
+    transition: color 0.15s ease, transform 0.2s ease-in-out;
+}
+
+.faq-item:hover .faq-title {
+    color: #2563eb;
+}
+
+.faq-item:hover .faq-chevron {
+    color: #3b82f6;
 }
 
 details[open] > .faq-summary .faq-chevron {
@@ -49,12 +65,36 @@ details[open] > .faq-summary .faq-chevron {
 }
 
 .faq-content {
-    padding: 0 1.5rem 1.25rem;
+    display: block;
+    max-height: 0;
+    padding: 0 1.25rem;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
     font-size: 0.875rem;
     line-height: 1.75rem;
     color: #475569;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0s linear 0.3s;
+
+    p,
+    ol {
+        max-width: 48rem;
+        padding-right: 1.5rem;
+    }
 
     @media (min-width: 640px) {
         font-size: 1rem;
     }
+}
+
+details:not([open]) > .faq-content {
+    display: block;
+}
+
+details[open] > .faq-content {
+    max-height: 100rem;
+    padding-bottom: 1.25rem;
+    visibility: visible;
+    opacity: 1;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0s linear;
 }

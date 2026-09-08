@@ -37,7 +37,7 @@
     <value>How does TimeVic calculate earnings?</value>
   </data>
   <data name="Title_CanITrackPaymentsFromClients" xml:space="preserve">
-    <value>Can I track payments from clients?</value>
+     <value>How exactly does TimeVic help me track client balances and prevent unpaid work?</value>
   </data>
   <data name="Title_WhatHappensIfAClientHasnTPaidYet" xml:space="preserve">
     <value>What happens if a client hasn’t paid yet?</value>
@@ -52,7 +52,7 @@
     <value>Does TimeVic replace invoicing tools?</value>
   </data>
   <data name="Title_DoINeedToTrackEveryMinute" xml:space="preserve">
-    <value>Do I need to track every minute?</value>
+     <value>What if I forget to stop my timer and leave it running overnight?</value>
   </data>
   <data name="Title_CanIManageMultipleClients" xml:space="preserve">
     <value>Can I manage multiple clients?</value>
@@ -61,19 +61,19 @@
     <value>Does TimeVic replace Jira or task managers?</value>
   </data>
   <data name="Title_CanIAttachTimeToTasks" xml:space="preserve">
-    <value>Can I attach time to tasks?</value>
+     <value>What happens when I start a timer from a task?</value>
   </data>
   <data name="Title_IsTimevicFree" xml:space="preserve">
     <value>Is TimeVic free?</value>
   </data>
-  <data name="Title_DoINeedToInstallAnything" xml:space="preserve">
-    <value>Do I need to install anything?</value>
+  <data name="Title_CanMyTeamMembersSubmitTimeForApproval" xml:space="preserve">
+    <value>Can my team members submit their time for approval before it affects reports?</value>
   </data>
   <data name="Title_HowDoIStart" xml:space="preserve">
     <value>How do I start?</value>
   </data>
-  <data name="Title_HowLongDoesItTakeToSeeValue" xml:space="preserve">
-    <value>How long does it take to see value?</value>
+  <data name="Title_DoesTimevicIntegrateWithExternalTaskManagers" xml:space="preserve">
+    <value>Does TimeVic work with Jira, ClickUp, or Redmine?</value>
   </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>For freelance developers working with multiple clients</value>
@@ -178,7 +178,7 @@
     <value>Yes.</value>
   </data>
   <data name="Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst" xml:space="preserve">
-    <value>You can record client payments and compare them directly against what you earned.</value>
+     <value>Unlike basic time trackers that only count hours, TimeVic is a double-balance financial hub. You record client payments, including upfront deposits without linking them to specific projects, track hours against commercial rates, and the system automatically calculates the Outstanding Balance. You instantly see which client owes you money and when a prepaid balance is fully spent, with no manual spreadsheets required.</value>
   </data>
   <data name="Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd" xml:space="preserve">
     <value>That gives you a clear split between paid work and unpaid work.</value>
@@ -208,7 +208,7 @@
     <value>The product stays focused. Features support income tracking instead of turning into a project management suite.</value>
   </data>
   <data name="Content_YouCanTrackAsMuchOrAsLittleAsYou" xml:space="preserve">
-    <value>You can track as much or as little as you want. Even partial tracking helps you understand your earnings better than disconnected notes.</value>
+     <value>TimeVic features a built-in Anti-Forget Timer Engine. If a timer runs continuously for over 12 hours, the system automatically stops it at a standard 8-hour mark and sends you a helpful email notification. This protects your workspace analytics and client reports from distorted figures, allowing you to easily adjust the logged hours manually later.</value>
   </data>
   <data name="Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd" xml:space="preserve">
     <value>Yes. TimeVic is built for multiple clients, multiple projects, and different hourly rates.</value>
@@ -220,7 +220,7 @@
     <value>Tasks are simple, optional, and only exist to support time tracking.</value>
   </data>
   <data name="Content_YesYouCanAttachTimeEntriesToTasksWhenYou" xml:space="preserve">
-    <value>Yes. You can attach time entries to tasks when you want more context, but tasks stay secondary to work, money, and payments.</value>
+     <value>Clicking Play on a task starts a time entry linked to that task. This keeps the logged work connected to its task context while you track time, earnings, and client payments.</value>
   </data>
   <data name="Content_Section4" xml:space="preserve">
     <value>Section 4</value>
@@ -234,8 +234,8 @@
   <data name="Content_YesTimevicIsFreeToUse" xml:space="preserve">
     <value>Yes. TimeVic is free to use.</value>
   </data>
-  <data name="Content_NoTimevicWorksInYourBrowser" xml:space="preserve">
-    <value>No. TimeVic works in your browser.</value>
+  <data name="Content_TeamMembersCanSubmitCompletedTimeEntriesForApproval" xml:space="preserve">
+    <value>Yes. Owners and managers can use the team approval workflow. Team members submit completed time entries for review, and managers can approve or reject them. Approved entries are locked and used in reports; rejected entries return to Draft for correction, so only verified hours contribute to client billing and payments.</value>
   </data>
   <data name="Content_Section5" xml:space="preserve">
     <value>Section 5</value>
@@ -261,11 +261,8 @@
   <data name="Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe" xml:space="preserve">
     <value>You will immediately see how much you earned from the tracked work.</value>
   </data>
-  <data name="Content_About2Minutes" xml:space="preserve">
-    <value>About 2 minutes.</value>
-  </data>
-  <data name="Content_AsSoonAsYouAddAClientSetARate" xml:space="preserve">
-    <value>As soon as you add a client, set a rate, and track your first entry, you can see earned income and unpaid balance.</value>
+  <data name="Content_TimevicIntegratesWithJiraClickUpAndRedmine" xml:space="preserve">
+    <value>Yes. TimeVic integrates with Jira, ClickUp, and Redmine. When you link a time entry to a task or issue in one of these systems, TimeVic synchronizes the tracked hours back to the external platform. Your task management and time tracking stay aligned without manual updates.</value>
   </data>
   <data name="Content_IncomeClarity" xml:space="preserve">
     <value>Income clarity</value>
@@ -277,10 +274,10 @@
     <value>Know how much you earned — and who still owes you</value>
   </data>
   <data name="Title_DoDevelopersSeeClientRates" xml:space="preserve">
-    <value>Do developers see client billing rates in team mode?</value>
+     <value>Can my hired freelancers or subcontractors see my client billing rates and agency earnings?</value>
   </data>
   <data name="Content_DoDevelopersSeeClientRates" xml:space="preserve">
-    <value>No. In team mode, developers only see their personal earnings based on their internal rate (Member Rate). Company billing rates and client financial details remain completely protected and confidential.</value>
+     <value>No. Complete data isolation is enforced by workspace role. Subcontractors with the User role can only see their tracked hours and their own personal payout report, calculated from their individual internal rate. Client-facing commercial rates, other team members’ rates, and overall workspace profit remain confidential and visible only to Owners and Managers.</value>
   </data>
   <data name="Title_HowDoesCustomCurrencyWork" xml:space="preserve">
     <value>How does custom workspace currency work (e.g. the ₵ sign)?</value>
@@ -289,10 +286,10 @@
     <value>You can choose any standard currency (USD, EUR, UAH) or define custom credit units (such as internal workspace coins ₵) for calculations and accounting within your team.</value>
   </data>
   <data name="Title_HowOftenClientReportsUpdated" xml:space="preserve">
-    <value>How often is data updated in guest client reports?</value>
+     <value>How can I share project hours with my client without constantly exporting PDFs or spreadsheets?</value>
   </data>
   <data name="Content_HowOftenClientReportsUpdated" xml:space="preserve">
-    <value>Data updates in real time, but the client only sees entries that have been officially approved (Approved) by a manager. Any drafts, in-progress timers, or developer mistakes are never shown to the client.</value>
+     <value>With a single click, generate a secure Shared Report link for your client. They can view approved hours, payment history, outstanding balance, and an optional task breakdown in a lightweight guest dashboard, without access to your internal workspace settings or private data.</value>
   </data>
   <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
     <value>No setup complexity. Just add a client, set a rate, and track time.</value>
