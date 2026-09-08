@@ -53,12 +53,12 @@
     else
     {
         <div
-            class="@InputSizeClasses w-full border transition-all duration-150 flex items-center justify-between bg-white text-slate-800 cursor-pointer select-none @BorderAndRingClasses @(IsDisabled ? "bg-slate-50 text-slate-400 cursor-not-allowed" : "")"
+            class="@(IsAutoHeight ? AutoHeightInputSizeClasses : InputSizeClasses) w-full border transition-all duration-150 flex items-center justify-between bg-white text-slate-800 cursor-pointer select-none @BorderAndRingClasses @(IsDisabled ? "bg-slate-50 text-slate-400 cursor-not-allowed" : "")"
             tabindex="@(IsDisabled ? -1 : 0)"
             @onclick="ToggleOpen"
             @onclick:stopPropagation="true">
             <div
-                class="flex items-center gap-2 truncate flex-1 min-w-0">
+                class="@(IsAutoHeight ? "flex items-center gap-2 flex-1 min-w-0" : "flex items-center gap-2 truncate flex-1 min-w-0")">
                 @if (PrefixContent != null)
                 {
                     @PrefixContent

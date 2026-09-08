@@ -86,4 +86,16 @@ public class UpdateTest: BaseTest
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
+
+    [Fact]
+    public async Task ShouldNotUpdateWhenNameExceedsMaximumLength()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TagId = _tag.Id,
+            Name = new string('a', AddRequest.NameMaxLength + 1)
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

@@ -12,6 +12,7 @@
         Label="@Label"
         Placeholder="@LocalizedPlaceholder"
         IsDisabled="@Disabled"
+        IsAutoHeight="true"
         IsFullWidth="@FullWidth"
         Size="@Size"
         Variant="@Variant">
@@ -19,7 +20,7 @@
             @if (_selectedTagList.Any())
             {
                 <div
-                    class="flex flex-wrap items-center gap-1.5 min-w-0">
+                    class="flex flex-1 flex-wrap items-center gap-1.5 min-w-0">
                     @foreach (var tag in _selectedTagList)
                     {
                         <span
@@ -45,19 +46,6 @@
             }
         </TriggerContent>
         <ChildContent>
-            @if (_state.Value.IsLoaded && !_list.Any())
-            {
-                <div
-                    class="w-full px-3 py-2 rounded-lg text-xs md:text-sm flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer select-none transition-colors font-medium"
-                    @onclick="OnAddTag">
-                    <i
-                        class="fa-solid fa-plus text-xs">
-                    </i>
-                    <span>
-                        @DashboardLocalizer["TagsBlock_AddTag"]
-                    </span>
-                </div>
-            }
             @foreach (var tag in _list)
             {
                 <AppSelectItem
@@ -71,12 +59,27 @@
                             style="@GetColorStyle(tag)">
                         </span>
                         <span
-                            class="truncate">
+                            class="truncate max-w-[8rem]"
+                            title="@tag.Name">
                             @tag.Name
                         </span>
                     </div>
                 </AppSelectItem>
             }
+            <div
+                class="mt-1 border-t border-slate-100 pt-1">
+                <button
+                    type="button"
+                    class="w-full px-3 py-2 rounded-lg text-left text-xs md:text-sm flex items-center gap-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer select-none transition-colors font-medium"
+                    @onclick="OnAddTag">
+                    <i
+                        class="fa-solid fa-plus text-xs">
+                    </i>
+                    <span>
+                        @DashboardLocalizer["TagsBlock_AddTag"]
+                    </span>
+                </button>
+            </div>
         </ChildContent>
     </AppSelect>
 </div>

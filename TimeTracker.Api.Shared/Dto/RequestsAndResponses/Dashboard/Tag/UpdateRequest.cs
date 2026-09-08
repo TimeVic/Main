@@ -12,7 +12,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
         public Guid TagId { get; set; }
 
         [Required]
-        [StringLength(200, MinimumLength = 1)]
+        [StringLength(AddRequest.NameMaxLength, MinimumLength = 1)]
         public string Name { get; set; } = string.Empty;
         
         [IsColor]

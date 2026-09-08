@@ -57,6 +57,9 @@ public partial class AppSelect<TValue> : AppBaseSelect
     public RenderFragment? TriggerContent { get; set; }
 
     [Parameter]
+    public bool IsAutoHeight { get; set; }
+
+    [Parameter]
     public RenderFragment? PrefixContent { get; set; }
 
     [Parameter]
@@ -97,6 +100,13 @@ public partial class AppSelect<TValue> : AppBaseSelect
         ComponentSize.Small => "h-8 px-2.5 py-1 text-xs rounded-lg",
         ComponentSize.Large => "h-12 px-4 py-2.5 text-base rounded-xl",
         _ => "h-10 px-3.5 py-2 text-sm rounded-xl"
+    };
+
+    protected string AutoHeightInputSizeClasses => Size switch
+    {
+        ComponentSize.Small => "min-h-8 px-2.5 py-1 text-xs rounded-lg",
+        ComponentSize.Large => "min-h-12 px-4 py-2.5 text-base rounded-xl",
+        _ => "min-h-10 px-3.5 py-2 text-sm rounded-xl"
     };
 
     protected string ButtonSizeClasses => Size switch
