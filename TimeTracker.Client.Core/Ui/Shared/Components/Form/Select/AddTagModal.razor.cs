@@ -9,6 +9,8 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class AddTagModal
 {
+    private const int TagNameMaxLength = AddRequest.NameMaxLength;
+
     [CascadingParameter]
     public AppModalInstance? ModalInstance { get; set; }
 
@@ -26,15 +28,9 @@ public partial class AddTagModal
             return;
         }
 
-        Dispatcher.Dispatch(new AddAction(model));
-        model = new AddRequest { Name = string.Empty };
-        if (ModalInstance != null)
-        {
-            _isLoading = true;
-        }
+        _isLoading = true;
         try
         {
-            await ModalInstance.Close(AppModalResult.Ok());
             var response = await ApiService.TagAddAsync(model);
             if (response != null)
             {

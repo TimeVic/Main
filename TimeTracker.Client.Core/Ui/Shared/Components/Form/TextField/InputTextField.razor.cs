@@ -27,6 +27,9 @@ public partial class InputTextField
     public bool IsUpdateOnInput { get; set; }
 
     [Parameter]
+    public int? MaxLength { get; set; }
+
+    [Parameter]
     public EventCallback<FocusEventArgs> OnBlur { get; set; }
 
     [Parameter]
@@ -111,8 +114,15 @@ public partial class InputTextField
 
     private async Task OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
     {
-        var newValue = string.Concat(_inputValue, emoji.Symbol);
+        var newValue = LimitValueLength(string.Concat(_inputValue, emoji.Symbol));
         _inputValue = newValue;
         await SetValueAsync(newValue);
+    }
+
+    private string LimitValueLength(string value)
+    {
+        return MaxLength.HasValue && value.Length > MaxLength.Value
+            ? value[..MaxLength.Value]
+            : value;
     }
 }

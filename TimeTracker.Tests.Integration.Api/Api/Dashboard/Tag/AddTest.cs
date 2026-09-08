@@ -76,4 +76,15 @@ public class AddTest: BaseTest
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
+
+    [Fact]
+    public async Task ShouldNotAddWhenNameExceedsMaximumLength()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Name = new string('a', AddRequest.NameMaxLength + 1)
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

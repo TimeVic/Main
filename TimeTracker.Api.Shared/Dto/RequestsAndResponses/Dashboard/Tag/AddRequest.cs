@@ -8,8 +8,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
 {
     public class AddRequest : IRequest<TagDto>
     {
+        public const int NameMaxLength = 50;
+
         [Required]
-        [StringLength(256, MinimumLength = 2)]
+        [StringLength(NameMaxLength, MinimumLength = 2)]
         public required string Name { get; set; }
         
         [IsColor]

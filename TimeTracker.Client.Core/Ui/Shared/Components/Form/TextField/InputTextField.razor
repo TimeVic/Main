@@ -36,6 +36,7 @@
             placeholder="@Placeholder"
             disabled="@IsDisabled"
             readonly="@IsReadOnly"
+            maxlength="@(MaxLength?.ToString())"
             class="w-full h-full bg-transparent border-0 px-3.5 py-1.5 text-inherit placeholder:text-slate-400 focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed @(StartContent != null ? "!pl-1.5" : "") @(HasEndElements ? "!pr-1.5" : "")"
             @attributes="AdditionalAttributes" />
 

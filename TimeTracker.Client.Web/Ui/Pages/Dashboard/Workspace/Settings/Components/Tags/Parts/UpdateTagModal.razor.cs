@@ -10,6 +10,8 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Component
 
 public partial class UpdateTagModal
 {
+    private const int TagNameMaxLength = AddRequest.NameMaxLength;
+
     [CascadingParameter]
     public AppModalInstance? ModalInstance { get; set; }
 
