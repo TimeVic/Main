@@ -240,4 +240,12 @@ public class ApiUrl
     public const string MessagingMessageGetList = "messaging/message/get-list";
     
     #endregion
+    
+    #region Mcp
+    
+    public const string Mcp = "mcp";
+    public const string McpSse = "mcp/sse";
+    public const string McpMessages = "mcp/messages";
+    
+    #endregion
 }

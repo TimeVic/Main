@@ -1,9 +1,14 @@
-﻿using Autofac;
+using Autofac;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
+using ModelContextProtocol.AspNetCore;
 using Persistence.Transactions.Behaviors;
 using Serilog;
+using TimeTracker.Api.Authentication;
 using TimeTracker.Api.Di.Autofac.Modules;
 using TimeTracker.Api.Middleware;
+using TimeTracker.Api.Services.Mcp.Tools;
+using TimeTracker.Api.Mcp.Tools;
 using TimeTracker.Api.WebSocket.Hubs;
 using TimeTracker.Business;
 using TimeTracker.Business.Extensions;
@@ -69,6 +74,36 @@ public class Startup
         });
         services.InitControllers(assembly);
         services.InitApiAuthServices(Configuration);
+
+        services.AddAuthentication()
+            .AddScheme<AuthenticationSchemeOptions, McpAuthenticationHandler>(
+                McpAuthenticationHandler.SchemeName,
+                _ => { }
+            );
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("McpPolicy", policy =>
+            {
+                policy.AddAuthenticationSchemes(McpAuthenticationHandler.SchemeName);
+                policy.RequireAuthenticatedUser();
+            });
+        });
+
+        services.AddHttpContextAccessor();
+        services.AddMcpServer()
+            .WithTools<ProjectTools>()
+        services.AddMcpServer(options =>
+        {
+            options.ServerInstructions = "Call get_user_context at the start of conversation to initialize context with user profile, accessible workspaces, and available projects.";
+        })
+            .WithTools<ContextTools>()
+            .WithTools<TimeEntryTools>()
+            .WithTools<SummaryReportTools>()
+            .WithHttpTransport(options =>
+            {
+                options.SessionMode = HttpServerSessionMode.Stateless;
+            });
         
         // Disable X-Frame headers
         services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
@@ -121,6 +156,8 @@ public class Startup
             
             endpoints.MapHub<MessagingHub>("/websocket/messaging");
             endpoints.MapHub<PingHub>("/websocket/ping");
+
+            endpoints.MapMcp("/mcp").RequireAuthorization("McpPolicy");
         });
     }
 }

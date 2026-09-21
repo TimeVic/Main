@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
@@ -14,6 +14,8 @@ public class ProjectDto : BaseDto
     public bool IsArchived { get; set; }
     
     public ClientDto? Client { get; set; }
+    
+    public WorkspaceDto Workspace { get; set; }
     
 #if IS_WEB_APP
     #region Select list methods

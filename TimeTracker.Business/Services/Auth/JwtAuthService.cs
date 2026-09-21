@@ -190,5 +190,89 @@ namespace TimeTracker.Business.Services.Auth
                 return default;
             }
         }
+
+        public string BuildMcpJwt(
+            Guid userId,
+            Guid workspaceId,
+            DateTime? expirationTime = null
+        )
+        {
+            var now = DateTime.UtcNow;
+            expirationTime ??= now.Add(TimeSpan.FromMinutes(_lifeTime));
+            var claims = new List<Claim>
+            {
+                new(ClaimsIdentity.DefaultNameClaimType, "mcp_user"),
+                new(ClaimsIdentity.DefaultRoleClaimType, "mcp_client"),
+                new(ClaimTypes.NameIdentifier, userId.ToString()),
+                new(TimeTracker.Business.Common.Constants.Http.AuthConstants.McpWorkspaceIdClaimType, workspaceId.ToString()),
+                new(TimeTracker.Business.Common.Constants.Http.AuthConstants.McpPurposeClaimType, TimeTracker.Business.Common.Constants.Http.AuthConstants.McpTokenPurpose)
+            };
+            var signingCredentials = new SigningCredentials(
+                _key,
+                SecurityAlgorithms.HmacSha256
+            );
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _issuer,
+                Audience = _audience,
+                NotBefore = now,
+                Subject = new ClaimsIdentity(claims),
+                Expires = expirationTime,
+                SigningCredentials = signingCredentials
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenObject = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(tokenObject);
+        }
+
+        public (Guid UserId, Guid WorkspaceId)? DecodeMcpJwt(string token)
+        public Guid? DecodeMcpJwt(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return null;
+            }
+
+            var parameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidIssuer = _issuer,
+                ValidAudience = _audience,
+                IssuerSigningKey = _key,
+                ClockSkew = TimeSpan.FromMinutes(1)
+            };
+
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var principal = handler.ValidateToken(token, parameters, out _);
+                
+                var purpose = principal.FindFirst(TimeTracker.Business.Common.Constants.Http.AuthConstants.McpPurposeClaimType)?.Value;
+                if (purpose != TimeTracker.Business.Common.Constants.Http.AuthConstants.McpTokenPurpose)
+                {
+                    return null;
+                }
+
+                var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var workspaceIdClaim = principal.FindFirst(TimeTracker.Business.Common.Constants.Http.AuthConstants.McpWorkspaceIdClaimType)?.Value;
+
+                if (Guid.TryParse(userIdClaim, out var userId) && Guid.TryParse(workspaceIdClaim, out var workspaceId))
+                if (Guid.TryParse(userIdClaim, out var userId))
+                {
+                    return (userId, workspaceId);
+                    return userId;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.LogDebug($"MCP Jwt Auth Token is Incorrect: {e.Message}", e);
+                return null;
+            }
+        }
     }
 }

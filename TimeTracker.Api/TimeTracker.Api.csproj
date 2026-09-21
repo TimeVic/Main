@@ -20,6 +20,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Content Include="..\Shared\appsettings.json" Link="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 

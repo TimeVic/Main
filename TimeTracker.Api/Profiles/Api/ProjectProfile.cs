@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Extensions;
@@ -14,6 +14,7 @@ public class ProjectProfile : Profile
             .IgnoreAllAndConstructUsing((src, mapper) =>
             {
                 var client = mapper.Mapper.Map<ClientDto>(src.Client);
+                var workspace = mapper.Mapper.Map<WorkspaceDto>(src.Client.Workspace);
                 return new ProjectDto
                 {
                     Id = src.Id,
@@ -22,6 +23,7 @@ public class ProjectProfile : Profile
                     DefaultHourlyRate = src.DefaultHourlyRate,
                     IsArchived = src.IsArchived,
                     Client = client,
+                    Workspace = workspace,
                 };
             });
         CreateMap<UpdateRequest, ProjectEntity>();

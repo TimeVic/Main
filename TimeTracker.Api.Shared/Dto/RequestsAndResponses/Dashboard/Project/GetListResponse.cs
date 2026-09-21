@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Dto;
 
@@ -6,6 +6,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 
 public class GetListResponse: PaginatedListDto<ProjectDto>
 {
+    public GetListResponse()
+    {
+    }
+
     public GetListResponse(
         ICollection<ProjectDto> responseList,
         int totalItems

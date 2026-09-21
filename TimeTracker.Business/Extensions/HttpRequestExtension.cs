@@ -5,6 +5,20 @@ namespace TimeTracker.Business.Extensions
 {
     public static class HttpRequestExtension
     {   
+        public static string? GetToken(this HttpRequest request)
+        {
+            var authHeader = request.Headers.Authorization.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            return string.IsNullOrEmpty(token) ? null : token;
+        }
+
+        public static string? GetBearerToken(this HttpRequest request) => request.GetToken();
+
         public static async Task<string> ReadBodyAsync(this HttpRequest request)
         {
             var result = "";
