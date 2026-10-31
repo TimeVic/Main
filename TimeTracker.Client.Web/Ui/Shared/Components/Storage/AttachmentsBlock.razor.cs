@@ -69,7 +69,7 @@ public partial class AttachmentsBlock
         }
 
         var extension = GetExtension(fileName);
-        return extension is "jpg" or "jpeg" or "png" or "gif" or "bmp" or "webp";
+        return extension is "jpg" or "jpeg" or "png" or "gif" or "bmp" or "webp" or "svg";
     }
 
     private bool IsAttachmentDeleting(StoredFileDto attachment)
@@ -123,7 +123,8 @@ public partial class AttachmentsBlock
             return;
         }
 
-        await InvokeAsync(StateHasChanged);
+        // Trigger re-render to display spinner without awaiting to preserve synchronous user gesture
+        StateHasChanged();
         try
         {
             var isCopied = await Js.InvokeAsync<bool>("copyImageToClipboard", [GetAttachmentUrl(attachment)]);
@@ -155,7 +156,26 @@ public partial class AttachmentsBlock
 
     private string GetAttachmentPreviewUrl(StoredFileDto attachment)
     {
+        // SVG is vector graphics and does not require cropped variants; return original URL
+        if (IsSvgAttachment(attachment))
+        {
+            return GetAttachmentUrl(attachment);
+        }
+
         return _urlService.GetStorageImageUrl(attachment, StorageImageSize.S_256);
+    }
+
+    private bool IsSvgAttachment(StoredFileDto attachment)
+    {
+        if (string.Equals(attachment.MimeType, "image/svg+xml", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var extension = !string.IsNullOrWhiteSpace(attachment.Extension)
+            ? attachment.Extension.TrimStart('.').ToLowerInvariant()
+            : GetExtension(attachment.OriginalFileName);
+        return extension == "svg";
     }
 
     private string GetAttachmentExtension(StoredFileDto attachment)

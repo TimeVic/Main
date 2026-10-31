@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Business.Common.Helpers;
+namespace TimeTracker.Business.Common.Helpers;
 
 public static class MimeTypeHelper
 {
@@ -429,6 +429,9 @@ public static class MimeTypeHelper
             {".sv4cpio", "application/x-sv4cpio"},
             {".sv4crc", "application/x-sv4crc"},
             {".svc", "application/xml"},
+            // Support SVG file uploads
+            {".svg", "image/svg+xml"},
+            {".svgz", "image/svg+xml"},
             {".swf", "application/x-shockwave-flash"},
             {".t", "application/x-troff"},
             {".tar", "application/x-tar"},
