@@ -104,27 +104,109 @@ window.copyToClipboard = async (text) => {
     }
 };
 
+async function convertBlobToPng(blob) {
+    if (blob.type === "image/png") {
+        return blob;
+    }
+
+    return new Promise((resolve, reject) => {
+        const objectUrl = URL.createObjectURL(blob);
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        img.onload = () => {
+            try {
+                let width = img.naturalWidth || img.width;
+                let height = img.naturalHeight || img.height;
+
+                // Handle SVGs or images without explicit dimensions
+                if (!width || !height) {
+                    width = 512;
+                    height = 512;
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext("2d");
+                if (!ctx) {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("Unable to create canvas 2d context"));
+                    return;
+                }
+
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob((pngBlob) => {
+                    URL.revokeObjectURL(objectUrl);
+                    if (pngBlob) {
+                        resolve(pngBlob);
+                    } else {
+                        reject(new Error("Failed to convert image to PNG blob"));
+                    }
+                }, "image/png");
+            } catch (err) {
+                URL.revokeObjectURL(objectUrl);
+                reject(err);
+            }
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(objectUrl);
+            reject(new Error("Failed to load image for clipboard conversion"));
+        };
+
+        img.src = objectUrl;
+    });
+}
+
 window.copyImageToClipboard = async (url) => {
     try {
         if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
+            console.warn("Clipboard API or ClipboardItem is not supported");
             return false;
         }
 
-        const response = await fetch(url, { credentials: "include" });
-        if (!response.ok) {
+        const fetchAndConvert = async () => {
+            let response = await fetch(url, { credentials: "include" });
+
+            // If session expired during idle, refresh via check-is-logged-in and retry
+            if (response.status === 401) {
+                try {
+                    const parsedUrl = new URL(url, window.location.href);
+                    const refreshUrl = `${parsedUrl.origin}/user/check-is-logged-in`;
+                    await fetch(refreshUrl, { credentials: "include" });
+                    response = await fetch(url, { credentials: "include" });
+                } catch (_) {}
+            }
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+            }
+
+            const blob = await response.blob();
+            return await convertBlobToPng(blob);
+        };
+
+        // Call navigator.clipboard.write with a Promise synchronously inside user activation
+        try {
+            const pngPromise = fetchAndConvert();
+            const item = new ClipboardItem({ "image/png": pngPromise });
+            await navigator.clipboard.write([item]);
+            return true;
+        } catch (promiseErr) {
+            // Fallback for older browsers that do not support Promise inside ClipboardItem
+            if (promiseErr instanceof TypeError) {
+                const pngBlob = await fetchAndConvert();
+                const item = new ClipboardItem({ "image/png": pngBlob });
+                await navigator.clipboard.write([item]);
+                return true;
+            }
+            console.error("Failed to write to clipboard:", promiseErr);
             return false;
         }
-
-        const image = await response.blob();
-        if (!image.type.startsWith("image/")) {
-            return false;
-        }
-
-        await navigator.clipboard.write([
-            new ClipboardItem({ [image.type]: image })
-        ]);
-        return true;
     } catch (err) {
+        console.error("copyImageToClipboard error:", err);
         return false;
     }
 };

@@ -1,4 +1,4 @@
-﻿using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Constants.Storage;
 
 namespace TimeTracker.Business.Common.Extensions;
 
@@ -93,6 +93,8 @@ public static class StoredFileTypeExtensions
                 "application/x-compress",
                 "application/x-zip-compressed",
                 "image/webp",
+                // Allow SVG files as attachments
+                "image/svg+xml",
             };
         }
         return new List<string>();

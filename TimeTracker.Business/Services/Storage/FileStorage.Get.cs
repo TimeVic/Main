@@ -1,4 +1,4 @@
-﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
@@ -32,6 +32,13 @@ public partial class FileStorage: IFileStorage
 
         if (imageSize.HasValue)
         {
+            // SVG files are vector images and do not require raster resizing; return the original file stream
+            if (string.Equals(file.MimeType, "image/svg+xml", StringComparison.OrdinalIgnoreCase))
+            {
+                var svgStream = await _storageClient.GetAsStream(file.CloudFilePath);
+                return (file, svgStream, file.MimeType);
+            }
+
             if (!IsImageMimeType(file.MimeType))
             {
                 throw new IncorrectFileException("Image size can be requested only for image files");
