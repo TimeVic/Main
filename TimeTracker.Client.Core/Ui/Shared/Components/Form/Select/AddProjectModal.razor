@@ -54,7 +54,7 @@
     </AppButton>
     <AppButton
         OnClick="@Submit"
-        IsLoading="_state.Value.IsSaving"
+        IsLoading="_isLoading || _state.Value.IsSaving"
         Color="@ComponentColor.Primary"
         Radius="@ButtonRadius.Medium">
         @DashboardLocalizer["Add"]

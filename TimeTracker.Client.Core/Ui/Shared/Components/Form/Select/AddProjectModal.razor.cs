@@ -27,30 +27,44 @@ public partial class AddProjectModal : IDisposable
     private EditForm _form = default!;
     
     private bool _isLoading = false;
+    private bool _isClientManuallyChanged = false;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _clientState.StateChanged += OnClientStateChanged;
-        TrySelectDefaultClient();
+        InitializeClientId();
     }
 
     protected override void OnParametersSet()
     {
-        if (InitialClientId.HasValue && model.ClientId == Guid.Empty)
+        base.OnParametersSet();
+        InitializeClientId();
+    }
+
+    private void InitializeClientId()
+    {
+        if (_isClientManuallyChanged)
+        {
+            return;
+        }
+
+        if (InitialClientId.HasValue && InitialClientId.Value != Guid.Empty)
         {
             model.ClientId = InitialClientId.Value;
         }
-        else
+        else if (model.ClientId == Guid.Empty)
         {
             TrySelectDefaultClient();
         }
-        base.OnParametersSet();
     }
 
     private void OnClientStateChanged(object? sender, EventArgs e)
     {
-        TrySelectDefaultClient();
+        if (!_isClientManuallyChanged && model.ClientId == Guid.Empty)
+        {
+            TrySelectDefaultClient();
+        }
         InvokeAsync(StateHasChanged);
     }
 
@@ -74,18 +88,13 @@ public partial class AddProjectModal : IDisposable
             return;
         }
 
-        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.AddAction(model));
-        model = new AddRequest();
-        if (ModalInstance != null)
-        {
-            _isLoading = true;
-        }
         if (model.ClientId == Guid.Empty)
         {
-            await ModalInstance.Close(AppModalResult.Ok());
             ToastService.ShowError(DashboardLocalizer["AddProjectModal_ClientRequired"].Value);
             return;
         }
+
+        _isLoading = true;
         StateHasChanged();
 
         try
@@ -114,6 +123,7 @@ public partial class AddProjectModal : IDisposable
 
     private void OnClientChanged(ClientDto? client)
     {
+        _isClientManuallyChanged = true;
         model.ClientId = client?.Id ?? Guid.Empty;
     }
 
