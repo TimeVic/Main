@@ -2,11 +2,8 @@ using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Notes;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -19,26 +16,20 @@ public class UpdateContentRequestHandler : NoteRequestHandlerBase, IAsyncRequest
         IApiRequestService apiRequestService,
         IUserDao userDao,
         ISecurityManager securityManager,
-        INoteDao noteDao,
-        IClientDao clientDao,
-        IProjectDao projectDao,
-        ITaskDao taskDao
-    ) : base(mapper, apiRequestService, userDao, securityManager, noteDao, clientDao, projectDao, taskDao)
+        INoteService noteService
+    ) : base(mapper, apiRequestService, userDao, securityManager, noteService)
     {
     }
 
     public async Task<NoteContentDto> ExecuteAsync(UpdateNoteContentRequest request)
     {
         var context = await GetWorkspaceContextAsync();
-        var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
-        EnsureDocument(note);
-        EnsureNotDraft(note);
-
-        var now = DateTime.UtcNow;
-        var content = await NoteDao.CreateContentAsync(note, NormalizeMarkdown(request.MarkdownContent), now);
-        SetUpdatedBy(note, context.User, now);
-        await NoteDao.SaveNodeAsync(note);
-
+        var content = await NoteService.UpdateContentAsync(
+            context.Workspace,
+            context.User,
+            request.NoteId,
+            request.MarkdownContent
+        );
         return Mapper.Map<NoteContentDto>(content);
     }
 }

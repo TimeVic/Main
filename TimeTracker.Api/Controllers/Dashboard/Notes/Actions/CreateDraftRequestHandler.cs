@@ -2,11 +2,8 @@ using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
-using TimeTracker.Business.Common.Constants.Notes;
-using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Notes;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -19,35 +16,20 @@ public class CreateDraftRequestHandler : NoteRequestHandlerBase, IAsyncRequestHa
         IApiRequestService apiRequestService,
         IUserDao userDao,
         ISecurityManager securityManager,
-        INoteDao noteDao,
-        IClientDao clientDao,
-        IProjectDao projectDao,
-        ITaskDao taskDao
-    ) : base(mapper, apiRequestService, userDao, securityManager, noteDao, clientDao, projectDao, taskDao)
+        INoteService noteService
+    ) : base(mapper, apiRequestService, userDao, securityManager, noteService)
     {
     }
 
     public async Task<NoteDocumentDto> ExecuteAsync(CreateNoteDraftRequest request)
     {
         var context = await GetWorkspaceContextAsync();
-        var markdownContent = NormalizeMarkdown(request.MarkdownContent);
-        var title = string.IsNullOrWhiteSpace(request.Title)
-            ? await GenerateDraftTitleAsync(context.Workspace, context.User, markdownContent)
-            : NormalizeTitle(request.Title);
-
-        // Draft notes are always Private and never nested under folders.
-        var draft = await NoteDao.CreateNodeAsync(
+        var draft = await NoteService.CreateDraftAsync(
             context.Workspace,
-            parent: null,
             context.User,
-            NoteNodeType.Document,
-            title,
-            markdownContent,
-            NoteVisibility.Private,
-            sortOrder: 0,
-            isDraft: true
+            request.Title,
+            request.MarkdownContent
         );
-
         return Mapper.Map<NoteDocumentDto>(draft);
     }
 }

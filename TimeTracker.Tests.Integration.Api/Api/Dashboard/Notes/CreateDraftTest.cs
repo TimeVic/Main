@@ -15,6 +15,7 @@ namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Notes;
 public class CreateDraftTest : BaseTest
 {
     private const string CreateDraftUrl = "/dashboard/notes/create-draft";
+    private const string DeleteDraftUrl = "/dashboard/notes/delete-draft";
     private const string GetTreeUrl = "/dashboard/notes/get-tree";
     private const string GetContentUrl = "/dashboard/notes/get-content";
 
@@ -84,6 +85,18 @@ public class CreateDraftTest : BaseTest
         Assert.True(second.IsDraft);
         Assert.Equal(NoteVisibility.Private, second.Visibility);
         Assert.Equal("Draft 2", second.Title);
+
+        // Sequence counter continues monotonically even after deleting a draft
+        var deleteResponse = await PostRequestAsync(DeleteDraftUrl, _jwtToken, new DeleteNoteDraftRequest
+        {
+            NoteId = second.Id
+        }, _workspace.Id);
+        deleteResponse.EnsureSuccessStatusCode();
+
+        var thirdResponse = await PostRequestAsync(CreateDraftUrl, _jwtToken, new CreateNoteDraftRequest(), _workspace.Id);
+        thirdResponse.EnsureSuccessStatusCode();
+        var third = await thirdResponse.GetJsonDataAsync<NoteDocumentDto>();
+        Assert.Equal("Draft 3", third.Title);
     }
 
     [Fact]

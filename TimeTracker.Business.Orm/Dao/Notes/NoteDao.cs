@@ -1,6 +1,7 @@
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Orm.Dao.System;
 using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -10,10 +11,15 @@ namespace TimeTracker.Business.Orm.Dao.Notes;
 public class NoteDao : INoteDao
 {
     private readonly IDbSessionProvider _sessionProvider;
+    private readonly ISequenceDao _sequenceDao;
 
-    public NoteDao(IDbSessionProvider sessionProvider)
+    public NoteDao(
+        IDbSessionProvider sessionProvider,
+        ISequenceDao sequenceDao
+    )
     {
         _sessionProvider = sessionProvider;
+        _sequenceDao = sequenceDao;
     }
 
     public async Task<NoteNodeEntity> CreateNodeAsync(
@@ -188,20 +194,15 @@ public class NoteDao : INoteDao
             .ToListAsync();
     }
 
-    public async Task DeleteDraftAsync(NoteNodeEntity draft)
+    public Task<long> GetNextDraftNumberAsync(UserEntity user)
     {
-        var session = _sessionProvider.CurrentSession;
-        draft.Attachments.Clear();
-        draft.Links.Clear();
-        draft.History.Clear();
-        draft.LastContent = null;
-        await session.FlushAsync();
+        return _sequenceDao.GetNextValue("NoteDraft", user.Id);
+    }
 
-        await session.Query<NoteContentEntity>()
-            .Where(item => item.NoteNode.Id == draft.Id)
-            .DeleteAsync();
-        await session.DeleteAsync(draft);
-        await session.FlushAsync();
+    public Task DeleteDraftAsync(NoteNodeEntity draft)
+    {
+        draft.ArchivedAt ??= DateTime.UtcNow;
+        return Task.CompletedTask;
     }
 
     public async Task<NoteLinkEntity> CreateLinkAsync(

@@ -44,6 +44,8 @@ public interface INoteDao : IDomainService
 
     Task<ICollection<NoteNodeEntity>> GetUserDraftsAsync(WorkspaceEntity workspace, UserEntity user);
 
+    Task<long> GetNextDraftNumberAsync(UserEntity user);
+
     Task DeleteDraftAsync(NoteNodeEntity draft);
 
     Task<NoteLinkEntity> CreateLinkAsync(

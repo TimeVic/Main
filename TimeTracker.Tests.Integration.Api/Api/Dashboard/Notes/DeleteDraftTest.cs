@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -108,7 +109,7 @@ public class DeleteDraftTest : BaseTest
     }
 
     [Fact]
-    public async Task DeleteDraftRemovesDraftCompletelyFromDatabaseAndTree()
+    public async Task DeleteDraftArchivesDraftAndExcludesFromTreeAndGetDocument()
     {
         // Tests interaction between delete-draft, get-tree, and get-document
         var createResponse = await PostRequestAsync(CreateDraftUrl, _jwtToken, new CreateNoteDraftRequest
@@ -124,9 +125,14 @@ public class DeleteDraftTest : BaseTest
         }, _workspace.Id);
         deleteResponse.EnsureSuccessStatusCode();
 
+        await FlushDbChanges(isClearSession: true);
+        var archivedEntity = await DbSessionProvider.CurrentSession.GetAsync<NoteNodeEntity>(draft.Id);
+        Assert.NotNull(archivedEntity);
+        Assert.NotNull(archivedEntity.ArchivedAt);
+
         var treeResponse = await PostRequestAsync(GetTreeUrl, _jwtToken, new GetNotesTreeRequest
         {
-            IncludeArchived = true,
+            IncludeArchived = false,
             Visibility = NoteVisibility.Private
         }, _workspace.Id);
         treeResponse.EnsureSuccessStatusCode();
@@ -134,6 +140,15 @@ public class DeleteDraftTest : BaseTest
 
         Assert.DoesNotContain(tree.Drafts, item => item.Id == draft.Id);
         Assert.DoesNotContain(tree.Nodes, item => item.Id == draft.Id);
+
+        var includeArchivedTreeResponse = await PostRequestAsync(GetTreeUrl, _jwtToken, new GetNotesTreeRequest
+        {
+            IncludeArchived = true,
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+        includeArchivedTreeResponse.EnsureSuccessStatusCode();
+        var includeArchivedTree = await includeArchivedTreeResponse.GetJsonDataAsync<GetNotesTreeResponse>();
+        Assert.DoesNotContain(includeArchivedTree.Drafts, item => item.Id == draft.Id);
 
         var getDocResponse = await PostRequestAsync(GetDocumentUrl, _jwtToken, new GetNoteDocumentRequest
         {
