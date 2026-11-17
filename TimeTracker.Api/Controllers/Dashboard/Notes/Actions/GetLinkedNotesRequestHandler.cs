@@ -36,7 +36,7 @@ public class GetLinkedNotesRequestHandler : NoteRequestHandlerBase, IAsyncReques
         var links = await NoteDao.GetLinksByEntityAsync(context.Workspace, request.EntityType, request.EntityId);
         var notes = links
             .Select(item => item.NoteNode)
-            .Where(item => item.Type == NoteNodeType.Document && item.ArchivedAt == null)
+            .Where(item => item.Type == NoteNodeType.Document && !item.IsDraft && item.ArchivedAt == null)
             .DistinctBy(item => item.Id)
             .ToList();
         var availableNotes = await GetAvailableNotesAsync(context.User, notes, AccessLevel.Read);

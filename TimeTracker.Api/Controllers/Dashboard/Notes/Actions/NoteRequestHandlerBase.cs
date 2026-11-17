@@ -225,6 +225,90 @@ public abstract class NoteRequestHandlerBase
         }
     }
 
+    protected static void EnsureDraft(NoteNodeEntity note)
+    {
+        if (note.Type != NoteNodeType.Document || !note.IsDraft)
+        {
+            throw new DataValidationException("Note must be a draft");
+        }
+    }
+
+    protected static void EnsureNotDraft(NoteNodeEntity note)
+    {
+        if (note.IsDraft)
+        {
+            throw new DataValidationException("Draft notes cannot use this action");
+        }
+    }
+
+    protected async Task<string> GenerateDraftTitleAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string? markdownContent
+    )
+    {
+        var derivedTitle = TryDeriveTitleFromMarkdown(markdownContent);
+        if (!string.IsNullOrWhiteSpace(derivedTitle))
+        {
+            return derivedTitle;
+        }
+
+        var existingDrafts = await NoteDao.GetUserDraftsAsync(workspace, user);
+        var usedNumbers = new HashSet<int>();
+        foreach (var draft in existingDrafts)
+        {
+            if (draft.Title.StartsWith("Draft ", StringComparison.OrdinalIgnoreCase)
+                && int.TryParse(draft.Title.AsSpan(6).Trim(), out var number)
+                && number > 0)
+            {
+                usedNumbers.Add(number);
+            }
+        }
+
+        var nextNumber = 1;
+        while (usedNumbers.Contains(nextNumber))
+        {
+            nextNumber++;
+        }
+
+        return $"Draft {nextNumber}";
+    }
+
+    private static string? TryDeriveTitleFromMarkdown(string? markdownContent)
+    {
+        if (string.IsNullOrWhiteSpace(markdownContent))
+        {
+            return null;
+        }
+
+        var lines = markdownContent.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.Trim().TrimStart('#', '>', '-', '*', '+', '`', ' ');
+            if (line.StartsWith("[ ] ", StringComparison.Ordinal)
+                || line.StartsWith("[x] ", StringComparison.OrdinalIgnoreCase))
+            {
+                line = line[4..].TrimStart();
+            }
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            var words = line.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+            var title = string.Join(' ', words.Take(4));
+            if (title.Length > 60)
+            {
+                title = title[..60].TrimEnd();
+            }
+
+            return string.IsNullOrWhiteSpace(title) ? null : title;
+        }
+
+        return null;
+    }
+
     protected static string NormalizeTitle(string title)
     {
         var normalizedTitle = title.Trim();

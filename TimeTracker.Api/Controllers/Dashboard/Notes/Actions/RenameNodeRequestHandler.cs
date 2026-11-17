@@ -33,6 +33,7 @@ public class RenameNodeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHan
     {
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
+        EnsureNotDraft(note);
 
         note.Title = NormalizeTitle(request.Title);
         SetUpdatedBy(note, context.User);

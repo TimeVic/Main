@@ -56,7 +56,8 @@ public class SelectDocumentEffect : Effect<SelectNoteDocumentAction>
                 throw new InvalidOperationException("Notes content response is empty.");
             }
 
-            dispatcher.Dispatch(new SetNoteDocumentAction(document, content, string.IsNullOrWhiteSpace(content.MarkdownContent)));
+            var isEditing = document.IsDraft || string.IsNullOrWhiteSpace(content.MarkdownContent);
+            dispatcher.Dispatch(new SetNoteDocumentAction(document, content, isEditing));
             dispatcher.Dispatch(new ExpandNoteParentsAction(action.NoteId));
         }
         catch (Exception e)

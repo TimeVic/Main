@@ -14,6 +14,9 @@ public partial class NotesTreeBlock
     public IReadOnlyList<NoteTreeNodeModel> TreeNodes { get; set; } = Array.Empty<NoteTreeNodeModel>();
 
     [Parameter]
+    public IReadOnlyList<NoteTreeNodeDto> Drafts { get; set; } = Array.Empty<NoteTreeNodeDto>();
+
+    [Parameter]
     public HashSet<Guid> ExpandedNodeIds { get; set; } = new();
 
     [Parameter]
@@ -21,6 +24,12 @@ public partial class NotesTreeBlock
 
     [Parameter]
     public bool IsLoading { get; set; }
+
+    [Parameter]
+    public bool IsCreatingDraft { get; set; }
+
+    [Parameter]
+    public bool IsDeletingDraft { get; set; }
 
     [Parameter]
     public bool IsEmbedded { get; set; }
@@ -48,6 +57,12 @@ public partial class NotesTreeBlock
 
     [Parameter]
     public EventCallback<NoteTreeNodeDto> ArchiveRequested { get; set; }
+
+    [Parameter]
+    public EventCallback CreateDraftRequested { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> DeleteDraftRequested { get; set; }
 
     private string ContainerClass => IsEmbedded
         ? "flex min-h-[720px] w-full flex-col bg-white"

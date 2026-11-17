@@ -67,6 +67,9 @@ public partial class MarkdownEdit
     public EventCallback OnClickedToView { get; set; }
 
     [Parameter]
+    public EventCallback OnBlur { get; set; }
+
+    [Parameter]
     public bool IsEditMode { get; set; }
 
     [Parameter]
@@ -169,6 +172,11 @@ public partial class MarkdownEdit
         }
 
         _isActionButtonsEnabled = _isActionButtonsEnabled || _editValue != _value;
+    }
+
+    private async Task OnEditorBlur()
+    {
+        await OnBlur.InvokeAsync();
     }
 
     private async Task OnClickView()
@@ -287,6 +295,16 @@ public partial class MarkdownEdit
         _editValue = _value;
         _isActionButtonsEnabled = false;
         ResizeEditBox(_editValue);
+    }
+
+    public async Task FocusAsync()
+    {
+        if (!_isShowEditBox || _editorMode != MarkdownEditorMode.Edit)
+        {
+            return;
+        }
+
+        await _editor.FocusAsync();
     }
 
     private void TrackSubmittedValue(string value)

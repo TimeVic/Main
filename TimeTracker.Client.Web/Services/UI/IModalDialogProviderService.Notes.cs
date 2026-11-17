@@ -34,4 +34,13 @@ public partial interface IModalDialogProviderService
         EventCallback<RenameNoteNodeRequest>? onSubmit = null,
         Action<AppModalResult>? onClose = null
     );
+
+    Task<AppModalResult> ShowPromoteDraftModal(
+        Guid draftId,
+        string initialTitle,
+        bool isWorkspaceVisibilityAllowed,
+        IReadOnlyList<NoteTreeNodeDto> privateNodes,
+        EventCallback<PromoteNoteDraftRequest>? onSubmit = null,
+        Action<AppModalResult>? onClose = null
+    );
 }

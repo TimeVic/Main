@@ -272,4 +272,56 @@ public partial class NotesPage
             Dispatcher.Dispatch(new ArchiveNoteNodeAction());
         }
     }
+
+    private Task CreateDraft()
+    {
+        Dispatcher.Dispatch(new CreateNoteDraftAction());
+        return Task.CompletedTask;
+    }
+
+    private Task SaveDraft()
+    {
+        Dispatcher.Dispatch(new SaveNoteDraftAction());
+        return Task.CompletedTask;
+    }
+
+    private Task DeleteDraft(Guid noteId)
+    {
+        Dispatcher.Dispatch(new DeleteNoteDraftAction(noteId));
+        return Task.CompletedTask;
+    }
+
+    private Task ClearDraftEditorFocus()
+    {
+        Dispatcher.Dispatch(new ClearDraftEditorFocusRequestAction());
+        return Task.CompletedTask;
+    }
+
+    private async Task OpenPromoteDraftModal()
+    {
+        if (State.CurrentDocument == null || !State.CurrentDocument.IsDraft)
+        {
+            return;
+        }
+
+        var isWorkspaceVisibilityAllowed = !IsSoloWorkspace
+            && SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
+        var privateNodes = State.FlatNodes
+            .Where(item => item.Visibility == NoteVisibility.Private)
+            .ToList();
+
+        await ModalDialogService.ShowPromoteDraftModal(
+            draftId: State.CurrentDocument.Id,
+            initialTitle: State.EditorTitle,
+            isWorkspaceVisibilityAllowed: isWorkspaceVisibilityAllowed,
+            privateNodes: privateNodes,
+            onSubmit: EventCallback.Factory.Create<PromoteNoteDraftRequest>(this, PromoteDraft)
+        );
+    }
+
+    private Task PromoteDraft(PromoteNoteDraftRequest request)
+    {
+        Dispatcher.Dispatch(new PromoteNoteDraftAction(request));
+        return Task.CompletedTask;
+    }
 }

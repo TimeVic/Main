@@ -45,11 +45,19 @@ public class GetTreeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandle
             }
         }
 
+        var visibleNodes = nodes.Where(item => availableNodeIds.Contains(item.Id)).ToList();
+        var treeNodes = visibleNodes.Where(item => !item.IsDraft).ToList();
+        var drafts = visibility == NoteVisibility.Private
+            ? visibleNodes
+                .Where(item => item.IsDraft)
+                .OrderByDescending(item => item.UpdatedAt ?? item.CreatedAt)
+                .ToList()
+            : [];
+
         return new GetNotesTreeResponse
         {
-            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(
-                nodes.Where(item => availableNodeIds.Contains(item.Id))
-            )
+            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(treeNodes),
+            Drafts = Mapper.Map<ICollection<NoteTreeNodeDto>>(drafts)
         };
     }
 }

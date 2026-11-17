@@ -9,6 +9,8 @@ public record NotesState
 {
     public IReadOnlyList<NoteTreeNodeDto> FlatNodes { get; init; } = [];
 
+    public IReadOnlyList<NoteTreeNodeDto> Drafts { get; init; } = [];
+
     public NoteVisibility ActiveMode { get; init; } = NoteVisibility.Workspace;
 
     public HashSet<Guid> ExpandedNodeIds { get; init; } = [];
@@ -36,6 +38,14 @@ public record NotesState
     public bool IsEditingDocument { get; init; }
 
     public bool IsCreatingNode { get; init; }
+
+    public bool IsCreatingDraft { get; init; }
+
+    public bool IsDeletingDraft { get; init; }
+
+    public bool IsPromotingDraft { get; init; }
+
+    public bool ShouldFocusDraftEditor { get; init; }
 
     public bool IsRenamingNode { get; init; }
 

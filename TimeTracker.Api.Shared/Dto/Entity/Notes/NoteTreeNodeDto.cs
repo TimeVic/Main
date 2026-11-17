@@ -17,6 +17,8 @@ public class NoteTreeNodeDto : IResponse
 
     public NoteVisibility Visibility { get; set; }
 
+    public bool IsDraft { get; set; }
+
     public int SortOrder { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

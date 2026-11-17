@@ -32,6 +32,7 @@ public class UpdateContentRequestHandler : NoteRequestHandlerBase, IAsyncRequest
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
         EnsureDocument(note);
+        EnsureNotDraft(note);
 
         var now = DateTime.UtcNow;
         var content = await NoteDao.CreateContentAsync(note, NormalizeMarkdown(request.MarkdownContent), now);

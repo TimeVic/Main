@@ -168,6 +168,14 @@ public interface IApiService
 
     Task<NoteTreeNodeDto?> NotesArchiveNodeAsync(ArchiveNoteNodeRequest model);
 
+    Task<NoteDocumentDto?> NotesCreateDraftAsync(CreateNoteDraftRequest model);
+
+    Task<NoteDocumentDto?> NotesUpdateDraftAsync(UpdateNoteDraftRequest model);
+
+    Task NotesDeleteDraftAsync(DeleteNoteDraftRequest model);
+
+    Task<NoteDocumentDto?> NotesPromoteDraftAsync(PromoteNoteDraftRequest model);
+
     Task<GetLinkedNotesResponse?> NotesGetLinkedNotesAsync(GetLinkedNotesRequest model);
 
     Task<NoteLinkDto?> NotesCreateLinkAsync(CreateNoteLinkRequest model);

@@ -1154,6 +1154,48 @@ public class NotesTest : BaseTest
         Assert.DoesNotContain(privateTree.Nodes, item => item.Id == workspaceDoc.Id);
     }
 
+    [Fact]
+    public async Task DraftCannotUseRegularDocumentMutationEndpoints()
+    {
+        var createDraftResponse = await PostRequestAsync("/dashboard/notes/create-draft", _jwtToken, new CreateNoteDraftRequest(), _workspace.Id);
+        createDraftResponse.EnsureSuccessStatusCode();
+        var draft = await createDraftResponse.GetJsonDataAsync<NoteDocumentDto>();
+
+        var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = draft.Id,
+            Title = "New title"
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, updateDocResponse.StatusCode);
+
+        var updateContentResponse = await PostRequestAsync(UpdateContentUrl, _jwtToken, new UpdateNoteContentRequest
+        {
+            NoteId = draft.Id,
+            MarkdownContent = "New content"
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, updateContentResponse.StatusCode);
+
+        var renameResponse = await PostRequestAsync(RenameNodeUrl, _jwtToken, new RenameNoteNodeRequest
+        {
+            NoteId = draft.Id,
+            Title = "Renamed"
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, renameResponse.StatusCode);
+
+        var moveResponse = await PostRequestAsync(MoveNodeUrl, _jwtToken, new MoveNoteNodeRequest
+        {
+            NoteId = draft.Id,
+            ParentId = null
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, moveResponse.StatusCode);
+
+        var archiveResponse = await PostRequestAsync(ArchiveNodeUrl, _jwtToken, new ArchiveNoteNodeRequest
+        {
+            NoteId = draft.Id
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, archiveResponse.StatusCode);
+    }
+
     private async Task<GetLinkedNotesResponse> GetLinkedNotesAsync(Guid projectId, string? token = null)
     {
         var response = await PostRequestAsync(GetLinkedNotesUrl, token ?? _jwtToken, new GetLinkedNotesRequest

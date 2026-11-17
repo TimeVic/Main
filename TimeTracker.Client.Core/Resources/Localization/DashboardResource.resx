@@ -788,6 +788,29 @@
   <data name="Notes_EmptyWorkspaceDescription" xml:space="preserve"><value>No workspace notes yet. Create shared notes for your team.</value></data>
   <data name="Notes_EmptyPrivateDescription" xml:space="preserve"><value>No private notes yet. Create notes visible only to you.</value></data>
   <data name="Notes_ParentVisibilityMismatch" xml:space="preserve"><value>Parent and child notes must have the same visibility.</value></data>
+  <data name="Notes_Drafts" xml:space="preserve"><value>Drafts</value></data>
+  <data name="Notes_NewDraft" xml:space="preserve"><value>New draft</value></data>
+  <data name="Notes_EmptyDrafts" xml:space="preserve"><value>No drafts yet. Click + for quick notes.</value></data>
+  <data name="Notes_DeleteDraft" xml:space="preserve"><value>Delete draft</value></data>
+  <data name="Notes_DraftBadge" xml:space="preserve"><value>Draft</value></data>
+  <data name="Notes_DraftTitlePlaceholder" xml:space="preserve"><value>Draft title</value></data>
+  <data name="Notes_DraftMarkdownPlaceholder" xml:space="preserve"><value>Write quick notes, logs, snippets or links...</value></data>
+  <data name="Notes_CopyAll" xml:space="preserve"><value>Copy all</value></data>
+  <data name="Notes_CopiedToClipboard" xml:space="preserve"><value>Copied to clipboard</value></data>
+  <data name="Notes_CopyToClipboardError" xml:space="preserve"><value>Unable to copy to clipboard</value></data>
+  <data name="Notes_SaveToNotes" xml:space="preserve"><value>Save to Notes</value></data>
+  <data name="Notes_PromoteDraftTitle" xml:space="preserve"><value>Save draft as note</value></data>
+  <data name="Notes_PromoteDraftDescription" xml:space="preserve"><value>Choose a title, space and folder to keep this draft as a regular note.</value></data>
+  <data name="Notes_Visibility" xml:space="preserve"><value>Visibility</value></data>
+  <data name="Notes_CreateDraftError" xml:space="preserve"><value>Failed to create draft</value></data>
+  <data name="Notes_SaveDraftError" xml:space="preserve"><value>Failed to save draft</value></data>
+  <data name="Notes_DeleteDraftError" xml:space="preserve"><value>Failed to delete draft</value></data>
+  <data name="Notes_PromoteDraftError" xml:space="preserve"><value>Failed to save draft as note</value></data>
+  <data name="Notes_PromoteDraftSuccess" xml:space="preserve"><value>Draft saved to Notes</value></data>
+  <data name="Notes_DraftAutoSaveHint" xml:space="preserve"><value>Auto-saves on blur</value></data>
+  <data name="Notes_DraftTimeJustNow" xml:space="preserve"><value>Just now</value></data>
+  <data name="Notes_DraftTimeMinutesAgo" xml:space="preserve"><value>{0}m ago</value></data>
+  <data name="Notes_DraftTimeHoursAgo" xml:space="preserve"><value>{0}h ago</value></data>
   <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Client</value></data>
   <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Project</value></data>
   <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Task</value></data>

@@ -187,6 +187,10 @@ public class ApiUrl
     public const string NotesRenameNode = "dashboard/notes/rename-node";
     public const string NotesMoveNode = "dashboard/notes/move-node";
     public const string NotesArchiveNode = "dashboard/notes/archive-node";
+    public const string NotesCreateDraft = "dashboard/notes/create-draft";
+    public const string NotesUpdateDraft = "dashboard/notes/update-draft";
+    public const string NotesDeleteDraft = "dashboard/notes/delete-draft";
+    public const string NotesPromoteDraft = "dashboard/notes/promote-draft";
     public const string NotesGetLinkedNotes = "dashboard/notes/get-linked-notes";
     public const string NotesCreateLink = "dashboard/notes/create-link";
     public const string NotesDeleteLink = "dashboard/notes/delete-link";

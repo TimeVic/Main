@@ -33,6 +33,7 @@ public class ArchiveNodeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHa
     {
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
+        EnsureNotDraft(note);
         await EnsureCanUseVisibilityAsync(context.Workspace, context.User, note.Visibility);
 
         var allNodes = await NoteDao.GetWorkspaceNodesAsync(context.Workspace);

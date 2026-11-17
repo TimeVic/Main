@@ -33,6 +33,7 @@ public class CreateLinkRequestHandler : NoteRequestHandlerBase, IAsyncRequestHan
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
         EnsureDocument(note);
+        EnsureNotDraft(note);
         await EnsureLinkedEntityExistsAsync(context.Workspace, request.EntityType, request.EntityId);
 
         if (await NoteDao.IsLinkExistsAsync(note, request.EntityType, request.EntityId))

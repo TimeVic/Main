@@ -24,7 +24,8 @@ public class NoteDao : INoteDao
         string title,
         string? initialMarkdownContent,
         NoteVisibility visibility,
-        int sortOrder
+        int sortOrder,
+        bool isDraft = false
     )
     {
         var now = DateTime.UtcNow;
@@ -35,6 +36,7 @@ public class NoteDao : INoteDao
             Type = type,
             Title = title,
             Visibility = visibility,
+            IsDraft = isDraft,
             SortOrder = sortOrder,
             CreatedByUser = createdByUser,
             UpdatedByUser = createdByUser,
@@ -110,7 +112,8 @@ public class NoteDao : INoteDao
     {
         var query = _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
-            .Where(item => item.ArchivedAt == null);
+            .Where(item => item.ArchivedAt == null)
+            .Where(item => !item.IsDraft);
 
         query = parent == null
             ? query.Where(item => item.Parent == null)
@@ -171,6 +174,34 @@ public class NoteDao : INoteDao
         return await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
             .ToListAsync();
+    }
+
+    public async Task<ICollection<NoteNodeEntity>> GetUserDraftsAsync(WorkspaceEntity workspace, UserEntity user)
+    {
+        return await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(item => item.CreatedByUser.Id == user.Id)
+            .Where(item => item.IsDraft)
+            .Where(item => item.Visibility == NoteVisibility.Private)
+            .Where(item => item.ArchivedAt == null)
+            .OrderByDescending(item => item.UpdatedAt ?? item.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task DeleteDraftAsync(NoteNodeEntity draft)
+    {
+        var session = _sessionProvider.CurrentSession;
+        draft.Attachments.Clear();
+        draft.Links.Clear();
+        draft.History.Clear();
+        draft.LastContent = null;
+        await session.FlushAsync();
+
+        await session.Query<NoteContentEntity>()
+            .Where(item => item.NoteNode.Id == draft.Id)
+            .DeleteAsync();
+        await session.DeleteAsync(draft);
+        await session.FlushAsync();
     }
 
     public async Task<NoteLinkEntity> CreateLinkAsync(
@@ -254,7 +285,7 @@ public class NoteDao : INoteDao
 
     private async Task CreateHistoryAsync(NoteNodeEntity node)
     {
-        if (node.Type != NoteNodeType.Document)
+        if (node.Type != NoteNodeType.Document || node.IsDraft)
         {
             return;
         }
