@@ -807,7 +807,6 @@
   <data name="Notes_DeleteDraftError" xml:space="preserve"><value>Failed to delete draft</value></data>
   <data name="Notes_PromoteDraftError" xml:space="preserve"><value>Failed to save draft as note</value></data>
   <data name="Notes_PromoteDraftSuccess" xml:space="preserve"><value>Draft saved to Notes</value></data>
-  <data name="Notes_DraftAutoSaveHint" xml:space="preserve"><value>Auto-saves on blur</value></data>
   <data name="Notes_DraftTimeJustNow" xml:space="preserve"><value>Just now</value></data>
   <data name="Notes_DraftTimeMinutesAgo" xml:space="preserve"><value>{0}m ago</value></data>
   <data name="Notes_DraftTimeHoursAgo" xml:space="preserve"><value>{0}h ago</value></data>
