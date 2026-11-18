@@ -807,7 +807,6 @@
   <data name="Notes_DeleteDraftError" xml:space="preserve"><value>Не вдалося видалити чернетку</value></data>
   <data name="Notes_PromoteDraftError" xml:space="preserve"><value>Не вдалося зберегти чернетку як нотатку</value></data>
   <data name="Notes_PromoteDraftSuccess" xml:space="preserve"><value>Чернетку збережено в нотатки</value></data>
-  <data name="Notes_DraftAutoSaveHint" xml:space="preserve"><value>Автозбереження при знятті фокуса</value></data>
   <data name="Notes_DraftTimeJustNow" xml:space="preserve"><value>Щойно</value></data>
   <data name="Notes_DraftTimeMinutesAgo" xml:space="preserve"><value>{0} хв тому</value></data>
   <data name="Notes_DraftTimeHoursAgo" xml:space="preserve"><value>{0} год тому</value></data>
