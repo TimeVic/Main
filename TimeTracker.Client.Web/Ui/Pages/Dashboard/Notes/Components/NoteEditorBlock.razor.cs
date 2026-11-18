@@ -96,6 +96,8 @@ public partial class NoteEditorBlock
 
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
     private MarkdownEdit? _markdownEdit;
+    private bool _hasHandledDraftFocus;
+    private Guid? _focusedDraftNoteId;
 
     private bool IsEffectiveEditing => Document != null && (Document.IsDraft || IsEditing);
 
@@ -151,12 +153,34 @@ public partial class NoteEditorBlock
         }
     }
 
+    protected override void OnParametersSet()
+    {
+        if (!ShouldFocusDraftEditor || Document?.Id != _focusedDraftNoteId)
+        {
+            _hasHandledDraftFocus = false;
+            _focusedDraftNoteId = null;
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (ShouldFocusDraftEditor && Document?.IsDraft == true && _markdownEdit != null)
+        if (!ShouldFocusDraftEditor || _hasHandledDraftFocus || Document?.IsDraft != true || _markdownEdit == null)
+        {
+            return;
+        }
+
+        // Guard before dispatching focus clear: OnDraftEditorFocused dispatches inside Fluxor's active
+        // CreateDraft dispatch pass, which defers the state update and otherwise re-enters OnAfterRenderAsync.
+        _hasHandledDraftFocus = true;
+        _focusedDraftNoteId = Document.Id;
+
+        try
+        {
+            await _markdownEdit.FocusAsync();
+        }
+        finally
         {
             await OnDraftEditorFocused.InvokeAsync();
-            await _markdownEdit.FocusAsync();
         }
     }
 
