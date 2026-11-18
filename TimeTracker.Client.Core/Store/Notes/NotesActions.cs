@@ -13,7 +13,10 @@ public record struct LoadNotesTreeAction(
 
 public record struct SetNotesActiveModeAction(NoteVisibility Mode);
 
-public record struct SetNotesTreeAction(IReadOnlyList<NoteTreeNodeDto> Nodes);
+public record struct SetNotesTreeAction(
+    IReadOnlyList<NoteTreeNodeDto> Nodes,
+    IReadOnlyList<NoteTreeNodeDto> Drafts
+);
 
 public record struct SetNotesTreeLoadingAction(bool IsLoading);
 
@@ -88,3 +91,32 @@ public record struct ArchiveNoteNodeAction;
 public record struct ReplaceNoteTreeNodeAction(NoteTreeNodeDto Node);
 
 public record struct UpdateNoteTreeNodeFromDocumentAction(NoteDocumentDto Document);
+
+public record struct CreateNoteDraftAction;
+
+public record struct SetNotesDraftCreatingAction(bool IsCreating);
+
+public record struct SaveNoteDraftAction;
+
+public record struct SyncSavedNoteDraftAction(
+    NoteDocumentDto Document,
+    NoteContentDto Content,
+    string SubmittedTitle,
+    string SubmittedMarkdown
+);
+
+public record struct DeleteNoteDraftAction(Guid NoteId);
+
+public record struct SetNotesDraftDeletingAction(bool IsDeleting);
+
+public record struct PromoteNoteDraftAction(PromoteNoteDraftRequest Request);
+
+public record struct SetNotesDraftPromotingAction(bool IsPromoting);
+
+public record struct ReplaceNoteDraftNodeAction(NoteTreeNodeDto Draft);
+
+public record struct RemoveNoteDraftNodeAction(Guid NoteId);
+
+public record struct RequestDraftEditorFocusAction;
+
+public record struct ClearDraftEditorFocusRequestAction;

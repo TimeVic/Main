@@ -185,7 +185,7 @@ public class SecurityManager: ISecurityManager
 
         return false;
     }
-    
+
     private async Task<bool> HasAccessToClientAsync(AccessLevel accessLevel, UserEntity user, ClientEntity client)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, client.Workspace);
@@ -209,7 +209,7 @@ public class SecurityManager: ISecurityManager
 
         return false;
     }
-    
+
     private async Task<bool> HasAccessToProject(AccessLevel accessLevel, UserEntity user, ProjectEntity project)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, project);
@@ -220,7 +220,7 @@ public class SecurityManager: ISecurityManager
                 && accessType == MembershipAccessType.User
             );
     }
-    
+
     private async Task<bool> HasAccessToMemberPayment(AccessLevel accessLevel, UserEntity user, MemberPaymentEntity payment)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
@@ -285,7 +285,7 @@ public class SecurityManager: ISecurityManager
             return false;
         }
 
-        if (noteNode.Visibility == NoteVisibility.Private)
+        if (noteNode.IsDraft || noteNode.Visibility == NoteVisibility.Private)
         {
             return noteNode.CreatedByUser.Id == user.Id;
         }

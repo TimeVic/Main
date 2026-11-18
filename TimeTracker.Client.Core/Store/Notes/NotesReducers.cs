@@ -59,6 +59,7 @@ public class NotesReducers
         return state with
         {
             FlatNodes = action.Nodes,
+            Drafts = action.Drafts,
             IsTreeLoaded = true
         };
     }
@@ -125,7 +126,8 @@ public class NotesReducers
             EditorMarkdown = action.Content.MarkdownContent,
             EditorVisibility = action.Document.Visibility,
             IsEditingDocument = action.IsEditing,
-            IsSaveError = false
+            IsSaveError = false,
+            ShouldFocusDraftEditor = false
         };
     }
 
@@ -150,6 +152,7 @@ public class NotesReducers
                 Title = document.Title,
                 LastContentId = document.LastContentId,
                 Visibility = document.Visibility,
+                IsDraft = document.IsDraft,
                 CreatedAt = document.CreatedAt,
                 UpdatedAt = document.UpdatedAt,
                 Links = document.Links,
@@ -253,7 +256,8 @@ public class NotesReducers
             EditorMarkdown = string.Empty,
             EditorVisibility = NoteVisibility.Workspace,
             IsEditingDocument = false,
-            IsSaveError = false
+            IsSaveError = false,
+            ShouldFocusDraftEditor = false
         };
     }
 
@@ -393,9 +397,11 @@ public class NotesReducers
                 Title = action.Node.Title,
                 LastContentId = currentDocument.LastContentId,
                 Visibility = currentDocument.Visibility,
+                IsDraft = currentDocument.IsDraft,
                 CreatedAt = currentDocument.CreatedAt,
                 UpdatedAt = currentDocument.UpdatedAt,
-                Links = currentDocument.Links
+                Links = currentDocument.Links,
+                Attachments = currentDocument.Attachments
             };
             editorTitle = action.Node.Title;
         }
@@ -433,6 +439,128 @@ public class NotesReducers
         return state with
         {
             FlatNodes = ReplaceNode(state.FlatNodes, updatedNode)
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetNotesDraftCreatingReducer(NotesState state, SetNotesDraftCreatingAction action)
+    {
+        return state with
+        {
+            IsCreatingDraft = action.IsCreating
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetNotesDraftDeletingReducer(NotesState state, SetNotesDraftDeletingAction action)
+    {
+        return state with
+        {
+            IsDeletingDraft = action.IsDeleting
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetNotesDraftPromotingReducer(NotesState state, SetNotesDraftPromotingAction action)
+    {
+        return state with
+        {
+            IsPromotingDraft = action.IsPromoting
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState RequestDraftEditorFocusReducer(NotesState state, RequestDraftEditorFocusAction action)
+    {
+        return state with
+        {
+            ShouldFocusDraftEditor = true
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState ClearDraftEditorFocusRequestReducer(NotesState state, ClearDraftEditorFocusRequestAction action)
+    {
+        return state with
+        {
+            ShouldFocusDraftEditor = false
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState ReplaceNoteDraftNodeReducer(NotesState state, ReplaceNoteDraftNodeAction action)
+    {
+        var drafts = ReplaceNode(state.Drafts, action.Draft)
+            .OrderByDescending(item => item.UpdatedAt ?? DateTime.MinValue)
+            .ToList();
+
+        return state with
+        {
+            Drafts = drafts
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState RemoveNoteDraftNodeReducer(NotesState state, RemoveNoteDraftNodeAction action)
+    {
+        var drafts = state.Drafts
+            .Where(item => item.Id != action.NoteId)
+            .ToList();
+        var isCurrent = state.SelectedNoteId == action.NoteId;
+
+        return state with
+        {
+            Drafts = drafts,
+            SelectedNoteId = isCurrent ? null : state.SelectedNoteId,
+            CurrentDocument = isCurrent ? null : state.CurrentDocument,
+            CurrentContent = isCurrent ? null : state.CurrentContent,
+            EditorTitle = isCurrent ? string.Empty : state.EditorTitle,
+            EditorMarkdown = isCurrent ? string.Empty : state.EditorMarkdown,
+            EditorVisibility = isCurrent ? NoteVisibility.Workspace : state.EditorVisibility,
+            IsEditingDocument = isCurrent ? false : state.IsEditingDocument,
+            IsSaveError = isCurrent ? false : state.IsSaveError,
+            ShouldFocusDraftEditor = isCurrent ? false : state.ShouldFocusDraftEditor
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SyncSavedNoteDraftReducer(NotesState state, SyncSavedNoteDraftAction action)
+    {
+        var draftNode = new NoteTreeNodeDto
+        {
+            Id = action.Document.Id,
+            ParentId = null,
+            Type = NoteNodeType.Document,
+            Title = action.Document.Title,
+            LastContentId = action.Document.LastContentId,
+            Visibility = action.Document.Visibility,
+            IsDraft = true,
+            UpdatedAt = action.Document.UpdatedAt
+        };
+        var drafts = ReplaceNode(state.Drafts, draftNode)
+            .OrderByDescending(item => item.UpdatedAt ?? DateTime.MinValue)
+            .ToList();
+
+        if (state.SelectedNoteId != action.Document.Id)
+        {
+            return state with
+            {
+                Drafts = drafts
+            };
+        }
+
+        var nextEditorTitle = state.EditorTitle == action.SubmittedTitle
+            ? action.Document.Title
+            : state.EditorTitle;
+
+        return state with
+        {
+            Drafts = drafts,
+            CurrentDocument = action.Document,
+            CurrentContent = action.Content,
+            EditorTitle = nextEditorTitle,
+            IsEditingDocument = true,
+            IsSaveError = false
         };
     }
 

@@ -62,9 +62,12 @@
                     <NotesTreeBlock
                         ActiveMode="@ActiveMode"
                         TreeNodes="@TreeNodes"
+                        Drafts="@State.Drafts"
                         ExpandedNodeIds="@State.ExpandedNodeIds"
                         SelectedNoteId="@State.SelectedNoteId"
                         IsLoading="State.IsTreeLoading"
+                        IsCreatingDraft="State.IsCreatingDraft"
+                        IsDeletingDraft="State.IsDeletingDraft"
                         IsEmbedded="true"
                         IsEditingAllowed="@CanManageTree"
                         ToggleExpandedRequested="@ToggleExpanded"
@@ -73,7 +76,9 @@
                         CreateNoteRequested="@OpenCreateNoteModal"
                         RenameRequested="@OpenRenameModal"
                         MoveRequested="@OpenMoveModal"
-                        ArchiveRequested="@OpenArchiveConfirmation"/>
+                        ArchiveRequested="@OpenArchiveConfirmation"
+                        CreateDraftRequested="@CreateDraft"
+                        DeleteDraftRequested="@DeleteDraft"/>
                 </StartContent>
                 <EndContent>
                     <NoteEditorBlock
@@ -83,6 +88,9 @@
                         Visibility="@State.EditorVisibility"
                         IsLoading="State.IsDocumentLoading"
                         IsSaving="State.IsDocumentSaving"
+                        IsDeletingDraft="State.IsDeletingDraft"
+                        IsPromotingDraft="State.IsPromotingDraft"
+                        ShouldFocusDraftEditor="State.ShouldFocusDraftEditor"
                         IsDirty="@IsDocumentDirty"
                         IsEditing="State.IsEditingDocument"
                         IsEditingAllowed="@CanEditDocument"
@@ -94,7 +102,11 @@
                         MarkdownContentChanged="@OnMarkdownChanged"
                         OnEdit="@StartDocumentEditing"
                         OnCancel="@CancelDocumentEditing"
-                        OnSave="@SaveDocument"/>
+                        OnSave="@SaveDocument"
+                        OnSaveDraft="@SaveDraft"
+                        OnDeleteDraft="@DeleteDraft"
+                        OnPromoteDraft="@OpenPromoteDraftModal"
+                        OnDraftEditorFocused="@ClearDraftEditorFocus"/>
                 </EndContent>
             </ResizableSplitBlock>
         </AppCardBody>

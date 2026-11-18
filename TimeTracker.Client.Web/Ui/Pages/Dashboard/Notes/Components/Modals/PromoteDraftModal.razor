@@ -1,0 +1,101 @@
+@using TimeTracker.Business.Common.Constants.Notes
+
+@inherits BaseReactiveComponent
+
+<div class="notes-node-modal">
+    <AppModalHeader
+        Title="@DashboardLocalizer["Notes_PromoteDraftTitle"]"
+        Description="@DashboardLocalizer["Notes_PromoteDraftDescription"]"
+        Icon="fa-regular fa-note-sticky"
+        Color="@ComponentColor.Primary" />
+    <AppModalBody
+        Class="pt-3">
+        <EditForm
+            Context="form"
+            @ref="_form"
+            Model="@_model"
+            OnSubmit="@SubmitForm"
+            novalidate>
+            <DataAnnotationsValidator/>
+            <button
+                type="submit"
+                class="sr-only"
+                tabindex="-1"
+                aria-hidden="true">
+                @DashboardLocalizer["Submit"]
+            </button>
+            <div
+                class="grid min-w-0 gap-5">
+                <div
+                    class="min-w-0">
+                    <InputTextField
+                        Class="min-w-0 max-w-full"
+                        FullWidth="true"
+                        Label="@DashboardLocalizer["Title"].Value"
+                        Placeholder="@DashboardLocalizer["Notes_NoteTitlePlaceholder"].Value"
+                        @bind-Value="_model.Title" />
+                </div>
+
+                @if (IsWorkspaceVisibilityAllowed)
+                {
+                    <div
+                        class="min-w-0">
+                        <label
+                            class="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500">
+                            @DashboardLocalizer["Notes_Visibility"]
+                        </label>
+                        <div
+                            class="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
+                            <button
+                                type="button"
+                                class="@GetVisibilityButtonClass(NoteVisibility.Private)"
+                                @onclick="@(() => SetVisibilityAsync(NoteVisibility.Private))">
+                                <i class="fa-solid fa-user-lock mr-1.5 text-xs"></i>
+                                <span>@DashboardLocalizer["Notes_ModePrivate"]</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="@GetVisibilityButtonClass(NoteVisibility.Workspace)"
+                                @onclick="@(() => SetVisibilityAsync(NoteVisibility.Workspace))">
+                                <i class="fa-solid fa-users mr-1.5 text-xs"></i>
+                                <span>@DashboardLocalizer["Notes_ModeWorkspace"]</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                @if (_isLoadingFolders)
+                {
+                    <div
+                        class="space-y-2">
+                        <AppSkeleton Class="h-8 w-full rounded-lg" />
+                        <AppSkeleton Class="h-8 w-3/4 rounded-lg" />
+                    </div>
+                }
+                else
+                {
+                    <MoveNoteFolderSelect
+                        Nodes="@VisibleFolderNodes"
+                        SelectedFolderId="@_model.ParentId"
+                        SelectedFolderIdChanged="@OnParentChanged" />
+                }
+            </div>
+        </EditForm>
+    </AppModalBody>
+    <AppModalFooter>
+        <AppButton
+            Color="@ComponentColor.Default"
+            Variant="@ButtonVariant.Outlined"
+            Radius="@ButtonRadius.Medium"
+            OnClick="@(() => ModalInstance?.Close(AppModalResult.Cancel()))">
+            @DashboardLocalizer["Cancel"]
+        </AppButton>
+        <AppButton
+            Color="@ComponentColor.Primary"
+            Radius="@ButtonRadius.Medium"
+            IsLoading="@IsSaving"
+            OnClick="@Submit">
+            @DashboardLocalizer["Notes_SaveToNotes"]
+        </AppButton>
+    </AppModalFooter>
+</div>

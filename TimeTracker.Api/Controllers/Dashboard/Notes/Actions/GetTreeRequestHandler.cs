@@ -4,10 +4,8 @@ using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
-using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Notes;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -20,11 +18,8 @@ public class GetTreeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandle
         IApiRequestService apiRequestService,
         IUserDao userDao,
         ISecurityManager securityManager,
-        INoteDao noteDao,
-        IClientDao clientDao,
-        IProjectDao projectDao,
-        ITaskDao taskDao
-    ) : base(mapper, apiRequestService, userDao, securityManager, noteDao, clientDao, projectDao, taskDao)
+        INoteService noteService
+    ) : base(mapper, apiRequestService, userDao, securityManager, noteService)
     {
     }
 
@@ -32,24 +27,17 @@ public class GetTreeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandle
     {
         var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         var visibility = request.Visibility ?? NoteVisibility.Private;
-        var nodes = await NoteDao.GetTreeAsync(context.Workspace, request.IncludeArchived, visibility);
-        var availableNodes = await GetAvailableNotesAsync(context.User, nodes, AccessLevel.Read);
-        var availableNodeIds = availableNodes.Select(item => item.Id).ToHashSet();
-
-        foreach (var availableNode in availableNodes)
-        {
-            var parent = availableNode.Parent;
-            while (parent != null && availableNodeIds.Add(parent.Id))
-            {
-                parent = parent.Parent;
-            }
-        }
+        var result = await NoteService.GetTreeAsync(
+            context.Workspace,
+            context.User,
+            request.IncludeArchived,
+            visibility
+        );
 
         return new GetNotesTreeResponse
         {
-            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(
-                nodes.Where(item => availableNodeIds.Contains(item.Id))
-            )
+            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(result.Nodes),
+            Drafts = Mapper.Map<ICollection<NoteTreeNodeDto>>(result.Drafts)
         };
     }
 }

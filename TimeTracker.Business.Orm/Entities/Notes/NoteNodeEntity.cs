@@ -12,6 +12,7 @@ public class NoteNodeEntity : AEntity
     public virtual required string Title { get; set; }
     public virtual int SortOrder { get; set; }
     public virtual NoteVisibility Visibility { get; set; }
+    public virtual bool IsDraft { get; set; }
     public virtual DateTime? ArchivedAt { get; set; }
 
     #region Relationships

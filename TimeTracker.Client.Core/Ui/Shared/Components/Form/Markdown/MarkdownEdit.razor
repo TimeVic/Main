@@ -68,6 +68,7 @@
                         @bind="@_editValue"
                         @bind:event="oninput"
                         @bind:after="@OnEditValueChanged"
+                        @onblur="@OnEditorBlur"
                         maxlength="@MaxLength"
                         rows="@_textAreaRows"
                         style="min-height: @(MinHeight)px"

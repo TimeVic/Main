@@ -56,6 +56,26 @@ public partial class ApiService
         return await PostAsync<NoteTreeNodeDto?>(ApiUrl.NotesArchiveNode, model);
     }
 
+    public async Task<NoteDocumentDto?> NotesCreateDraftAsync(CreateNoteDraftRequest model)
+    {
+        return await PostAsync<NoteDocumentDto?>(ApiUrl.NotesCreateDraft, model);
+    }
+
+    public async Task<NoteDocumentDto?> NotesUpdateDraftAsync(UpdateNoteDraftRequest model)
+    {
+        return await PostAsync<NoteDocumentDto?>(ApiUrl.NotesUpdateDraft, model);
+    }
+
+    public async Task NotesDeleteDraftAsync(DeleteNoteDraftRequest model)
+    {
+        await PostAsync<object?>(ApiUrl.NotesDeleteDraft, model);
+    }
+
+    public async Task<NoteDocumentDto?> NotesPromoteDraftAsync(PromoteNoteDraftRequest model)
+    {
+        return await PostAsync<NoteDocumentDto?>(ApiUrl.NotesPromoteDraft, model);
+    }
+
     public async Task<GetLinkedNotesResponse?> NotesGetLinkedNotesAsync(GetLinkedNotesRequest model)
     {
         return await PostAsync<GetLinkedNotesResponse?>(ApiUrl.NotesGetLinkedNotes, model);

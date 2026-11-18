@@ -1,0 +1,76 @@
+@using TimeTracker.Api.Shared.Dto.Entity.Notes
+
+@inherits BaseReactiveComponent
+
+<div class="border-b border-slate-200 bg-slate-50/60 p-3">
+    <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                @DashboardLocalizer["Notes_Drafts"]
+            </span>
+            <span class="rounded-full bg-slate-200/80 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+                @Drafts.Count
+            </span>
+        </div>
+        <AppButton
+            IconOnly="true"
+            Size="ComponentSize.Small"
+            Variant="ButtonVariant.Outlined"
+            IsLoading="@IsCreatingDraft"
+            Title="@DashboardLocalizer["Notes_NewDraft"].Value"
+            OnClick="@OnCreateDraftClick">
+            <i class="fa-solid fa-plus text-xs"></i>
+        </AppButton>
+    </div>
+
+    <div class="mt-2">
+        @if (!Drafts.Any())
+        {
+            <p class="px-1 py-1 text-xs text-slate-400">
+                @DashboardLocalizer["Notes_EmptyDrafts"]
+            </p>
+        }
+        else
+        {
+            <div
+                class="max-h-52 space-y-1 overflow-y-auto pr-0.5"
+                role="listbox"
+                aria-label="@DashboardLocalizer["Notes_Drafts"].Value">
+                @foreach (var draft in Drafts)
+                {
+                    <div
+                        @key="draft.Id"
+                        class="@GetDraftRowClass(draft.Id)"
+                        role="option"
+                        tabindex="0"
+                        aria-selected="@(IsSelected(draft.Id).ToString().ToLowerInvariant())"
+                        @onclick="@(() => SelectDraftRequested.InvokeAsync(draft))"
+                        @onkeydown="@(args => OnDraftKeyDown(args, draft))">
+                        <div class="flex min-w-0 flex-1 items-center gap-2">
+                            <i class="fa-regular fa-file-lines shrink-0 text-xs text-slate-400"></i>
+                            <span class="truncate text-sm">
+                                @draft.Title
+                            </span>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-1.5">
+                            <span class="text-[11px] text-slate-400">
+                                @FormatDraftTime(draft.UpdatedAt)
+                            </span>
+                            <button
+                                type="button"
+                                class="flex h-5 w-5 items-center justify-center rounded text-xs text-slate-400 opacity-0 transition hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 focus:opacity-100"
+                                title="@DashboardLocalizer["Notes_DeleteDraft"].Value"
+                                aria-label="@DashboardLocalizer["Notes_DeleteDraft"].Value"
+                                disabled="@IsDeletingDraft"
+                                @onclick="@(() => DeleteDraftRequested.InvokeAsync(draft.Id))"
+                                @onclick:stopPropagation="true"
+                                @onkeydown:stopPropagation="true">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

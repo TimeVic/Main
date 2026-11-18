@@ -2,14 +2,9 @@ using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Constants.Notes;
-using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Common.Exceptions.Common;
-using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Notes;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Dto.Notes;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -22,45 +17,31 @@ public class CreateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncReques
         IApiRequestService apiRequestService,
         IUserDao userDao,
         ISecurityManager securityManager,
-        INoteDao noteDao,
-        IClientDao clientDao,
-        IProjectDao projectDao,
-        ITaskDao taskDao
-    ) : base(mapper, apiRequestService, userDao, securityManager, noteDao, clientDao, projectDao, taskDao)
+        INoteService noteService
+    ) : base(mapper, apiRequestService, userDao, securityManager, noteService)
     {
     }
 
     public async Task<NoteDocumentDto> ExecuteAsync(CreateNoteDocumentRequest request)
     {
         var context = await GetWorkspaceContextAsync();
-        await EnsureCanUseVisibilityAsync(context.Workspace, context.User, request.Visibility);
+        var links = request.Links?
+            .Select(item => new NoteLinkTargetDto
+            {
+                EntityType = item.EntityType,
+                EntityId = item.EntityId
+            })
+            .ToList();
 
-        var parent = await GetValidParentAsync(context.Workspace, context.User, request.ParentId);
-        EnsureMatchingParentVisibility(parent, request.Visibility);
-
-        var links = request.Links ?? new List<NoteLinkRequestDto>();
-        EnsureNoDuplicateLinks(links);
-
-        foreach (var link in links)
-        {
-            await EnsureLinkedEntityExistsAsync(context.Workspace, link.EntityType, link.EntityId);
-        }
-
-        var note = await NoteDao.CreateNodeAsync(
+        var note = await NoteService.CreateDocumentAsync(
             context.Workspace,
-            parent,
             context.User,
-            NoteNodeType.Document,
-            NormalizeTitle(request.Title),
-            string.Empty,
+            request.Title,
             request.Visibility,
-            await ResolveSortOrderAsync(context.Workspace, parent, request.SortOrder)
+            request.ParentId,
+            request.SortOrder,
+            links
         );
-
-        foreach (var link in links)
-        {
-            await NoteDao.CreateLinkAsync(context.Workspace, note, context.User, link.EntityType, link.EntityId);
-        }
 
         return Mapper.Map<NoteDocumentDto>(note);
     }

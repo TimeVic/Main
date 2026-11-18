@@ -59,7 +59,8 @@ public class LoadTreeEffect : Effect<LoadNotesTreeAction>
                 Visibility = visibility
             });
             var nodes = response?.Nodes?.ToList() ?? [];
-            dispatcher.Dispatch(new SetNotesTreeAction(nodes));
+            var drafts = response?.Drafts?.ToList() ?? [];
+            dispatcher.Dispatch(new SetNotesTreeAction(nodes, drafts));
             SelectInitialNoteIfNeeded(action.InitialNoteId, nodes, dispatcher);
         }
         catch (Exception e)

@@ -46,11 +46,17 @@ public class ArchiveNodeEffect : Effect<ArchiveNoteNodeAction>
                 NoteId = nodeToArchive.Id
             });
 
-            var response = await _apiService.NotesGetTreeAsync(new GetNotesTreeRequest());
+            var response = await _apiService.NotesGetTreeAsync(new GetNotesTreeRequest
+            {
+                Visibility = _state.Value.ActiveMode
+            });
             var nodes = response?.Nodes?.ToList() ?? [];
-            dispatcher.Dispatch(new SetNotesTreeAction(nodes));
+            var drafts = response?.Drafts?.ToList() ?? [];
+            dispatcher.Dispatch(new SetNotesTreeAction(nodes, drafts));
             dispatcher.Dispatch(new SetArchiveNoteNodeConfirmationOpenedAction(false));
-            if (_state.Value.SelectedNoteId.HasValue && nodes.All(item => item.Id != _state.Value.SelectedNoteId.Value))
+            if (_state.Value.SelectedNoteId.HasValue
+                && nodes.All(item => item.Id != _state.Value.SelectedNoteId.Value)
+                && drafts.All(item => item.Id != _state.Value.SelectedNoteId.Value))
             {
                 dispatcher.Dispatch(new ClearNoteEditorAction());
             }

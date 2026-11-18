@@ -16,7 +16,8 @@ public interface INoteDao : IDomainService
         string title,
         string? initialMarkdownContent,
         NoteVisibility visibility,
-        int sortOrder
+        int sortOrder,
+        bool isDraft = false
     );
 
     Task<NoteNodeEntity?> GetNodeByIdAsync(WorkspaceEntity workspace, Guid? noteId, bool isIncludeArchived = false);
@@ -40,6 +41,12 @@ public interface INoteDao : IDomainService
     Task<ICollection<NoteNodeHistoryEntity>> GetHistoryAsync(NoteNodeEntity noteNode);
 
     Task<ICollection<NoteNodeEntity>> GetWorkspaceNodesAsync(WorkspaceEntity workspace);
+
+    Task<ICollection<NoteNodeEntity>> GetUserDraftsAsync(WorkspaceEntity workspace, UserEntity user);
+
+    Task<long> GetNextDraftNumberAsync(UserEntity user);
+
+    Task DeleteDraftAsync(NoteNodeEntity draft);
 
     Task<NoteLinkEntity> CreateLinkAsync(
         WorkspaceEntity workspace,

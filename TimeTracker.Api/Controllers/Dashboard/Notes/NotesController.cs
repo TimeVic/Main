@@ -79,6 +79,28 @@ public class NotesController(ILifetimeScope scope) : MainApiControllerBase(scope
             .For<NoteTreeNodeDto>()
             .With(request);
 
+    [HttpPost("create-draft")]
+    public Task<IActionResult> CreateDraft([FromBody] CreateNoteDraftRequest request)
+        => this.RequestAsync()
+            .For<NoteDocumentDto>()
+            .With(request);
+
+    [HttpPost("update-draft")]
+    public Task<IActionResult> UpdateDraft([FromBody] UpdateNoteDraftRequest request)
+        => this.RequestAsync()
+            .For<NoteDocumentDto>()
+            .With(request);
+
+    [HttpPost("delete-draft")]
+    public Task<IActionResult> DeleteDraft([FromBody] DeleteNoteDraftRequest request)
+        => this.RequestAsync(request);
+
+    [HttpPost("promote-draft")]
+    public Task<IActionResult> PromoteDraft([FromBody] PromoteNoteDraftRequest request)
+        => this.RequestAsync()
+            .For<NoteDocumentDto>()
+            .With(request);
+
     [HttpPost("get-linked-notes")]
     public Task<IActionResult> GetLinkedNotes([FromBody] GetLinkedNotesRequest request)
         => this.RequestAsync()

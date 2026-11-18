@@ -19,6 +19,7 @@ public class NoteProfile : Profile
                 Title = src.Title,
                 LastContentId = src.LastContent?.Id,
                 Visibility = src.Visibility,
+                IsDraft = src.IsDraft,
                 SortOrder = src.SortOrder,
                 UpdatedAt = src.UpdatedAt
             });
@@ -31,6 +32,7 @@ public class NoteProfile : Profile
                 Title = src.Title,
                 LastContentId = src.LastContent?.Id,
                 Visibility = src.Visibility,
+                IsDraft = src.IsDraft,
                 CreatedAt = src.CreatedAt,
                 UpdatedAt = src.UpdatedAt,
                 Links = mapper.Mapper.Map<ICollection<NoteLinkDto>>(src.Links.ToList()),

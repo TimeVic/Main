@@ -1,4 +1,4 @@
-﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
@@ -19,6 +19,10 @@ public partial class FileStorage: IFileStorage
             throw new HasNoAccessException();
         }
         await _storageClient.Delete(file.CloudFilePath);
+        if (!string.IsNullOrWhiteSpace(file.ThumbCloudFilePath))
+        {
+            await _storageClient.Delete(file.ThumbCloudFilePath);
+        }
         
         file.Tasks.Clear();
         file.Users.Clear();

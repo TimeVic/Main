@@ -126,4 +126,38 @@ public partial class ModalDialogProviderService
             onClose: onClose
         );
     }
+
+    public Task<AppModalResult> ShowPromoteDraftModal(
+        Guid draftId,
+        string initialTitle,
+        bool isWorkspaceVisibilityAllowed,
+        IReadOnlyList<NoteTreeNodeDto> privateNodes,
+        EventCallback<PromoteNoteDraftRequest>? onSubmit = null,
+        Action<AppModalResult>? onClose = null
+    )
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            [nameof(PromoteDraftModal.DraftId)] = draftId,
+            [nameof(PromoteDraftModal.InitialTitle)] = initialTitle,
+            [nameof(PromoteDraftModal.IsWorkspaceVisibilityAllowed)] = isWorkspaceVisibilityAllowed,
+            [nameof(PromoteDraftModal.PrivateNodes)] = privateNodes
+        };
+        if (onSubmit.HasValue)
+        {
+            parameters[nameof(PromoteDraftModal.OnSubmit)] = onSubmit.Value;
+        }
+
+        return _appModalDialogService.ShowAsync<PromoteDraftModal>(
+            parameters: parameters,
+            options: new AppModalOptions
+            {
+                Size = AppModalSize.Medium,
+                HasCloseButton = true,
+                IsCloseOnBackdropClick = true,
+                IsCloseOnEscapeKey = true
+            },
+            onClose: onClose
+        );
+    }
 }

@@ -15,6 +15,7 @@ public class NoteNodeMapping : BaseGuidMappings<NoteNodeEntity>
         Map(x => x.Title);
         Map(x => x.SortOrder);
         Map(x => x.Visibility).Enum<NoteVisibility>();
+        Map(x => x.IsDraft);
         Map(x => x.ArchivedAt).DateTimeNullable();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();

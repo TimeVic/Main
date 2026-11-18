@@ -788,6 +788,29 @@
   <data name="Notes_EmptyWorkspaceDescription" xml:space="preserve"><value>У просторі ще немає спільних нотаток. Створіть нотатку для команди.</value></data>
   <data name="Notes_EmptyPrivateDescription" xml:space="preserve"><value>У вас ще немає приватних нотаток. Створіть нотатку, доступну лише вам.</value></data>
   <data name="Notes_ParentVisibilityMismatch" xml:space="preserve"><value>Видимість батьківської та дочірньої нотатки має збігатися.</value></data>
+  <data name="Notes_Drafts" xml:space="preserve"><value>Чернетки</value></data>
+  <data name="Notes_NewDraft" xml:space="preserve"><value>Нова чернетка</value></data>
+  <data name="Notes_EmptyDrafts" xml:space="preserve"><value>Чернеток ще немає. Натисніть + для швидких записів.</value></data>
+  <data name="Notes_DeleteDraft" xml:space="preserve"><value>Видалити чернетку</value></data>
+  <data name="Notes_DraftBadge" xml:space="preserve"><value>Чернетка</value></data>
+  <data name="Notes_DraftTitlePlaceholder" xml:space="preserve"><value>Назва чернетки</value></data>
+  <data name="Notes_DraftMarkdownPlaceholder" xml:space="preserve"><value>Пишіть швидкі нотатки, логи, фрагменти або посилання...</value></data>
+  <data name="Notes_CopyAll" xml:space="preserve"><value>Скопіювати все</value></data>
+  <data name="Notes_CopiedToClipboard" xml:space="preserve"><value>Скопійовано в буфер обміну</value></data>
+  <data name="Notes_CopyToClipboardError" xml:space="preserve"><value>Не вдалося скопіювати в буфер обміну</value></data>
+  <data name="Notes_SaveToNotes" xml:space="preserve"><value>Зберегти в нотатки</value></data>
+  <data name="Notes_PromoteDraftTitle" xml:space="preserve"><value>Зберегти чернетку як нотатку</value></data>
+  <data name="Notes_PromoteDraftDescription" xml:space="preserve"><value>Виберіть назву, простір і папку, щоб зберегти чернетку як звичайну нотатку.</value></data>
+  <data name="Notes_Visibility" xml:space="preserve"><value>Видимість</value></data>
+  <data name="Notes_CreateDraftError" xml:space="preserve"><value>Не вдалося створити чернетку</value></data>
+  <data name="Notes_SaveDraftError" xml:space="preserve"><value>Не вдалося зберегти чернетку</value></data>
+  <data name="Notes_DeleteDraftError" xml:space="preserve"><value>Не вдалося видалити чернетку</value></data>
+  <data name="Notes_PromoteDraftError" xml:space="preserve"><value>Не вдалося зберегти чернетку як нотатку</value></data>
+  <data name="Notes_PromoteDraftSuccess" xml:space="preserve"><value>Чернетку збережено в нотатки</value></data>
+  <data name="Notes_DraftAutoSaveHint" xml:space="preserve"><value>Автозбереження при знятті фокуса</value></data>
+  <data name="Notes_DraftTimeJustNow" xml:space="preserve"><value>Щойно</value></data>
+  <data name="Notes_DraftTimeMinutesAgo" xml:space="preserve"><value>{0} хв тому</value></data>
+  <data name="Notes_DraftTimeHoursAgo" xml:space="preserve"><value>{0} год тому</value></data>
   <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Клієнт</value></data>
   <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Проєкт</value></data>
   <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Задача</value></data>

@@ -1,6 +1,7 @@
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Orm.Dao.System;
 using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -10,10 +11,15 @@ namespace TimeTracker.Business.Orm.Dao.Notes;
 public class NoteDao : INoteDao
 {
     private readonly IDbSessionProvider _sessionProvider;
+    private readonly ISequenceDao _sequenceDao;
 
-    public NoteDao(IDbSessionProvider sessionProvider)
+    public NoteDao(
+        IDbSessionProvider sessionProvider,
+        ISequenceDao sequenceDao
+    )
     {
         _sessionProvider = sessionProvider;
+        _sequenceDao = sequenceDao;
     }
 
     public async Task<NoteNodeEntity> CreateNodeAsync(
@@ -24,7 +30,8 @@ public class NoteDao : INoteDao
         string title,
         string? initialMarkdownContent,
         NoteVisibility visibility,
-        int sortOrder
+        int sortOrder,
+        bool isDraft = false
     )
     {
         var now = DateTime.UtcNow;
@@ -35,6 +42,7 @@ public class NoteDao : INoteDao
             Type = type,
             Title = title,
             Visibility = visibility,
+            IsDraft = isDraft,
             SortOrder = sortOrder,
             CreatedByUser = createdByUser,
             UpdatedByUser = createdByUser,
@@ -110,7 +118,8 @@ public class NoteDao : INoteDao
     {
         var query = _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
-            .Where(item => item.ArchivedAt == null);
+            .Where(item => item.ArchivedAt == null)
+            .Where(item => !item.IsDraft);
 
         query = parent == null
             ? query.Where(item => item.Parent == null)
@@ -171,6 +180,29 @@ public class NoteDao : INoteDao
         return await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
             .ToListAsync();
+    }
+
+    public async Task<ICollection<NoteNodeEntity>> GetUserDraftsAsync(WorkspaceEntity workspace, UserEntity user)
+    {
+        return await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(item => item.CreatedByUser.Id == user.Id)
+            .Where(item => item.IsDraft)
+            .Where(item => item.Visibility == NoteVisibility.Private)
+            .Where(item => item.ArchivedAt == null)
+            .OrderByDescending(item => item.UpdatedAt ?? item.CreatedAt)
+            .ToListAsync();
+    }
+
+    public Task<long> GetNextDraftNumberAsync(UserEntity user)
+    {
+        return _sequenceDao.GetNextValue("NoteDraft", user.Id);
+    }
+
+    public Task DeleteDraftAsync(NoteNodeEntity draft)
+    {
+        draft.ArchivedAt ??= DateTime.UtcNow;
+        return Task.CompletedTask;
     }
 
     public async Task<NoteLinkEntity> CreateLinkAsync(
@@ -254,7 +286,7 @@ public class NoteDao : INoteDao
 
     private async Task CreateHistoryAsync(NoteNodeEntity node)
     {
-        if (node.Type != NoteNodeType.Document)
+        if (node.Type != NoteNodeType.Document || node.IsDraft)
         {
             return;
         }
