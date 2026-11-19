@@ -39,8 +39,13 @@ public partial class NotesPage
     [SupplyParameterFromQuery(Name = "noteId")]
     public Guid? InitialNoteId { get; set; }
 
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "mode")]
+    public string? InitialMode { get; set; }
+
     private bool _isInitialized;
     private Guid? _lastInitialNoteId;
+    private string? _lastInitialMode;
 
     private NotesState State => NotesState.Value;
 
@@ -70,7 +75,18 @@ public partial class NotesPage
 
     private Task SetMode(NoteVisibility mode)
     {
-        Dispatcher.Dispatch(new SetNotesActiveModeAction(mode));
+        if (State.ActiveMode != mode)
+        {
+            Dispatcher.Dispatch(new SetNotesActiveModeAction(mode));
+        }
+
+        if (!IsSoloWorkspace)
+        {
+            var modeValue = mode.ToString().ToLowerInvariant();
+            _lastInitialMode = modeValue;
+            NavigationManager.NavigateTo($"{UrlService.GetDashboardUrl("notes")}?mode={modeValue}", replace: true);
+        }
+
         return Task.CompletedTask;
     }
 
@@ -112,19 +128,69 @@ public partial class NotesPage
 
     protected override void OnParametersSet()
     {
-        if (IsSoloWorkspace && State.ActiveMode != NoteVisibility.Private)
+        var requestedMode = ParseRequestedMode();
+
+        if (!_isInitialized)
         {
-            Dispatcher.Dispatch(new SetNotesActiveModeAction(NoteVisibility.Private));
+            _isInitialized = true;
+            _lastInitialNoteId = InitialNoteId;
+            _lastInitialMode = InitialMode;
+
+            var targetMode = IsSoloWorkspace
+                ? NoteVisibility.Private
+                : requestedMode ?? State.ActiveMode;
+
+            if (State.ActiveMode != targetMode)
+            {
+                Dispatcher.Dispatch(new SetNotesActiveModeAction(targetMode, InitialNoteId));
+                return;
+            }
+
+            if (!State.IsTreeLoading)
+            {
+                LoadTree();
+            }
+
+            return;
         }
 
-        if (_isInitialized && InitialNoteId == _lastInitialNoteId)
+        if (IsSoloWorkspace && State.ActiveMode != NoteVisibility.Private)
+        {
+            Dispatcher.Dispatch(new SetNotesActiveModeAction(NoteVisibility.Private, InitialNoteId));
+            _lastInitialNoteId = InitialNoteId;
+            _lastInitialMode = InitialMode;
+            return;
+        }
+
+        var isModeChanged = !string.Equals(InitialMode, _lastInitialMode, StringComparison.OrdinalIgnoreCase);
+        var isNoteChanged = InitialNoteId != _lastInitialNoteId;
+        if (!isModeChanged && !isNoteChanged)
         {
             return;
         }
 
-        _isInitialized = true;
+        _lastInitialMode = InitialMode;
         _lastInitialNoteId = InitialNoteId;
+
+        if (!IsSoloWorkspace && isModeChanged && requestedMode.HasValue && State.ActiveMode != requestedMode.Value)
+        {
+            Dispatcher.Dispatch(new SetNotesActiveModeAction(requestedMode.Value, InitialNoteId));
+            return;
+        }
+
         LoadTree();
+    }
+
+    private NoteVisibility? ParseRequestedMode()
+    {
+        if (string.IsNullOrWhiteSpace(InitialMode))
+        {
+            return null;
+        }
+
+        return Enum.TryParse<NoteVisibility>(InitialMode, ignoreCase: true, out var mode)
+            ? mode
+            : null;
     }
 
     private void LoadTree()

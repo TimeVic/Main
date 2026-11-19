@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Exceptions.Api;
@@ -167,6 +168,80 @@ public class UploadTest: BaseTest
 
         Assert.Equal("md", uploadedFile.Extension);
         Assert.Equal("text/markdown", uploadedFile.MimeType);
+    }
+
+    [Fact]
+    public async Task ShouldUploadAttachmentToDraftNote()
+    {
+        var draft = await _noteDao.CreateNodeAsync(
+            _workspace,
+            null,
+            _user,
+            NoteNodeType.Document,
+            "Draft 1",
+            string.Empty,
+            NoteVisibility.Private,
+            0,
+            isDraft: true
+        );
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", draft.Id },
+                { "EntityType", StorageEntityType.NoteNode },
+                { "FileType", StoredFileType.Attachment }
+            },
+            CreateFormFile("image.jpg")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var uploadedFile = await response.GetJsonDataAsync<StoredFileDto>();
+        await FlushDbChanges(true);
+        var actualDraft = await DbSessionProvider.CurrentSession.GetAsync<NoteNodeEntity>(draft.Id);
+
+        Assert.NotEqual(Guid.Empty, uploadedFile.Id);
+        Assert.Single(actualDraft.Attachments);
+        Assert.Equal(uploadedFile.Id, actualDraft.Attachments.Single().Id);
+    }
+
+    [Fact]
+    public async Task ShouldRejectUploadAttachmentToAnotherUsersDraftNote()
+    {
+        var (_, memberUser, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var memberDraft = await _noteDao.CreateNodeAsync(
+            _workspace,
+            null,
+            memberUser,
+            NoteNodeType.Document,
+            "Member Draft",
+            string.Empty,
+            NoteVisibility.Private,
+            0,
+            isDraft: true
+        );
+
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", memberDraft.Id },
+                { "EntityType", StorageEntityType.NoteNode },
+                { "FileType", StoredFileType.Attachment }
+            },
+            CreateFormFile("image.jpg")
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]

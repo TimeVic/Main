@@ -11,7 +11,7 @@ public record struct LoadNotesTreeAction(
     NoteVisibility? Visibility = null
 );
 
-public record struct SetNotesActiveModeAction(NoteVisibility Mode);
+public record struct SetNotesActiveModeAction(NoteVisibility Mode, Guid? InitialNoteId = null);
 
 public record struct SetNotesTreeAction(
     IReadOnlyList<NoteTreeNodeDto> Nodes,
@@ -92,7 +92,7 @@ public record struct ReplaceNoteTreeNodeAction(NoteTreeNodeDto Node);
 
 public record struct UpdateNoteTreeNodeFromDocumentAction(NoteDocumentDto Document);
 
-public record struct CreateNoteDraftAction;
+public record struct CreateNoteDraftAction(bool IsNavigateToNotes = false);
 
 public record struct SetNotesDraftCreatingAction(bool IsCreating);
 

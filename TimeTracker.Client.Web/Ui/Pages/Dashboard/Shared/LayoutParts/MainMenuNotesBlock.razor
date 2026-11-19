@@ -1,0 +1,81 @@
+@using TimeTracker.Client.Core.Ui.Shared.Components.Dropdown
+@inherits BaseReactiveComponent
+
+@if (IsMobile)
+{
+    <div>
+        <a
+            href="@NotesUrl"
+            class="@MobileLinkClass">
+            <i class="fa-regular fa-note-sticky"></i>
+            <span>@DashboardLocalizer["Notes"]</span>
+        </a>
+    </div>
+}
+else
+{
+    <div class="relative">
+        <AppDropdown
+            Alignment="DropdownAlignment.Left"
+            MenuClass="w-60 p-2">
+            <Trigger>
+                <span
+                    class="@DesktopTriggerClass"
+                    role="button"
+                    tabindex="0">
+                    <i
+                        class="fa-regular fa-note-sticky"
+                        aria-hidden="true"></i>
+                    <span class="hidden sm:inline">@DashboardLocalizer["Notes"]</span>
+                    <i
+                        class="fa-solid fa-chevron-down text-xs text-slate-400"
+                        aria-hidden="true"></i>
+                </span>
+            </Trigger>
+            <Menu>
+                <AppDropdownItem
+                    IsDisabled="@NotesState.Value.IsCreatingDraft"
+                    OnClick="@CreateQuickDraft">
+                    <StartContent>
+                        <i class="fa-solid fa-plus text-blue-600"></i>
+                    </StartContent>
+                    <ChildContent>@DashboardLocalizer["Notes_Menu_QuickDraft"]</ChildContent>
+                </AppDropdownItem>
+
+                @if (IsSoloWorkspace)
+                {
+                    <AppDropdownItem
+                        ShowDivider="true"
+                        IsActive="@IsNotesRouteActive"
+                        OnClick="@OpenPersonalNotes">
+                        <StartContent>
+                            <i class="fa-regular fa-note-sticky"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["Notes"]</ChildContent>
+                    </AppDropdownItem>
+                }
+                else
+                {
+                    <AppDropdownItem
+                        ShowDivider="true"
+                        IsActive="@IsWorkspaceNotesActive"
+                        OnClick="@OpenWorkspaceNotes">
+                        <StartContent>
+                            <i class="fa-solid fa-users"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["Notes_Menu_WorkspaceNotes"]</ChildContent>
+                    </AppDropdownItem>
+
+                    <AppDropdownItem
+                        IsActive="@IsPrivateNotesActive"
+                        OnClick="@OpenPrivateNotes">
+                        <StartContent>
+                            <i class="fa-solid fa-user-lock"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["Notes_Menu_PrivateNotes"]</ChildContent>
+                    </AppDropdownItem>
+                }
+            </Menu>
+        </AppDropdown>
+    </div>
+}

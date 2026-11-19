@@ -27,6 +27,8 @@
         </div>
     }
 
+    <MainMenuNotesBlock IsMobile="true" />
+
     @foreach (var group in groupedItems)
     {
         <div>
@@ -78,6 +80,8 @@ else
                 <span class="hidden sm:inline">@item.Name</span>
             </a>
         }
+
+        <MainMenuNotesBlock IsMobile="false" />
 
         @if (groupedItems.Any())
         {
