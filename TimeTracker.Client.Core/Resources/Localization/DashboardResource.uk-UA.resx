@@ -790,6 +790,9 @@
   <data name="Notes_ParentVisibilityMismatch" xml:space="preserve"><value>Видимість батьківської та дочірньої нотатки має збігатися.</value></data>
   <data name="Notes_Drafts" xml:space="preserve"><value>Чернетки</value></data>
   <data name="Notes_NewDraft" xml:space="preserve"><value>Нова чернетка</value></data>
+  <data name="Notes_Menu_QuickDraft" xml:space="preserve"><value>Швидка чернетка</value></data>
+  <data name="Notes_Menu_WorkspaceNotes" xml:space="preserve"><value>Спільні нотатки</value></data>
+  <data name="Notes_Menu_PrivateNotes" xml:space="preserve"><value>Приватні нотатки</value></data>
   <data name="Notes_EmptyDrafts" xml:space="preserve"><value>Чернеток ще немає. Натисніть + для швидких записів.</value></data>
   <data name="Notes_DeleteDraft" xml:space="preserve"><value>Видалити чернетку</value></data>
   <data name="Notes_DraftBadge" xml:space="preserve"><value>Чернетка</value></data>

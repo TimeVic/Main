@@ -204,16 +204,26 @@
                 </div>
             </div>
         }
-        @if (!Document.IsDraft)
+        @if (IsEditingAllowed || Document.IsDraft)
         {
-            @if (IsEditingAllowed)
-            {
-                <AttachmentsUploadBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" FilesChanged="@AttachmentsChanged" Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" />
-            }
-            else
-            {
-                <AttachmentsBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" AllowDelete="false" />
-            }
+            <AttachmentsUploadBlock
+                @key="Document.Id"
+                Class="mx-4 mb-4 border-t border-slate-200 pt-4"
+                EntityId="@Document.Id"
+                EntityType="@StorageEntityType.NoteNode"
+                Files="@Document.Attachments"
+                FilesChanged="@AttachmentsChanged"
+                Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" />
+        }
+        else
+        {
+            <AttachmentsBlock
+                @key="Document.Id"
+                Class="mx-4 mb-4 border-t border-slate-200 pt-4"
+                EntityId="@Document.Id"
+                EntityType="@StorageEntityType.NoteNode"
+                Files="@Document.Attachments"
+                AllowDelete="false" />
         }
     }
 </section>

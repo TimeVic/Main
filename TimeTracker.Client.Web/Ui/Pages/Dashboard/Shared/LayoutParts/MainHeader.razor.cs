@@ -1,5 +1,6 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Business.Common.Constants;
@@ -56,6 +57,7 @@ public partial class MainHeader : IDisposable
     {
         base.OnInitialized();
         WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsStateChanged;
+        NavigationManager.LocationChanged += OnLocationChanged;
     }
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
@@ -97,6 +99,16 @@ public partial class MainHeader : IDisposable
     public void Dispose()
     {
         WorkspacePermissionsState.StateChanged -= OnWorkspacePermissionsStateChanged;
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        if (_isMobileMenuOpen)
+        {
+            _isMobileMenuOpen = false;
+            _ = InvokeAsync(StateHasChanged);
+        }
     }
 
     private void OnWorkspacePermissionsStateChanged(object? sender, EventArgs args)

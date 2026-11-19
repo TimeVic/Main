@@ -46,7 +46,6 @@ public partial class MainMenu: IDisposable
         new(Text("Summary"), "fa-regular fa-bar-chart", UrlService.GetDashboardUrl("report/summary")),
         new(Text("TimeEntries"), "fa-regular fa-clock", UrlService.GetDashboardUrl()),
         new(Text("Tasks"), "fa-regular fa-square-check", UrlService.GetDashboardUrl("tasks")),
-        new(Text("Notes"), "fa-regular fa-note-sticky", UrlService.GetDashboardUrl("notes")),
         new(
             Text("Approvals_Menu"),
             "fa-solid fa-clipboard-check",
